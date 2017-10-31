@@ -1,0 +1,15 @@
+#Capítulo 2 Disponibilidad de la información
+
+
+\subsection{Encuesta Nacional de Ocupación y Empleo}
+
+
+Notas de limpieza de la información. Para los datos de secciones electorales 2012 se encontraron 37 secciones sin datos de votación aunque si lista nominal. Para propósitos
+Existen 623 casos donde la sección reporta una votación mayor a 100 porciento
+
+
+\subsection{Datos Electorales}
+
+
+
+

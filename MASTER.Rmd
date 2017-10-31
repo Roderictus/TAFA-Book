@@ -1,0 +1,57 @@
+---
+title: "Determinantes de la participación electoral en México"
+author: "Rodrigo Franco Fuentes"
+date: "`r format(Sys.time(), '%B %e, %Y')`"
+header-includes:
+   - \renewcommand{\contentsname}{Índice}
+output: 
+  pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
+---
+
+
+```{r functions, include=FALSE, cache = TRUE}
+library(knitr)
+library(rgeos)
+library(rgdal)
+library(raster)
+library(ggplot2)
+library(dplyr)
+library(gtable)
+library(grid)
+library(stringr)
+library(data.table)
+library(viridis)
+# A function for captioning and referencing images
+fig <- local({
+    i <- 0
+    ref <- list()
+    list(
+        cap=function(refName, text) {
+            i <<- i + 1
+            ref[[refName]] <<- i
+            paste("Figure ", i, ": ", text, sep="")
+        },
+        ref=function(refName) {
+            ref[[refName]]
+        })
+})
+``` 
+```{r Cap-1, child = 'Capitulos/Cap_1.Rmd', cache = TRUE}
+```
+```{r Cap-2, child = 'Capitulos/Cap_2.Rmd', cache = TRUE}
+```
+```{r Cap-3, child = 'Capitulos/Cap_3.Rmd', cache = TRUE}
+```
+```{r Cap-4, child = 'Capitulos/Cap_4.Rmd', cache = TRUE}
+```
+
+
+\begin{appendix}
+  \listoffigures
+  \listoftables
+\end{appendix}
+

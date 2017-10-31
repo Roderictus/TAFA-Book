@@ -1,0 +1,14 @@
+
+#Capítulo 1 : Revisión de Literatura y Motivación
+
+
+
+
+
+
+```{r, fig.cap=paste("alguna cosa"), echo = FALSE, cache = TRUE}
+plot(mtcars)
+```
+
+Texto textoso
+
