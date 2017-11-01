@@ -7,7 +7,7 @@
 
 
 ```{r, fig.cap=paste("alguna cosa"), echo = FALSE, cache = TRUE}
-plot(mtcars)
+
 ```
 
 Texto textoso
