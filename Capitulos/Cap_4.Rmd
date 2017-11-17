@@ -1,6 +1,38 @@
 #Capítulo 4 Modelos 
 
 \subsection{Modelos a nivel Municipal}
+Datos a nivel municipal. 
+
+1.Encuesta intercensal 2015.
+2.Descriptivos y varianza municipal
+3.Participación electoral Municipal 2012 
+
+'''{r Participacion Municipal, }
+
+```{r, fig.cap=paste("Participación electoral a nivel municipal 2012 mapa"), echo = FALSE, cache = TRUE}
+library(rgdal)
+Municipios<- readOGR(dsn = "C:/Proyectos R/TAFA-Book/Datos/Geográficos/Municipios/areas_geoestadisticas_municipales.shp",
+                     "areas_geoestadisticas_municipales", encoding = "UTF8") #Municipios nacionales
+
+
+
+Municipios<- readOGR("/Mapa muy reducido/areas_geoestadisticas_municipales.shp",
+               "areas_geoestadisticas_municipales")
+
+```
+
+
+
+```{r, fig.cap=paste("Participación electoral a nivel municipal 2012 tabla"), echo = FALSE, cache = TRUE}
+
+
+
+
+```
+
+
+
+
 
 
 \subsection{Modelos a nivel Estatal}

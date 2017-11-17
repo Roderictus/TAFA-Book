@@ -82,11 +82,9 @@ P2006Secc %>%
         format.args = list(big.mark = ","), 
         caption = "Participación electoral Estatal 2006") 
 ```
-
 1.Cambio de la variación total
 2. Estados con mayor variación
 3. Condensar en una tabla
-
 ```{r PE 2012, echo = FALSE, cache = TRUE}
 P2012Secc %>% 
   group_by(NOMBRE_ESTADO) %>%
@@ -97,7 +95,6 @@ P2012Secc %>%
         format.args = list(big.mark = ","), 
         caption = "Participación electoral Estatal 2012") 
 ```
-
 1. varianza de la participación
 2. correlaciones del voto 
 3. cambios en la votación promedio por municipio
@@ -105,19 +102,10 @@ P2012Secc %>%
 5. modelo con competencia electoral como variable
 6. integrar demográficos
 7. Relación entre participación electoral y voto por algún partido 
-
-
-
 ```{r Dispersión Seccional del voto, echo=FALSE, cache = TRUE}
-P2012Secc %>%
-  arrange(Lista_Nominal_Mun) %>%
-  select(MUNICIPIO, Por_PAN, Por_PRI, Por_MORENA) %>%
-  filter(MUNICIPIO %in% (PueMun2016 %>%
-                           top_n(10, Lista_Nominal))$MUNICIPIO) %>%
-  gather(key = MUNICIPIO, value = Partido) %>%
-  setNames (.,c("Municipio", "Partido", "Porcentaje")) %>%
-  ggplot(aes(x = Municipio, y = Porcentaje, fill = Partido)) + geom_boxplot() + 
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+head(P2012Secc)
 ```
 
 
