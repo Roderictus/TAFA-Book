@@ -4,17 +4,14 @@ author: "Rodrigo Franco Fuentes"
 date: "`r format(Sys.time(), '%B %e, %Y')`"
 header-includes:
    - \renewcommand{\contentsname}{Índice}
-output: 
-  pdf_document:
-    fig_caption: yes
-    keep_tex: yes
-    number_sections: yes
-    toc: yes
+output: pdf_document
+    
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, fig.path = "Figuras/", warning = FALSE,
                       message =FALSE, cache = TRUE, fig.width =12, 
                       fig.height = 8)
+
 library(knitr)
 library(rgeos)
 library(rgdal)
