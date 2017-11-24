@@ -1,4 +1,4 @@
-#Capítulo 2 Disponibilidad de la información
+\section {Capítulo 2 Disponibilidad de la información}
 
 
 \subsection{Encuesta Nacional de Ocupación y Empleo}

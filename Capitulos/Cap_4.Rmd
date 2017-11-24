@@ -1,4 +1,4 @@
-#Capítulo 4 Modelos 
+\section {Capítulo 4 Modelos} 
 
 \subsection{Modelos a nivel Municipal}
 Datos a nivel municipal. 
@@ -9,15 +9,14 @@ Datos a nivel municipal.
 
 '''{r Participacion Municipal, }
 
-```{r, fig.cap=paste("Participación electoral a nivel municipal 2012 mapa"), echo = FALSE, cache = TRUE}
-library(rgdal)
+```{r, fig.cap=paste("Participación electoral a nivel municipal 2012 mapa"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 Municipios<- readOGR(dsn = "C:/Proyectos R/TAFA-Book/Datos/Geográficos/Municipios/areas_geoestadisticas_municipales.shp",
                      "areas_geoestadisticas_municipales", encoding = "UTF8") #Municipios nacionales
 
 
 
-Municipios<- readOGR("/Mapa muy reducido/areas_geoestadisticas_municipales.shp",
-               "areas_geoestadisticas_municipales")
+
+
 
 ```
 

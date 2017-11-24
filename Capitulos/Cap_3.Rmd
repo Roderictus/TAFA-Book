@@ -1,3 +1,14 @@
+\section {Capítulo 3 Análisis Exploratorio}
+
+\subsection{Participación Electoral a nivel Estatal}
+
+
+\subsubsection{ Prueba  de subsubsección}
+
+
+
+
+
 ```{r, include  = FALSE, cache = TRUE}
 ##################################  2006  ###############################
 P2006Secc<-fread(input = "http://siceef.ine.mx/BD/Presidente2006Seccion.csv", 
@@ -60,10 +71,6 @@ P2012Mun<-P2012Secc %>%   #2447
             ID_Municipio  = unique(ID_MUNICIPIO))
 P2012Mun$CVE_ENT <- str_sub(string = P2012Mun$CVUN, start = 1, end = 2)
 ```
-#Capítulo 3 Análisis Exploratorio 
-
-
-\subsection{Participación Electoral a nivel Estatal}
 
 Se analizan resultados electorales de 3 elecciones federales 2000, 2006 y 2012. La lista nominal 
 
@@ -107,6 +114,9 @@ P2012Secc %>%
 
 head(P2012Secc)
 ```
+
+
+\subsection{Participación Electoral a nivel Municipal}
 
 
 \subsection{Participación Electoral a nivel Municipal}

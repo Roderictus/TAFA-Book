@@ -2,10 +2,10 @@
 title: "Determinantes de la participación electoral en México"
 author: "Rodrigo Franco Fuentes"
 date: "`r format(Sys.time(), '%B %e, %Y')`"
-header-includes:
-   - \renewcommand{\contentsname}{Índice}
-output: pdf_document
-    
+output: 
+  pdf_document:
+  number_sections: yes
+  toc: yes
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, fig.path = "Figuras/", warning = FALSE,
@@ -61,11 +61,14 @@ theme_map <- function(...) {
       plot.background = element_rect(fill = "#f5f5f2", color = NA), 
       panel.background = element_rect(fill = "#f5f5f2", color = NA), 
       legend.background = element_rect(fill = "#f5f5f2", color = NA),
-      panel.border = element_blank(),
-      ...
-    )
+      panel.border = element_blank()
+      )
 }
 ``` 
+
+\renewcommand{\contentsname}{Índice}
+\tableofcontents
+
 
 ```{r Cap-1, child = 'Capitulos/Cap_1.Rmd', cache = TRUE}
 ```

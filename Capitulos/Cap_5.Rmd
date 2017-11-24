@@ -1,0 +1,11 @@
+\section{Capítulo 5 Estudio de Caso; Puebla}
+
+
+
+\subsection{Puebla, Estudio de Caso }
+
+
+```{r, fig.cap=paste("Participación electoral a nivel municipal 2012 mapa"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+
+```
+
