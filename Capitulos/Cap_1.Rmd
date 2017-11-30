@@ -1,9 +1,25 @@
 \section {Capítulo 1 : Revisión de Literatura y Motivación}
 
-Algún texto sobre motivación y revisión de literatura. 
+¿Que factores explican la variación en la participación electoral?
+Es relevante desde distintas perspectivas, legitimidad, civismo, el sistema de información que debe de alimentar un sistema democrático basado en la percepción de la ciudadania sobre el desempeño de los servidores públicos electos. Sin embargo el planteamiento principal de la presente tesis es inferir a partir de las diferencias en la participación electoral sesgos de "motivación". Esto se refiere desde la simple intensifícación de una campaña, o la percepción de que más está en juego en la elección con una mayor participación asociada a esto hasta con fenómenos de acarreo y fraude electoral. 
+La idea principal es que existe una "participación base" similar a la suma de los llamados "votos duros" de la base partidista. Esta es relativamente más homogénea que la participación efectiva la cual es modificada por la intensidad de la campaña, coattails, acarreo y, en algunas ocasiones, posible fraude. 
+El sistema electoral mixto junto con elecciones concurrentes brinda oportunidades importantes del estudio de varianza. Elecciones donde se elige solamente a un gobernador (Ej. Puebla 2016) pueden compararse con elecciones donde se elige diputados locales, federales, gobernador y presidente. Lo que esperariamos observar en elecciones concurrentes es un aumento en la varianza de la participación electoral provocada por un "valor del voto" que varia de acuerdo a los "premios de la votación". El valor del voto puede entenderse como el valor de la oficina pública y aunque no es una variable observable se entiende intuitivamente que presidencias municipales de ciudades tienen un valor más alto que el de municipios con menor concentración de recursos. Se aproxima el valor del voto con el gasto público municipal.
+
+
+
+1. PIB Municipal ("Valor del voto"), se utiliza una especie de valor del voto per cápita.
+2. 
+
+
+
+#optimización iterativa del valor del voto, modelo de optimización dinámica 
+Variación entre periodos
+
 
 
 ```{r, fig.cap=paste("alguna cosa"), echo = FALSE, cache = TRUE}
+
+
 
 ```
 Texto textoso

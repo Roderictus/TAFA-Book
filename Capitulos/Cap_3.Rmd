@@ -3,73 +3,14 @@
 \subsection{Participación Electoral a nivel Estatal}
 
 
-\subsubsection{ Prueba  de subsubsección}
+\subsubsection{Prueba  de subsubsección}
 
 
 
 
 
 ```{r, include  = FALSE, cache = TRUE}
-##################################  2006  ###############################
-P2006Secc<-fread(input = "http://siceef.ine.mx/BD/Presidente2006Seccion.csv", 
-                 sep = ",", encoding = "UTF-8")
-P2006Secc$CVE_SECC <-str_c(str_pad(P2006Secc$ID_ESTADO, width =2, "left", "0"),         #Estado Sección
-                         str_pad(P2006Secc$SECCION, width = 4, "left", "0"))
-P2006Secc$CV_MUN   <- str_c(str_pad(P2006Secc$ID_ESTADO, width = 2, "left", "0"),       #Estado Municipio
-                         str_pad(P2006Secc$ID_MUNICIPIO, width = 3, "left", "0"))
-P2006Secc$CV_TODO  <- str_c(str_c(str_pad(P2006Secc$ID_ESTADO, width = 2, "left", "0"), #Estado, Municipio, Sección
-                         str_pad(P2006Secc$ID_MUNICIPIO, width = 3, "left", "0")), 
-                         str_pad(P2006Secc$SECCION, width = 4, "left", "0"))
-P2006Secc<-filter(P2006Secc, MUNICIPIO != "Voto en el Extranjero")
-P2006Mun<-P2006Secc %>% #2442 Municipios 
-  group_by(CVUN =as.factor(P2006Secc$CV_MUN)) %>%
-  summarise(TOTAL = sum(TOTAL_VOTOS, na.rm =TRUE),
-            Lista_Nominal = sum (LISTA_NOMINAL, na.rm = TRUE),
-            PAN = sum(PAN, na.rm = TRUE),
-            APM = sum(APM, na.rm = TRUE),
-            PBT = sum(PBT, na.rm = TRUE),
-            NVA_ALIANZA   = sum(NVA_ALIANZA, na.rm = TRUE),
-            ASDC          = sum(ASDC, na.rm = TRUE), 
-            CANCELADOS    = sum(NUM_VOTOS_CAN_NREG, na.rm = TRUE),
-            NULOS         = sum(NUM_VOTOS_NULOS, na.rm = TRUE),
-            Num_Secciones = length(unique(na.omit(SECCION))),
-            Num_Casillas  = length(unique(na.omit(CASILLA))),
-            Municipio     = unique(MUNICIPIO), 
-            ID_Municipio  = unique(ID_MUNICIPIO))
-P2006Mun$CVE_ENT <- str_sub(string = P2006Mun$CVUN, start = 1, end = 2)
-################################### 2012  #######################################
-P2012Secc<-fread(input = "http://siceef.ine.mx/BD/Presidente2012Seccion.csv", 
-                 sep = ",", encoding = "Latin-1")
-P2012Secc$CVE_SECC<-str_c(str_pad(P2012Secc$ID_ESTADO, width =2, "left", "0"),
-                          str_pad(P2012Secc$SECCION, width = 4, "left", "0"))
-P2012Secc$CV_MUN <- str_c(str_pad(P2012Secc$ID_ESTADO, width = 2, "left", "0"),
-                          str_pad(P2012Secc$ID_MUNICIPIO, width = 3, "left", "0"))
-P2012Secc$CV_TODO  <- str_c(str_c(str_pad(P2012Secc$ID_ESTADO, width = 2, "left", "0"), #Estado, Municipio, Sección
-                         str_pad(P2012Secc$ID_MUNICIPIO, width = 3, "left", "0")), 
-                         str_pad(P2012Secc$SECCION, width = 4, "left", "0"))
-P2012Mun<-P2012Secc %>%   #2447
-  group_by(CVUN =as.factor(P2012Secc$CV_MUN)) %>%
-  summarise(TOTAL = sum(TOTAL_VOTOS, na.rm =TRUE),
-            Lista_Nominal = sum (LISTA_NOMINAL, na.rm = TRUE),
-            PAN  = sum(PAN, na.rm = TRUE),
-            PRI  = sum(PRI, na.rm = TRUE),
-            PRD  = sum(PRD, na.rm = TRUE),
-            PVEM = sum(PVEM, na.rm = TRUE),
-            PT   = sum(PT, na.rm = TRUE),
-            MC   = sum(MC, na.rm = TRUE),
-            NVA_ALIANZA   = sum(NVA_ALIANZA, na.rm = TRUE),
-            PRI_PVEM      = sum(PRI_PVEM, na.rm = TRUE),
-            PRD_PT_MC     = sum(PRD_PT_MC, na.rm = TRUE),
-            PRD_PT        = sum(PRD_PT, na.rm = TRUE),
-            PRD_MC        = sum(PRD_MC, na.rm = TRUE),
-            PT_MC         = sum(PT_MC, na.rm = TRUE),
-            CANCELADOS    = sum(NUM_VOTOS_CAN_NREG, na.rm = TRUE),
-            NULOS         = sum(NUM_VOTOS_NULOS, na.rm = TRUE),
-            Num_Secciones = length(unique(na.omit(SECCION))),
-            Num_Casillas  = length(unique(na.omit(CASILLAS))),
-            Municipio     = unique(na.omit(MUNICIPIO)), 
-            ID_Municipio  = unique(ID_MUNICIPIO))
-P2012Mun$CVE_ENT <- str_sub(string = P2012Mun$CVUN, start = 1, end = 2)
+
 ```
 
 Se analizan resultados electorales de 3 elecciones federales 2000, 2006 y 2012. La lista nominal 
@@ -78,6 +19,10 @@ Se analizan resultados electorales de 3 elecciones federales 2000, 2006 y 2012. 
 2006 si tiene lista nominal, 2474 municipios, revisar porqué, quitar voto en el extranjero 
 2012 2446 municipios en México en el 2012
 quitar  Municipio "Voto en el Extranjero"
+
+
+
+
 
 ```{r PE 2006, echo = FALSE, cache = TRUE}
 P2006Secc %>% 
