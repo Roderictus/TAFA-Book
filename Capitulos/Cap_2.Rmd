@@ -12,7 +12,12 @@ Existen 623 casos donde la sección reporta una votación mayor a 100 porciento
 
 \subsection{Datos Electorales}
 
-Se disponen de los datos electorales de los años 2000, 2006 y 2012. Sin embargo sólo se cuenta con datos de lista nominal para los años 2006 y 2012 por lo que el análisis de participación electoral se reduce a estos dos periodos. Sin embargo se complementan dichos periodos con votaciones estatales para periodos posteriores en los estudios de caso de Guadalajara y Puebla. 
+Se disponen de los datos electorales de los años 2000, 2006 y 2012. Sin embargo sólo se cuenta con datos de lista nominal para los años 2006 y 2012 por lo que el análisis de participación electoral se reduce a estos dos periodos. 
+
+El análisis se concentra en dos elecciones federales para presidente de la república y en el estudio pormenorizado de dos elecciones estatales; Guadalajara y Puebla en el 2016. 
+
+
+Sin embargo se complementan dichos periodos con votaciones estatales para periodos posteriores en los estudios de caso de Guadalajara y Puebla. 
 
 
 \subsubsection{Elecciones Federales 2012}
@@ -29,34 +34,48 @@ PRD, Movimiento Ciudadano
 
 
 ```{r Mapa participación electoral Estatal 2006 , echo = FALSE, cache = TRUE}
-##################################  2006  ###############################
-P2006Secc<-fread(input = "http://siceef.ine.mx/BD/Presidente2006Seccion.csv", 
-                 sep = ",", encoding = "UTF-8")
-P2006Secc$CVE_SECC <-str_c(str_pad(P2006Secc$ID_ESTADO, width =2, "left", "0"),         #Estado Sección
-                         str_pad(P2006Secc$SECCION, width = 4, "left", "0"))
-P2006Secc$CV_MUN   <- str_c(str_pad(P2006Secc$ID_ESTADO, width = 2, "left", "0"),       #Estado Municipio
-                         str_pad(P2006Secc$ID_MUNICIPIO, width = 3, "left", "0"))
-P2006Secc$CV_TODO  <- str_c(str_c(str_pad(P2006Secc$ID_ESTADO, width = 2, "left", "0"), #Estado, Municipio, Sección
-                         str_pad(P2006Secc$ID_MUNICIPIO, width = 3, "left", "0")), 
-                         str_pad(P2006Secc$SECCION, width = 4, "left", "0"))
-P2006Secc<-filter(P2006Secc, MUNICIPIO != "Voto en el Extranjero")
-P2006Mun<-P2006Secc %>% #2442 Municipios 
-  group_by(CVUN =as.factor(P2006Secc$CV_MUN)) %>%
-  summarise(TOTAL = sum(TOTAL_VOTOS, na.rm =TRUE),
-            Lista_Nominal = sum (LISTA_NOMINAL, na.rm = TRUE),
-            PAN = sum(PAN, na.rm = TRUE),
-            APM = sum(APM, na.rm = TRUE),
-            PBT = sum(PBT, na.rm = TRUE),
-            NVA_ALIANZA   = sum(NVA_ALIANZA, na.rm = TRUE),
-            ASDC          = sum(ASDC, na.rm = TRUE), 
-            CANCELADOS    = sum(NUM_VOTOS_CAN_NREG, na.rm = TRUE),
-            NULOS         = sum(NUM_VOTOS_NULOS, na.rm = TRUE),
-            Num_Secciones = length(unique(na.omit(SECCION))),
-            Num_Casillas  = length(unique(na.omit(CASILLA))),
-            Municipio     = unique(MUNICIPIO), 
-            ID_Municipio  = unique(ID_MUNICIPIO))
-P2006Mun$CVE_ENT <- str_sub(string = P2006Mun$CVUN, start = 1, end = 2)
-################################### 2012  #######################################
+
+
+
+
+###########################     Cartografía   ###################################
+Estados <- readOGR("C:/Proyectos R/TAFA-Book/Datos/Geográficos/Estados/areas_geoestadisticas_estatales.shp",
+                   "areas_geoestadisticas_estatales", encoding = "UTF8") #cartografía estatal
+Estados_Map <- fortify(Estados, region = "CVE_ENT" )
+Estados_Map$CVE_ENT <-  Estados_Map$id
+Estados_Map2 <- left_join(Estados_Map, P2006Edo, by = "CVE_ENT") #96 mb 
+###########################     Mapa          ###################################
+Part_Edo_Map <- ggplot() +
+  geom_polygon(data = Estados_Map2, aes(fill = Por_Part, 
+                                       x = long, 
+                                       y = lat, 
+                                       group = group)) +
+  geom_path(data = Estados_Map, aes( x= long, 
+                                     y = lat, group = group),
+            color = "white", size = 0.2) +
+  coord_equal() +
+  theme_map() +
+  labs( x = NULL,
+        y = NULL, NULL, 
+        title = "Paricipación Electoral Estatal 2006") +
+  theme(legend.position = "bottom") +
+  scale_fill_viridis(
+    option = "viridis",
+    name = "Porcentaje de participación electoral 2006",
+#    discrete = T,
+    direction = -1,
+    guide = guide_legend(
+      keyheight = unit(5, units = "mm"),
+      title.position = 'top',
+      reverse = T
+    ))
+Part_Edo_Map
+```
+
+```{r Mapa participación electoral Estatal 2012 , echo = FALSE, cache = TRUE}
+#########################   2012 Estatal      ##################################################
+2012  #######################################
+
 P2012Secc<-fread(input = "http://siceef.ine.mx/BD/Presidente2012Seccion.csv", 
                  sep = ",", encoding = "Latin-1")
 P2012Secc$CVE_SECC<-str_c(str_pad(P2012Secc$ID_ESTADO, width =2, "left", "0"),
@@ -89,68 +108,13 @@ P2012Mun<-P2012Secc %>%   #2447
             Municipio     = unique(na.omit(MUNICIPIO)), 
             ID_Municipio  = unique(ID_MUNICIPIO))
 P2012Mun$CVE_ENT <- str_sub(string = P2012Mun$CVUN, start = 1, end = 2)
+
 #####################################################################################################
 #shapefiles con formas estatales
 #agregar datos a nivel estatal
 #tabla con resultados agregados por estado, participación electoral y principales partidos
 ###########################   Datos 2006 Estatal  #########################################
-P2006Edo<- P2006Mun %>% group_by(CVE_ENT = as.factor(CVE_ENT)) %>% 
-  summarise(TOTAL = sum(TOTAL, na.rm = TRUE),
-            Lista_Nominal = sum (Lista_Nominal, na.rm = TRUE),
-            PAN           = sum(PAN, na.rm = TRUE),
-            APM           = sum(APM, na.rm = TRUE),
-            PBT           = sum(PBT, na.rm = TRUE),
-            NVA_ALIANZA   = sum(NVA_ALIANZA, na.rm = TRUE),
-            ASDC          = sum(ASDC, na.rm = TRUE),
-            CANCELADOS    = sum(CANCELADOS, na.rm = TRUE),
-            NULOS         = sum(NULOS, na.rm = TRUE),
-            Num_Secciones = sum(Num_Secciones, na.rm = TRUE),
-            Num_Casillas  = sum(Num_Casillas, na.rm = TRUE)
-            )
-P2006Edo$Por_Part <- (P2006Edo$TOTAL/P2006Edo$Lista_Nominal) * 100 #porcentajes. 
-P2006Edo$PAN_por <- (P2006Edo$PAN/P2006Edo$TOTAL) * 100
-P2006Edo$APM_por <- (P2006Edo$APM/P2006Edo$TOTAL) * 100
-P2006Edo$PBT_por <- (P2006Edo$PBT/P2006Edo$TOTAL) * 100
-P2006Edo$NVA_ALIANZA_por <- (P2006Edo$NVA_ALIANZA/P2006Edo$TOTAL) * 100
-P2006Edo$ASDC_por <- (P2006Edo$ASDC/P2006Edo$TOTAL) * 100
 
-###########################     Cartografía   ###################################
-Estados <- readOGR("C:/Proyectos R/TAFA-Book/Datos/Geográficos/Estados/areas_geoestadisticas_estatales.shp",
-                   "areas_geoestadisticas_estatales", encoding = "UTF8") #cartografía estatal
-Estados_Map <- fortify(Estados, region = "CVE_ENT" )
-Estados_Map$CVE_ENT <-  Estados_Map$id
-Estados_Map <- left_join(Estados_Map, P2006Edo, by = "CVE_ENT") #96 mb 
-###########################     Mapa          ###################################
-Part_Edo_Map <- ggplot() +
-  geom_polygon(data = Estados_Map, aes(fill = Por_Part, 
-                                       x = long, 
-                                       y = lat, 
-                                       group = group)) +
-  geom_path(data = Estados_Map, aes( x= long, 
-                                     y = lat, group = group),
-            color = "white", size = 0.2) +
-  coord_equal() +
-  theme_map() +
-  labs( x = NULL,
-        y = NULL, NULL, 
-        title = "Paricipación Electoral Estatal 2006") +
-  theme(legend.position = "bottom") +
-  scale_fill_viridis(
-    option = "viridis",
-    name = "Porcentaje de participación electoral 2016",
-    discrete = T,
-    direction = -1,
-    guide = guide_legend(
-      keyheight = unit(5, units = "mm"),
-      title.position = 'top',
-      reverse = T
-    ))
-Part_Edo_Map
-```
-
-```{r Mapa participación electoral Estatal 2012 , echo = FALSE, cache = TRUE}
-
-#########################   2012 Estatal      ##################################################
 P2012Edo<- P2012Mun %>% group_by(CVE_ENT = as.factor(CVE_ENT)) %>% 
   summarise(TOTAL = sum(TOTAL, na.rm = TRUE),
             Lista_Nominal = sum (Lista_Nominal, na.rm = TRUE),
@@ -183,13 +147,117 @@ P2012Edo$PRI_PVEM_por     <- (P2012Edo$PRI_PVEM/P2012Edo$TOTAL) * 100
 P2012Edo$PRD_PT_MC_por    <- (P2012Edo$PRD_PT_MC/P2012Edo$TOTAL) * 100
 P2012Edo$PRD_PT_por       <- (P2012Edo$PRD_PT/P2012Edo$TOTAL) * 100
 P2012Edo$PRD_MC_por       <- (P2012Edo$PRD_MC/P2012Edo$TOTAL) * 100
-
-
-
+###########################     
+#Estados_Map <- fortify(Estados, region = "CVE_ENT" ) #Estados ya existe, cambiamos los datos que se anexan 
+#Estados_Map$CVE_ENT <-  Estados_Map$id
+Estados_Map2 <- left_join(Estados_Map, P2012Edo, by = "CVE_ENT") #96 mb 
+head(Estados_Map2)
+###########################     Mapa          ###################################
+Part_Edo_Map <- ggplot() +
+  geom_polygon(data = Estados_Map2, aes(fill = Por_Part, 
+                                       x = long, 
+                                       y = lat, 
+                                       group = group)) +
+  geom_path(data = Estados_Map, aes( x= long, 
+                                     y = lat, group = group),
+            color = "white", size = 0.2) +
+  coord_equal() +
+  theme_map() +
+  labs( x = NULL,
+        y = NULL, NULL, 
+        title = "Paricipación Electoral Estatal 2012") +
+  theme(legend.position = "bottom") +
+  scale_fill_viridis(
+    option = "viridis",
+    name = "Porcentaje de participación electoral 2012",
+    #discrete = T,
+    direction = -1,
+    guide = guide_legend(
+      keyheight = unit(5, units = "mm"),
+      title.position = 'top',
+      reverse = T
+    ))
+Part_Edo_Map
 ```
 
 
 ```{r Mapa participación electoral Municipal 2006 , echo = FALSE, cache = TRUE}
+
+Municipios_Cart <- readOGR("C:/Proyectos R/Datos-Electorales/Mapa Reducido/areas_geoestadisticas_municipales.shp", "areas_geoestadisticas_municipales",                     encoding = "UTF8")   #shp de municipios
+#región como código único
+Municipios_Cart$CVE_EDO_MUN <- str_c(Municipios_Cart$CVE_ENT, Municipios_Cart$CVE_MUN)
+Municipios_Map<-(fortify(Municipios_Cart, region = c("CVE_EDO_MUN")))
+Municipios_Map<-left_join(Municipios_Map, Municipios_Cart@data, by = "CVE_EDO_MUN")
+Municipios_Map$CVE_EDO_MUN<-Municipios_Map$id
+P2006Mun$CVE_EDO_MUN <- P2006Mun$CVUN
+Municipios_Map2 <- left_join(Municipios_Map, P2006Mun, by = "CVE_EDO_MUN") #
+#revisar consistencia de municipios 
+A<-table(Municipios_Map2$NOM_MUN)
+B<-table(Municipios_Map2$Municipio)
+
+summary(Municipios_Map2$Por_Part)
+sort(table(Municipios_Map2[is.na(Municipios_Map2$Por_Part),]$NOM_MUN)
+)
+
+
+
+no_classes <- 6
+
+quantiles <-quantile(Municipios_Map2$Por_Part,
+                     probs = seq(0,1,length.out = no_classes + 1 ))
+labels <- c()
+for(idx in 1:length(quantiles)) {
+  labels<-c(labels, paste0(round(quantiles[idx],2),
+                           "-",
+                           round(quantiles[idx + 1],2)))
+}
+labels <- labels[1:length(labels)-1]
+
+Municipios_Map$Por_Participacion2 <- cut(as.numeric(Municipios_Map$Por_Voto),
+                                        breaks = quantiles, 
+                                        labels = labels, 
+                                        include.lowest = T)
+
+
+
+
+
+Part_Mun_Map <- ggplot() +
+  geom_polygon(data = Municipios_Map2, aes(fill = Por_Part, 
+                                       x = long, 
+                                       y = lat, 
+                                       group = group)) +
+  #geom_path(data = Estados_Map, aes( x= long, 
+  #                                   y = lat, group = group),
+  #          color = "black", size = 0.1) +
+  geom_path(data = Municipios_Map2, aes( x= long, 
+                                     y = lat, group = group),
+            color = "white") +
+  
+  coord_equal() +
+  theme_map() +
+  labs( x = NULL,
+        y = NULL, NULL, 
+        title = "Paricipación Electoral Municipal 2006 ") +
+  theme(legend.position = "bottom") +
+  scale_fill_viridis(
+    option = "viridis",
+    name = "Porcentaje de participación electoral 2006",
+    #discrete = T,
+    direction = -1,
+    guide = guide_legend(
+      keyheight = unit(5, units = "mm"),
+      title.position = 'top',
+      reverse = T
+    ))
+
+Part_Mun_Map
+```
+
+
+```{r Mapa participación electoral Municipal 2012, echo = FALSE, cache = TRUE}
+
+
 
 ```
 

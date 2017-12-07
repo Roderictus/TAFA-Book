@@ -34,6 +34,9 @@ P2006Secc %>%
         format.args = list(big.mark = ","), 
         caption = "Participación electoral Estatal 2006") 
 ```
+
+
+
 1.Cambio de la variación total
 2. Estados con mayor variación
 3. Condensar en una tabla

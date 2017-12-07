@@ -1,0 +1,12 @@
+\section{Capítulo 6 Estudio de Caso; Guadalajara}
+
+
+
+\subsection{Guadalajara, Estudio de Caso }
+
+
+```{r, fig.cap=paste("Participación electoral a nivel municipal 2012 mapa"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+JALSECCMUN2015 <- fread("")
+
+```
+
