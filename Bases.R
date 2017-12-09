@@ -163,6 +163,9 @@ JALSECC2015 <- JAL2015 %>%
             VotosTotales = sum(VotosTotales), 
             VotosValidos = sum(VotosVálidos))
 JALSECC2015$ANO <- 2015
+write.csv(x = P2012Edo, file = "Datos/Electorales/P2012Edo.csv")
+
+head(JALSECC2015)
 JALSECC2015<- JALSECC2015 %>% mutate(Por_Part <- (VotosTotales/Boletas),
                        PAN_por    = (PAN/VotosValidos)*100,
                        PRI_por    = (PRI/VotosValidos)*100,
