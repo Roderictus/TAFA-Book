@@ -6,8 +6,9 @@ library(stringr)
 #archivo auxiliar para su construcción
 
 #Bases electorales
-
+#######################################################################################################
 ##########################    P2006 Secc    ###########################################################
+#######################################################################################################
 
 P2006Secc<-fread(input = "http://siceef.ine.mx/BD/Presidente2006Seccion.csv", 
                  sep = ",", encoding = "UTF-8")
@@ -19,13 +20,11 @@ P2006Secc$CV_TODO  <- str_c(str_c(str_pad(P2006Secc$ID_ESTADO, width = 2, "left"
                                   str_pad(P2006Secc$ID_MUNICIPIO, width = 3, "left", "0")), 
                             str_pad(P2006Secc$SECCION, width = 4, "left", "0"))
 P2006Secc<-filter(P2006Secc, MUNICIPIO != "Voto en el Extranjero")
-
 write.csv(x = P2006Secc, file = "Datos/Electorales/P2006Secc.csv")# N
 
 ####################      P2006 Mun      ##############################################################
-
 P2006Mun<-P2006Secc %>% #2442 Municipios 
-  group_by(CVUN =as.factor(P2006Secc$CV_MUN)) %>%
+  group_by(CIRCUNSCRIPCION, ID_ESTADO, NOMBRE_ESTADO, ID_MUNICIPIO, MUNICIPIO) %>%
   summarise(TOTAL = sum(TOTAL_VOTOS, na.rm =TRUE),
             Lista_Nominal = sum (LISTA_NOMINAL, na.rm = TRUE),
             PAN = sum(PAN, na.rm = TRUE),
@@ -46,12 +45,10 @@ P2006Mun$APM_por    <- (P2006Mun$APM/P2006Mun$TOTAL) * 100
 P2006Mun$PBT_por    <- (P2006Mun$PBT/P2006Mun$TOTAL) * 100
 P2006Mun$NVA_ALIANZA_por <- (P2006Mun$NVA_ALIANZA/P2006Mun$TOTAL) * 100
 P2006Mun$ASDC_por   <- (P2006Mun$ASDC/P2006Mun$TOTAL) * 100
-
 write.csv(x = P2006Mun, file = "Datos/Electorales/P2006Mun.csv")# N
 
 ##################################     P2006 Edo   ###################################################
-
-P2006Edo<- P2006Mun %>% group_by(CVE_ENT = as.factor(CVE_ENT)) %>% 
+P2006Edo<- P2006Mun %>% group_by(CIRCUNSCRIPCION, ID_ESTADO, NOMBRE_ESTADO) %>% 
   summarise(TOTAL = sum(TOTAL, na.rm = TRUE),
             Lista_Nominal = sum (Lista_Nominal, na.rm = TRUE),
             PAN           = sum(PAN, na.rm = TRUE),
@@ -70,16 +67,84 @@ P2006Edo$APM_por <- (P2006Edo$APM/P2006Edo$TOTAL) * 100
 P2006Edo$PBT_por <- (P2006Edo$PBT/P2006Edo$TOTAL) * 100
 P2006Edo$NVA_ALIANZA_por <- (P2006Edo$NVA_ALIANZA/P2006Edo$TOTAL) * 100
 P2006Edo$ASDC_por <- (P2006Edo$ASDC/P2006Edo$TOTAL) * 100
+write.csv(x = P2006Edo, file = "Datos/Electorales/P2006Edo.csv")# N
 
-######## P2012 Secc
-######## P2012 Mun
-######## P2012 Edo
-######## G2016 Pue
+################################################################################################
+#######################################       2012  SECC    ########################################
+################################################################################################
+P2012Secc<-fread(input = "http://siceef.ine.mx/BD/Presidente2012Seccion.csv", 
+                 sep = ",", encoding = "Latin-1")
+P2012Secc$CVE_SECC<-str_c(str_pad(P2012Secc$ID_ESTADO, width =2, "left", "0"),
+                          str_pad(P2012Secc$SECCION, width = 4, "left", "0"))
+P2012Secc$CV_MUN <- str_c(str_pad(P2012Secc$ID_ESTADO, width = 2, "left", "0"),
+                          str_pad(P2012Secc$ID_MUNICIPIO, width = 3, "left", "0"))
+P2012Secc$CV_TODO  <- str_c(str_c(str_pad(P2012Secc$ID_ESTADO, width = 2, "left", "0"), #Estado, Municipio, Sección
+                                  str_pad(P2012Secc$ID_MUNICIPIO, width = 3, "left", "0")), 
+                            str_pad(P2012Secc$SECCION, width = 4, "left", "0"))
+write.csv(x = P2012Secc, file = "Datos/Electorales/P2012Secc.csv")# N
+################################################################################################
+#########################   2012 Municipal      ##################################################
+################################################################################################
+P2012Mun<-P2012Secc %>%   #2448
+  group_by(NOMBRE_ESTADO, ID_ESTADO, MUNICIPIO, ID_MUNICIPIO, CVUN =as.factor(P2012Secc$CV_MUN)) %>%
+  summarise(TOTAL = sum(TOTAL_VOTOS, na.rm =TRUE),
+            Lista_Nominal = sum (LISTA_NOMINAL, na.rm = TRUE),
+            PAN  = sum(PAN, na.rm = TRUE),
+            PRI  = sum(PRI, na.rm = TRUE),
+            PRD  = sum(PRD, na.rm = TRUE),
+            PVEM = sum(PVEM, na.rm = TRUE),
+            PT   = sum(PT, na.rm = TRUE),
+            MC   = sum(MC, na.rm = TRUE),
+            NVA_ALIANZA   = sum(NVA_ALIANZA, na.rm = TRUE),
+            PRI_PVEM      = sum(PRI_PVEM, na.rm = TRUE),
+            PRD_PT_MC     = sum(PRD_PT_MC, na.rm = TRUE),
+            PRD_PT        = sum(PRD_PT, na.rm = TRUE),
+            PRD_MC        = sum(PRD_MC, na.rm = TRUE),
+            PT_MC         = sum(PT_MC, na.rm = TRUE),
+            CANCELADOS    = sum(NUM_VOTOS_CAN_NREG, na.rm = TRUE),
+            NULOS         = sum(NUM_VOTOS_NULOS, na.rm = TRUE),
+            Num_Secciones = length(unique(na.omit(SECCION))),
+            Num_Casillas  = length(unique(na.omit(CASILLAS))))
+write.csv(x = P2012Mun, file = "Datos/Electorales/P2012Mun.csv")# N
+###########################   Datos 2012 Estatal  #########################################
+P2012Edo<- P2012Mun %>% group_by(NOMBRE_ESTADO, ID_ESTADO) %>% 
+  summarise(TOTAL = sum(TOTAL, na.rm = TRUE),
+            Lista_Nominal = sum (Lista_Nominal, na.rm = TRUE),
+            PAN           = sum(PAN, na.rm = TRUE),
+            PRI           = sum(PRI, na.rm = TRUE),
+            PRD           = sum(PRD, na.rm = TRUE),
+            PVEM          = sum(PVEM, na.rm = TRUE),
+            PT            = sum(PT, na.rm = TRUE),
+            MC            = sum(MC, na.rm = TRUE),
+            NVA_ALIANZA   = sum(NVA_ALIANZA, na.rm = TRUE),
+            PRI_PVEM      = sum(PRI_PVEM, na.rm = TRUE),
+            PRD_PT_MC     = sum(PRD_PT_MC, na.rm = TRUE), 
+            PRD_PT        = sum(PRD_PT, na.rm = TRUE),
+            PRD_MC        = sum(PRD_MC, na.rm = TRUE),
+            CANCELADOS    = sum(CANCELADOS, na.rm = TRUE),
+            NULOS         = sum(NULOS, na.rm = TRUE),
+            Num_Secciones = sum(Num_Secciones, na.rm = TRUE),
+            Num_Casillas  = sum(Num_Casillas, na.rm = TRUE),
+            Num_Municipios = length(unique(na.omit(MUNICIPIO))))
+P2012Edo$Por_Part <- (P2012Edo$TOTAL/P2012Edo$Lista_Nominal) * 100 #porcentajes. 
+P2012Edo$PAN_por  <- (P2012Edo$PAN/P2012Edo$TOTAL) * 100
+P2012Edo$PRI_por  <- (P2012Edo$PRI/P2012Edo$TOTAL) * 100
+P2012Edo$PRD_por  <- (P2012Edo$PRD/P2012Edo$TOTAL) * 100
+P2012Edo$PVEM_por <- (P2012Edo$PVEM/P2012Edo$TOTAL) * 100
+P2012Edo$PT_por   <- (P2012Edo$PT/P2012Edo$TOTAL) * 100
+P2012Edo$MC_por   <- (P2012Edo$MC/P2012Edo$TOTAL) * 100
+P2012Edo$NVA_ALIANZA_por  <- (P2012Edo$NVA_ALIANZA/P2012Edo$TOTAL) * 100
+P2012Edo$PRI_PVEM_por     <- (P2012Edo$PRI_PVEM/P2012Edo$TOTAL) * 100
+P2012Edo$PRD_PT_MC_por    <- (P2012Edo$PRD_PT_MC/P2012Edo$TOTAL) * 100
+P2012Edo$PRD_PT_por       <- (P2012Edo$PRD_PT/P2012Edo$TOTAL) * 100
+P2012Edo$PRD_MC_por       <- (P2012Edo$PRD_MC/P2012Edo$TOTAL) * 100
+write.csv(x = P2012Edo, file = "Datos/Electorales/P2012Edo.csv")# N
 
+#######################################################################################################
 ################### M2016 Jalisco     #################################################################
+#######################################################################################################
 #125 ayuntamientos
 # 39 diputados al congreso del estado, 20 de mayoría relativa por cada uno de los distritos electorales
-
 JAL2015 <- read_xlsx(path = "C:/Proyectos R/Datos-Electorales/2015 Guadalajara/ResultadosPorCasilla2015.xlsx", 
                      range = "A4:AD18734")
 colnames(JAL2015) <- make.names(colnames(JAL2015))
@@ -115,3 +180,28 @@ write.csv(x = JALSECCDIP2015, file = "Datos/Electorales/Jalisco/JALSECCDIP2015.c
 
 #Bases de construcción cartográfica
 
+
+#http://gaia.inegi.org.mx/NLB/tunnel/IFE2010/Descarga.do?tabla=0&grupo=0&edo=1
+
+Estadísticas censales a escalas geoelectorales por estado
+
+#ENOE
+
+
+
+
+#ENOE a nivel municipal
+
+
+
+
+
+
+
+
+
+
+#####################################################################################################
+#shapefiles con formas estatales
+#agregar datos a nivel estatal
+#tabla con resultados agregados por estado, participación electoral y principales partidos

@@ -2,7 +2,7 @@
 
 
 
-\subsection{Guadalajara, Estudio de Caso }
+\subsection{Guadalajara, Sociodemográficos }
 
 
 ```{r, fig.cap=paste("Participación electoral a nivel municipal 2012 mapa"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
@@ -10,3 +10,8 @@ JALSECCMUN2015 <- fread("")
 
 ```
 
+
+\subsection{Guadalajara, Ingreso }
+
+
+\subsection{Guadalajara, Modelo a nivel municipal }
