@@ -2,11 +2,69 @@
 
 
 
+
+
+
+
+\subsection{Guadalajara, Descriptivos del voto }
+
+
+Voto total `r sum(JALSECCMUN$VotosTotales)`
+Voto total valido `r sum(JALSECCMUN$VotosValidos)`
+
+
+
+```{r, fig.cap=paste("Correlación seccional"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+library(PerformanceAnalytics)
+JALSECCMUN2015 <-fread(file = "Datos/Electorales/Jalisco/JALSECCMUN2015.csv")
+head(JALSECCMUN2015)
+colnames(JALSECCMUN2015)
+
+class(JALSECCMUN2015$Por_Part)
+head(JALSECCMUN2015)
+JALSECCMUN2015 %>%
+  select(PAN_por, PRI_por, MC_por, PVEM_por, MORENA_por, Por_Part) %>%
+  chart.Correlation(histogram = TRUE)
+  
+
+JALMUNMUN2015 %>%
+  select(PAN_por, PRI_por, MC_por, PVEM_por, MORENA_por, Por_Part) %>%
+  chart.Correlation(histogram = TRUE)
+
+
+
+```
+
+
+```{r, fig.cap=paste("Resultados Municipales"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+
+
+```
+
+```{r, fig.cap=paste("Correlación Municipal"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+JALMUNMUN2015 <-fread(file = "Datos/Electorales/Jalisco/JALSECCMUN2015.csv")
+
+
+```
+
+
+
 \subsection{Guadalajara, Sociodemográficos }
 
 
 ```{r, fig.cap=paste("Participación electoral a nivel municipal 2012 mapa"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
-JALSECCMUN2015 <- fread("")
+
+
+
+
+
+table(JALSECCMUN2015$Municipio)
+
+
+
+
+
+
 
 ```
 

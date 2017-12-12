@@ -163,9 +163,7 @@ JALSECC2015 <- JAL2015 %>%
             VotosTotales = sum(VotosTotales), 
             VotosValidos = sum(VotosVálidos))
 JALSECC2015$ANO <- 2015
-write.csv(x = P2012Edo, file = "Datos/Electorales/P2012Edo.csv")
 
-head(JALSECC2015)
 JALSECC2015<- JALSECC2015 %>% mutate(Por_Part <- (VotosTotales/Boletas),
                        PAN_por    = (PAN/VotosValidos)*100,
                        PRI_por    = (PRI/VotosValidos)*100,
@@ -178,10 +176,64 @@ JALSECC2015<- JALSECC2015 %>% mutate(Por_Part <- (VotosTotales/Boletas),
 JALSECCMUN2015 <- JALSECC2015 %>% filter(Elección == "Municipes")
 JALSECCDIP2015 <- JALSECC2015 %>% filter(Elección == "Diputados MR")
 
+###################################         Jalisco a Nivel Municipal       ################################
+JALSECCMUN2015 <-fread(file = "Datos/Electorales/Jalisco/JALSECCMUN2015.csv")
+
+JALMUNMUN2015 <- JALSECCMUN2015 %>%      #municipes en municipios, 125 Municipios
+  group_by(Municipio) %>%
+  summarise(PAN = sum(PAN), 
+            PRI = sum(PRI), 
+            PRD = sum(PRD), 
+            PT = sum(PT), 
+            PVEM =sum(PVEM), 
+            MC = sum(MC),
+            N.A. = sum (N.A.), 
+            MORENA = sum(MORENA),
+            JPK = sum(JPK), 
+            Boletas = sum(Boletas),
+            VotosTotales = sum(VotosTotales), 
+            VotosValidos = sum(VotosValidos))
+
 write.csv(x = JALSECCMUN2015, file = "Datos/Electorales/Jalisco/JALSECCMUN2015.csv")
 write.csv(x = JALSECCDIP2015, file = "Datos/Electorales/Jalisco/JALSECCDIP2015.csv")
 
+#Base de datos a nivel municipal
+
+head(JALSECCMUN2015)
+
+JALMUNMUN2015 <- JALSECCMUN2015 %>%   #Resultados a nivel municipio 
+  group_by(Municipio) %>% 
+  mutate(Por_Part <- (VotosTotales/Boletas),
+         PAN_por    = (PAN/VotosValidos)*100,
+         PRI_por    = (PRI/VotosValidos)*100,
+         PRD_por    = (PRD/VotosValidos)*100,
+         PT_por     = (PT/VotosValidos)*100,
+         PVEM_por   = (PVEM/VotosValidos)*100,
+         MC_por     = (MC/VotosValidos)*100,
+         MORENA_por = (MORENA/VotosValidos)*100,
+         JPK_por    = (JPK/VotosValidos)*100)        
+  
+JALMUNMUN2015<- JALMUNMUN2015 %>% 
+  mutate(Por_Part  = (VotosTotales/Boletas),
+         PAN_por    = (PAN/VotosValidos)*100,
+         PRI_por    = (PRI/VotosValidos)*100,
+         PRD_por    = (PRD/VotosValidos)*100,
+         PT_por     = (PT/VotosValidos)*100,
+         PVEM_por   = (PVEM/VotosValidos)*100,
+         MC_por     = (MC/VotosValidos)*100,
+         NA_por     = (N.A./VotosValidos)*100, 
+         MORENA_por = (MORENA/VotosValidos)*100,
+         JPK_por    = (JPK/VotosValidos)*100)
+
+
+
 #Bases de construcción cartográfica
+
+
+
+
+
+
 
 
 #http://gaia.inegi.org.mx/NLB/tunnel/IFE2010/Descarga.do?tabla=0&grupo=0&edo=1
