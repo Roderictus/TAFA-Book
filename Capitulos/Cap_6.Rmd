@@ -1,6 +1,6 @@
 \section{Capítulo 6 Estudio de Caso; Guadalajara}
 
-
+Se analizan los resultados electorales para la elección de municipes, concurrente con diputados locales, para el año de 2015 a nivel municipal y sección electoral. Se realiza la comparación la elección Federal 2012 encontrando los principales cambios en participación electoral y tendencias generales del voto. Se presentan resultados y descriptivos de acuerdo a la base pública de resultados 
 
 
 
@@ -13,33 +13,47 @@ Voto total `r sum(JALSECCMUN$VotosTotales)`
 Voto total valido `r sum(JALSECCMUN$VotosValidos)`
 
 
+```{r, fig.cap=paste("Concentración de los votos y participación por municipio"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 
-```{r, fig.cap=paste("Correlación seccional"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
-library(PerformanceAnalytics)
-JALSECCMUN2015 <-fread(file = "Datos/Electorales/Jalisco/JALSECCMUN2015.csv")
-head(JALSECCMUN2015)
-colnames(JALSECCMUN2015)
+head(JALMUNMUN2015)
 
-class(JALSECCMUN2015$Por_Part)
-head(JALSECCMUN2015)
-JALSECCMUN2015 %>%
-  select(PAN_por, PRI_por, MC_por, PVEM_por, MORENA_por, Por_Part) %>%
-  chart.Correlation(histogram = TRUE)
-  
+TopMunJal  <- JALMUNMUN2015 %>%
+  select(Municipio, Boletas, Por_Part, )
 
+TopMunPUE2016<-PueMun2016 %>%
+  select(MUNICIPIO, Lista_Nominal, Por_Lista_Nominal, TOTAL, Por_Voto) %>%
+  arrange(-Lista_Nominal) %>%
+  top_n(10, Lista_Nominal)
+colnames(TopMunPUE2016)<- c("Municipio", "Lista Nominal", "% de la Lista Nominal", "Voto Total", "Voto como % de LN")
+kable(TopMunPUE2016)
+
+
+
+```
+
+
+```{r, fig.cap=paste("Correlación Municipal"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+JALMUNMUN2015 <-fread(file = "Datos/Electorales/Jalisco/JALMUNMUN.")
 JALMUNMUN2015 %>%
   select(PAN_por, PRI_por, MC_por, PVEM_por, MORENA_por, Por_Part) %>%
   chart.Correlation(histogram = TRUE)
-
-
-
 ```
 
 
+
+
+Mapa con resultados electorales a nivel municipal para las principales fuerzas políticas y 
 ```{r, fig.cap=paste("Resultados Municipales"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 
 
+
+
+
+
 ```
+
+Mapa con resultados a nivel sección electoral para Guadalajara y principales municipios urbanos. 
+
 
 ```{r, fig.cap=paste("Correlación Municipal"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 JALMUNMUN2015 <-fread(file = "Datos/Electorales/Jalisco/JALSECCMUN2015.csv")

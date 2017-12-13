@@ -164,20 +164,28 @@ JALSECC2015 <- JAL2015 %>%
             VotosValidos = sum(VotosVálidos))
 JALSECC2015$ANO <- 2015
 
-JALSECC2015<- JALSECC2015 %>% mutate(Por_Part <- (VotosTotales/Boletas),
-                       PAN_por    = (PAN/VotosValidos)*100,
-                       PRI_por    = (PRI/VotosValidos)*100,
-                       PRD_por    = (PRD/VotosValidos)*100,
-                       PT_por     = (PT/VotosValidos)*100,
-                       PVEM_por   = (PVEM/VotosValidos)*100,
-                       MC_por     = (MC/VotosValidos)*100,
-                       MORENA_por = (MORENA/VotosValidos)*100,
-                       JPK_por    = (JPK/VotosValidos)*100)
+JALSECC2015<- JALSECC2015 %>% 
+  mutate(Por_Part = (VotosTotales/Boletas)*100,
+         PAN_por    = (PAN/VotosValidos)*100,
+         PRI_por    = (PRI/VotosValidos)*100,
+         PRD_por    = (PRD/VotosValidos)*100,
+         PT_por     = (PT/VotosValidos)*100,
+         PVEM_por   = (PVEM/VotosValidos)*100,
+         MC_por     = (MC/VotosValidos)*100,
+         MORENA_por = (MORENA/VotosValidos)*100,
+         JPK_por    = (JPK/VotosValidos)*100)
 JALSECCMUN2015 <- JALSECC2015 %>% filter(Elección == "Municipes")
 JALSECCDIP2015 <- JALSECC2015 %>% filter(Elección == "Diputados MR")
 
 ###################################         Jalisco a Nivel Municipal       ################################
-JALSECCMUN2015 <-fread(file = "Datos/Electorales/Jalisco/JALSECCMUN2015.csv")
+#JALSECCMUN2015 <-fread(file = "Datos/Electorales/Jalisco/JALSECCMUN2015.csv")
+
+#hay 10 secciones electorales, en el municipio de Guadalajara con nas en Votos Validos
+#Asignamos Votos Totales a los votos validos
+
+JALSECCMUN2015[is.na(JALSECCMUN2015$VotosValidos),]$VotosValidos <-JALSECCMUN2015[is.na(JALSECCMUN2015$VotosValidos),]$VotosTotales
+
+head(JALSECCMUN2015)
 
 JALMUNMUN2015 <- JALSECCMUN2015 %>%      #municipes en municipios, 125 Municipios
   group_by(Municipio) %>%
@@ -198,8 +206,6 @@ write.csv(x = JALSECCMUN2015, file = "Datos/Electorales/Jalisco/JALSECCMUN2015.c
 write.csv(x = JALSECCDIP2015, file = "Datos/Electorales/Jalisco/JALSECCDIP2015.csv")
 
 #Base de datos a nivel municipal
-
-head(JALSECCMUN2015)
 
 JALMUNMUN2015 <- JALSECCMUN2015 %>%   #Resultados a nivel municipio 
   group_by(Municipio) %>% 
@@ -223,9 +229,17 @@ JALMUNMUN2015<- JALMUNMUN2015 %>%
          MC_por     = (MC/VotosValidos)*100,
          NA_por     = (N.A./VotosValidos)*100, 
          MORENA_por = (MORENA/VotosValidos)*100,
-         JPK_por    = (JPK/VotosValidos)*100)
+         JPK_por    = (JPK/VotosValidos)*100, 
+         Boletas_Por= (Boletas/sum(Boletas)*100),#porcentaje de la lista nominal que tiene cada municipio
+         Validos_Por= (VotosValidos/ sum(VotosValidos)*100))#porcentaje de la votación efectiva de cada municipio 
+
+JALMUNMUN2015$VotosValidos
+
+sum(JALMUNMUN2015$Boletas_Por)
+sum(JALMUNMUN2015$Validos_Por)
 
 
+write.csv(x = JALMUNMUN2015, file = "Datos/Electorales/Jalisco/JALMUNMUN2015.csv")
 
 #Bases de construcción cartográfica
 
