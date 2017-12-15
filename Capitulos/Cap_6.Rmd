@@ -14,39 +14,96 @@ Voto total valido `r sum(JALSECCMUN$VotosValidos)`
 
 
 ```{r, fig.cap=paste("Concentración de los votos y participación por municipio"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
-
-head(JALMUNMUN2015)
-
-TopMunJal  <- JALMUNMUN2015 %>%
-  select(Municipio, Boletas, Por_Part, )
-
-TopMunPUE2016<-PueMun2016 %>%
-  select(MUNICIPIO, Lista_Nominal, Por_Lista_Nominal, TOTAL, Por_Voto) %>%
-  arrange(-Lista_Nominal) %>%
-  top_n(10, Lista_Nominal)
-colnames(TopMunPUE2016)<- c("Municipio", "Lista Nominal", "% de la Lista Nominal", "Voto Total", "Voto como % de LN")
-kable(TopMunPUE2016)
-
-
+TopMunJal2015  <- JALMUNMUN2015 %>%
+  dplyr::select(Municipio, Boletas, Por_Part, Validos_Por, MC_por, PAN_por, PRI_por) %>% #Porcentaje de la lista nominal que tiene cada municipio
+  arrange(-Validos_Por) %>%
+  top_n(20, Validos_Por)
+colnames(TopMunJal2015) <- c("Municipio", "Lista Nominal", "% Participación", "% estatalvalidos" , "% MC", "% PAN", "% PRI")
+kable(TopMunJal2015)
 
 ```
 
 
 ```{r, fig.cap=paste("Correlación Municipal"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
-JALMUNMUN2015 <-fread(file = "Datos/Electorales/Jalisco/JALMUNMUN.")
+JALMUNMUN2015 <-fread(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/Jalisco/JALMUNMUN.csv")
+
 JALMUNMUN2015 %>%
-  select(PAN_por, PRI_por, MC_por, PVEM_por, MORENA_por, Por_Part) %>%
+  dplyr::select(PAN_por, PRI_por, MC_por, PVEM_por, MORENA_por, Por_Part) %>%
+  chart.Correlation(histogram = TRUE)
+```
+
+
+```{r, fig.cap=paste("Correlación Seccional"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+JALSECCMUN2015 <-fread(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/Jalisco/JALSECCMUN2015.csv")
+
+JALSECCMUN2015 %>%
+  dplyr::select(PAN_por, PRI_por, MC_por, PVEM_por, MORENA_por, Por_Part) %>%
   chart.Correlation(histogram = TRUE)
 ```
 
 
 
-
 Mapa con resultados electorales a nivel municipal para las principales fuerzas políticas y 
-```{r, fig.cap=paste("Resultados Municipales"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+```{r, fig.cap=paste("Participación electoral 2015 Municipios"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 
 
 
+Municipios <-readOGR("C:/Proyectos R/Analisis Electoral Puebla/Datos/Cartográficos/Municipios Nacional/areas_geoestadisticas_municipales.shp", "areas_geoestadisticas_municipales", encoding = "UTF8") #cartografía de Jalisco 14
+
+Municipios@data #CVE_ENT
+
+
+
+
+Municipios_Map <- fortify(Municipios, region = "nombre")
+Municipios_Map[Municipios_Map$id == "CA?ADA MORELOS",]$id <- "CAÑADA MORELOS"
+Municipios_Map[Municipios_Map$id == "SAN ANTONIO CA?ADA",]$id <- "SAN ANTONIO CAÑADA"
+PueMun2016$id<-PueMun2016$MUNICIPIO #Para unirlos por nombre de municipio 
+Municipios_Map <- left_join(Municipios_Map, PueMun2016, by = "id")
+#head(Municipios_Map)
+#Municipios_Map[is.na(Municipios_Map$Por_Voto),]#0 Na´s
+no_classes <- 6
+labels <- c()
+quantiles <-quantile(Municipios_Map$Por_Voto,
+                     probs = seq(0,1,length.out = no_classes + 1 ))
+labels <- c()
+for(idx in 1:length(quantiles)) {
+  labels<-c(labels, paste0(round(quantiles[idx],2),
+                           "-",
+                           round(quantiles[idx + 1],2)))
+}
+labels <- labels[1:length(labels)-1]
+Municipios_Map$Por_Participacion2 <- cut(Municipios_Map$Por_Voto,
+                                        breaks = quantiles, 
+                                        labels = labels, 
+                                        include.lowest = T)
+#####
+Plot_Puebla <- ggplot() +
+  geom_polygon(data = Municipios_Map, aes(fill = Por_Participacion2, 
+                                         x = long,
+                                         y = lat, 
+                                         group = group)) +
+  geom_path(data = Municipios_Map, aes( x = long, 
+                                       y = lat, 
+                                       group = group),
+            color = "white", size = 0.2) +
+  coord_equal() +
+  theme_map() +
+  labs( x = NULL, 
+        y = NULL, NULL,
+        title = "Participación electoral Puebla 2016") +
+  theme(legend.position = "bottom") +
+  scale_fill_viridis(
+    option = "viridis",
+    name = "Participación Electoral Puebla 2016",
+    discrete = T,
+    direction = -1,
+    guide = guide_legend(
+      keyheight = unit(5, units = "mm"),
+      title.position = 'top',
+      reverse = T
+    ))
+Plot_Puebla
 
 
 
@@ -55,12 +112,26 @@ Mapa con resultados electorales a nivel municipal para las principales fuerzas p
 Mapa con resultados a nivel sección electoral para Guadalajara y principales municipios urbanos. 
 
 
-```{r, fig.cap=paste("Correlación Municipal"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
-JALMUNMUN2015 <-fread(file = "Datos/Electorales/Jalisco/JALSECCMUN2015.csv")
-
+```{r, fig.cap=paste("Resultados electorales Guadalajara"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+#datos de secciones
+#estados 14, municipio 41 
+Secciones <-readOGR("C:/Proyectos R/Datos-Electorales/Cartografía electoral/14/SECCION.shp", 
+                    "SECCION") #6459
+Secciones$CVE_SECC<-str_c(str_pad(Secciones$entidad, width =2, "left", "0"),
+                          str_pad(Secciones$seccion, width = 4, "left", "0"))
+Secciones_Map <- fortify(Secciones, 
+                         region = "CVE_SECC")
+Secciones_Map$CVE_SECC <- Secciones_Map$id
+Secciones_Map<-left_join(x = Secciones_Map, y = P2012SeccEdo, by = "CVE_SECC")
+Secciones_Map$Por_PRI <-  ((Secciones_Map$PRI + Secciones_Map$PRI_PVEM) /
+                             (Secciones_Map$TOTAL_VOTOS-Secciones_Map$NUM_VOTOS_NULOS))*100
+Secciones_Map[is.na(Secciones_Map$Por_PRI),]$Por_PRI <- median(Secciones_Map$Por_PRI,na.rm = TRUE) #imputando el valor de las medianas
+Secciones_Map[is.na(Secciones_Map$Por_Participacion),]$Por_Participacion <- median(Secciones_Map$Por_Participacion,na.rm = TRUE) #imputando el valor de las medianas
 
 ```
 
+```{r, fig.cap=paste("Resultados electorales Zapopan"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+```
 
 
 \subsection{Guadalajara, Sociodemográficos }

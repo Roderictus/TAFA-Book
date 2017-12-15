@@ -210,7 +210,7 @@ write.csv(x = JALSECCDIP2015, file = "Datos/Electorales/Jalisco/JALSECCDIP2015.c
 #Base de datos a nivel municipal
 
 JALMUNMUN2015<- JALMUNMUN2015 %>% 
-  mutate(Por_Part  = (VotosTotales/Boletas),
+  mutate(Por_Part  = (VotosTotales/Boletas)*100,
          PAN_por    = (PAN/VotosValidos)*100,
          PRI_por    = (PRI/VotosValidos)*100,
          PRD_por    = (PRD/VotosValidos)*100,
@@ -222,14 +222,10 @@ JALMUNMUN2015<- JALMUNMUN2015 %>%
          JPK_por    = (JPK/VotosValidos)*100, 
          Boletas_Por= (Boletas/sum(Boletas)*100),#porcentaje de la lista nominal que tiene cada municipio
          Validos_Por= (VotosValidos/ sum(VotosValidos)*100))#porcentaje de la votación efectiva de cada municipio 
-
 write.csv(x = JALMUNMUN2015, file = "Datos/Electorales/Jalisco/JALMUNMUN2015.csv")
 
 #Bases de construcción cartográfica
-
-
-
-
+#
 
 
 
@@ -244,15 +240,6 @@ Estadísticas censales a escalas geoelectorales por estado
 
 
 #ENOE a nivel municipal
-
-
-
-
-
-
-
-
-
 
 #####################################################################################################
 #shapefiles con formas estatales

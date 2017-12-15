@@ -27,7 +27,7 @@ library(tidyr)
 library(kableExtra)
 library(gridExtra)
 library(lattice)
-
+library(PerformanceAnalytics)#para correlaciones del voto 
 
 
 # Función para referencia de entradas 
@@ -77,6 +77,10 @@ theme_map <- function(...) {
 ```{r Cap-3, child = 'Capitulos/Cap_3.Rmd', cache = TRUE}
 ```
 ```{r Cap-4, child = 'Capitulos/Cap_4.Rmd', cache = TRUE}
+```
+```{r Cap-5, child = 'Capitulos/Cap_5.Rmd', cache = TRUE}
+```
+```{r Cap-6, child = 'Capitulos/Cap_6.Rmd', cache = TRUE}
 ```
 
 
