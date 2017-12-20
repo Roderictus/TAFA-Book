@@ -149,6 +149,7 @@ write.csv(x = P2012Edo, file = "Datos/Electorales/P2012Edo.csv")# N
 JAL2015 <- read_xlsx(path = "C:/Proyectos R/Datos-Electorales/2015 Guadalajara/ResultadosPorCasilla2015.xlsx", 
                      range = "A4:AD18734")
 colnames(JAL2015) <- make.names(colnames(JAL2015))
+head(JAL2015)
 JALSECC2015 <- JAL2015 %>%
   group_by(Municipio, Sección, Elección) %>%
   summarise(PAN = sum(PAN), 
@@ -186,7 +187,7 @@ JALSECCDIP2015 <- JALSECC2015 %>% filter(Elección == "Diputados MR")
 
 JALSECCMUN2015[is.na(JALSECCMUN2015$VotosValidos),]$VotosValidos <-JALSECCMUN2015[is.na(JALSECCMUN2015$VotosValidos),]$VotosTotales
 
-#head(JALSECCMUN2015) 7161
+head(JALSECCMUN2015)# 7161
 
 
 JALMUNMUN2015 <- JALSECCMUN2015 %>%      #municipes en municipios, 125 Municipios

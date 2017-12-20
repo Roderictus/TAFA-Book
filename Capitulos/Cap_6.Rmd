@@ -4,11 +4,9 @@ Se analizan los resultados electorales para la elección de municipes, concurren
 
 
 
-
-
 \subsection{Guadalajara, Descriptivos del voto }
 
-
+Número de casillas `r nrow(JAL2015)`
 Voto total `r sum(JALSECCMUN$VotosTotales)`
 Voto total valido `r sum(JALSECCMUN$VotosValidos)`
 
@@ -46,22 +44,41 @@ JALSECCMUN2015 %>%
 Mapa con resultados electorales a nivel municipal para las principales fuerzas políticas y 
 ```{r, fig.cap=paste("Participación electoral 2015 Municipios"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 
-
-
 Municipios <-readOGR("C:/Proyectos R/Analisis Electoral Puebla/Datos/Cartográficos/Municipios Nacional/areas_geoestadisticas_municipales.shp", "areas_geoestadisticas_municipales", encoding = "UTF8") #cartografía de Jalisco 14
+MunMapJal15 <- Municipios[Municipios@data$CVE_ENT == "14",] #Subseteo de los datos geográficos del estado que nos interesa 
+MunMapJal<-tidy(x = MunMapJal15, region = "NOM_MUN")
+MunMapJal$NOM_MUN <- MunMapJal$id #probando unirlos por nombre, mayor certeza de que está bien
+#el paso siguiente se hace para tener CVE_MUN
+MunMapJal2015 <- left_join(MunMapJal, MunMapJal15@data, by = "NOM_MUN") #notar el @data, MunMapJal15 no es data.frame 
+#añadir datos de resultados electorales Municipales
+#revisar que empaten nombres de municipios
+JALMUNMUN2015$NOM_MUN <- JALMUNMUN2015$Municipio
+#Código para encontrar al que hay que renombrar
+#intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN))),
+#          chartr('áéíóúñ','aeioun',unique(tolower(MunMapJal$NOM_MUN))))#124 aparecen en ambos
 
-Municipios@data #CVE_ENT
+#setdiff(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN))),
+#        intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN))),
+#                  chartr('áéíóúñ','aeioun',unique(tolower(MunMapJal$NOM_MUN)))))
+#"manzanilla de la paz"
+
+#setdiff(chartr('áéíóúñ','aeioun',unique(tolower(MunMapJal$NOM_MUN))),
+#        intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN))),
+#                  chartr('áéíóúñ','aeioun',unique(tolower(MunMapJal$NOM_MUN)))))
+#"la manzanilla de la paz"
+#generar las variables de nombres unificados, en minúsculas sin acentos y un nombre que hay que asignar a mano
+JALMUNMUN2015$NOM_MUN_JOIN <- chartr('áéíóúñ','aeioun',tolower(JALMUNMUN2015$NOM_MUN))
+JALMUNMUN2015[JALMUNMUN2015$NOM_MUN_JOIN == "manzanilla de la paz",]$NOM_MUN_JOIN <- "la manzanilla de la paz"
+MunMapJal$NOM_MUN_JOIN<- chartr('áéíóúñ','aeioun',tolower(MunMapJal$NOM_MUN))
+##chequemos 
+#intersect(unique(JALMUNMUN2015$NOM_MUN_JOIN),
+#          unique(MunMapJal$NOM_MUN_JOIN))#125 de lujoso lujo 
+##Ahora juntemos los datos electorales con los datos geográficos
 
 
 
 
-Municipios_Map <- fortify(Municipios, region = "nombre")
-Municipios_Map[Municipios_Map$id == "CA?ADA MORELOS",]$id <- "CAÑADA MORELOS"
-Municipios_Map[Municipios_Map$id == "SAN ANTONIO CA?ADA",]$id <- "SAN ANTONIO CAÑADA"
-PueMun2016$id<-PueMun2016$MUNICIPIO #Para unirlos por nombre de municipio 
-Municipios_Map <- left_join(Municipios_Map, PueMun2016, by = "id")
-#head(Municipios_Map)
-#Municipios_Map[is.na(Municipios_Map$Por_Voto),]#0 Na´s
+
 no_classes <- 6
 labels <- c()
 quantiles <-quantile(Municipios_Map$Por_Voto,
@@ -111,6 +128,9 @@ Plot_Puebla
 
 Mapa con resultados a nivel sección electoral para Guadalajara y principales municipios urbanos. 
 
+
+```{r, fig.cap=paste("Mapa de densidad de votos "), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+```
 
 ```{r, fig.cap=paste("Resultados electorales Guadalajara"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 #datos de secciones
