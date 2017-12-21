@@ -226,23 +226,49 @@ JALMUNMUN2015<- JALMUNMUN2015 %>%
 write.csv(x = JALMUNMUN2015, file = "Datos/Electorales/Jalisco/JALMUNMUN2015.csv")
 
 #Bases de construcción cartográfica
-#
 
+Municipios <-readOGR("C:/Proyectos R/Analisis Electoral Puebla/Datos/Cartográficos/Municipios Nacional/areas_geoestadisticas_municipales.shp", "areas_geoestadisticas_municipales", encoding = "UTF8") #cartografía de Jalisco 14
+MunMapJal15 <- Municipios[Municipios@data$CVE_ENT == "14",] #Subseteo de los datos geográficos del estado que nos interesa 
+rm(Municipios)#WastenotWantNot RAM
+MunMapJal<-tidy(x = MunMapJal15, region = "NOM_MUN")
+MunMapJal$NOM_MUN <- MunMapJal$id #probando unirlos por nombre, mayor certeza de que está bien
+#el paso siguiente se hace para tener CVE_MUN
 
+#unión de cartografía con los datos electorales 
 
+MunMapJal2015 <- left_join(MunMapJal, MunMapJal15@data, by = "NOM_MUN") #notar el @data, MunMapJal15 no es data.frame 
+#añadir datos de resultados electorales Municipales
+#revisar que empaten nombres de municipios
+JALMUNMUN2015$NOM_MUN <- JALMUNMUN2015$Municipio
+#Código para encontrar al que hay que renombrar
+#intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN))),
+#          chartr('áéíóúñ','aeioun',unique(tolower(MunMapJal$NOM_MUN))))#124 aparecen en ambos
 
-#http://gaia.inegi.org.mx/NLB/tunnel/IFE2010/Descarga.do?tabla=0&grupo=0&edo=1
+#setdiff(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN))),
+#        intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN))),
+#                  chartr('áéíóúñ','aeioun',unique(tolower(MunMapJal$NOM_MUN)))))
+#"manzanilla de la paz"
 
-Estadísticas censales a escalas geoelectorales por estado
-
-#ENOE
-
-
-
-
-#ENOE a nivel municipal
+#setdiff(chartr('áéíóúñ','aeioun',unique(tolower(MunMapJal$NOM_MUN))),
+#        intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN))),
+#                  chartr('áéíóúñ','aeioun',unique(tolower(MunMapJal$NOM_MUN)))))
+#"la manzanilla de la paz"
+#generar las variables de nombres unificados, en minúsculas sin acentos y un nombre que hay que asignar a mano
+JALMUNMUN2015$NOM_MUN_JOIN <- chartr('áéíóúñ','aeioun',tolower(JALMUNMUN2015$NOM_MUN))
+JALMUNMUN2015[JALMUNMUN2015$NOM_MUN_JOIN == "manzanilla de la paz",]$NOM_MUN_JOIN <- "la manzanilla de la paz"
+MunMapJal$NOM_MUN_JOIN<- chartr('áéíóúñ','aeioun',tolower(MunMapJal$NOM_MUN))
+##chequemos 
+#intersect(unique(JALMUNMUN2015$NOM_MUN_JOIN),
+#          unique(MunMapJal$NOM_MUN_JOIN))#125 de lujoso lujo 
+##Ahora juntemos los datos electorales con los datos geográficos
+MunMapJal2015<-left_join(x = MunMapJal, y = JALMUNMUN2015, by = "NOM_MUN_JOIN")#a la izquierda van el data set más grande, datos geográficos
+#guardemos la base para después invocarla en el código principal 
+write.csv(x = MunMapJal2015, file = "Datos/Electorales/Jalisco/MunMapJal2015.csv")
 
 #####################################################################################################
+##############      ENOE a nivel municipal      #####################################
+#####################################################################################################
+
 #shapefiles con formas estatales
 #agregar datos a nivel estatal
 #tabla con resultados agregados por estado, participación electoral y principales partidos
