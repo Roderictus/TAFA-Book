@@ -100,7 +100,7 @@ Mapa con resultados a nivel sección electoral para Guadalajara y principales mu
 ```{r, fig.cap=paste("Resultados electorales Guadalajara"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 #datos de secciones
 #estados 14, municipio 41 
-Secciones <-readOGR("C:/Proyectos R/Datos-Electorales/Cartografía electoral/14/SECCION.shp", 
+Secciones14 <-readOGR("C:/Proyectos R/Datos-Electorales/Cartografía electoral/14/SECCION.shp", 
                     "SECCION") #6459
 Secciones$CVE_SECC<-str_c(str_pad(Secciones$entidad, width =2, "left", "0"),
                           str_pad(Secciones$seccion, width = 4, "left", "0"))
@@ -123,14 +123,6 @@ Secciones_Map[is.na(Secciones_Map$Por_Participacion),]$Por_Participacion <- medi
 
 
 ```{r, fig.cap=paste("Participación electoral a nivel municipal 2012 mapa"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
-
-
-
-
-
-table(JALSECCMUN2015$Municipio)
-
-
 
 
 
