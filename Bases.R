@@ -338,51 +338,60 @@ head(ENOE)
 ##############      Intercensal     #################################################################
 #####################################################################################################
 #sacarlo para Jalisco, municipal, homologarlo con shapefiles. 
-PersonaIC <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_PERSONA14.CSV")#perona intercensal, jalisco 
+PersonaIC <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_PERSONA14.CSV")#persona intercensal, jalisco 
+ViviendaIC <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA14.CSV")#persona intercensal, jalisco 
 #la codificación de las etiquetas se obtiene del cuestionario 
 #http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/especiales/intercensal/2015/doc/eic2015_cuestionario.pdf
 
 PersonaIC$SEXO<-factor(PersonaIC$SEXO, labels = c("Hombre", "Mujer"))
 PPJal <- PersonaIC %>% group_by(SEXO) %>% count(vars = EDAD, wt = FACTOR) 
+#suma del tiempo dedicado a actividades sin pago 
 colnames(PPJal) <- c('Sexo', "Edad", "Pob")
 PPJal <- PPJal[ PPJal$Edad < 111,] #quitamos unos  NA's 999 
-
+#elaboramos las categorias de edad 
+PPJal<-mutate(PPJal, Edad_grupo = 
+         ifelse(Edad <= 4, "0-04", 
+                ifelse(Edad <= 9, "05-09",
+                       ifelse(Edad <= 14, "10-14",
+                              ifelse(Edad <= 19, "15-19",
+                                     ifelse(Edad <= 24, "20-24",
+                                            ifelse(Edad <= 29, "25-29",
+                                                   ifelse(Edad <= 34, "30-34",
+                                                          ifelse(Edad <= 39, "35-39",
+                                                                 ifelse(Edad <= 44, "40-44",
+                                                                        ifelse(Edad <= 49, "45-49",
+                                                                               ifelse(Edad <= 54, "50-54",
+                                                                                      ifelse(Edad <= 59, "55-59",
+                                                                                             ifelse(Edad <=64, "60-64",
+                                                                                                    ifelse(Edad <= 69, "65-69",
+                                                                                                           ifelse(Edad <=74, "70-74",
+                                                                                                                  ifelse(Edad <= 79, "75-79", 
+                                                                                                                         ifelse(Edad <= 84, "80-84",
+                                                                                                                                ifelse(Edad <= 89, "85-89",
+                                                                                                                                       ifelse(Edad <= 94, "90-94","95+"))))))))))))))))))))
 ggplot(data=PPJal) +
-  geom_bar(aes(Edad,Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Mujer"), width = .8) +
-  geom_bar(aes(Edad,-Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Hombre"), width = .8) +
-  #scale_y_continuous(breaks=seq(-100,40,10),labels=abs(seq(-100,40,10))) +
-  coord_flip()
+  geom_bar(aes(Edad_grupo,Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Mujer"), width = .8) +
+  geom_bar(aes(Edad_grupo,-Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Hombre"), width = .8) +
+  scale_y_continuous(breaks = seq(-400000, 400000, 50000), 
+                     labels = paste0(as.character(c(seq(400, 0, -50), seq(50, 400, 50))), "mil")) + 
+  coord_flip() + 
+  scale_fill_brewer(palette = "Set1") + 
+  xlab(label = "Edad") + ylab("Población") + ggtitle("Población Jalisco, Encuesta Intercensal 2015") +
+  theme_bw()
 
-
-
-
-
-head(PersonaIC)
-
-table(PersonaIC$FACTOR)
-table(PersonaIC$NOM_LOC)
-length(unique(PersonaIC$ID_PERSONA))#1,266,418
 
 
 sum(PersonaIC$FACTOR) #población de Jalisco
-PersonasIC #mujeres de Jalisco
+head(PersonaIC)
+
+PersonaIC %>% filter(SEXO == "Mujer") %>% select(FACTOR) %>% sum() #Mujeres de Jalisco
+PersonaIC %>% filter(SEXO == "Hombre") %>% select(FACTOR) %>% sum() #Hombres de Jalisco
 #hombres de Jalisco
 #rangos de edad 
 
 ####### piramide poblacional
 
 
-
-
-ggplot(PersonaIC) + geom_bar(aes(EDAD, ))
-
-
-PersonaIC %>% group_by(MUN, NOM_MUN) %>% 
-  summarise(Total = sum(FACTOR))
-
-
-
-ViviendaIC <-read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA14.CSV")
 
 
 #shapefiles con formas estatales
