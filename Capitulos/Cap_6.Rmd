@@ -121,12 +121,16 @@ Secciones_Map[is.na(Secciones_Map$Por_Participacion),]$Por_Participacion <- medi
 
 \subsection{Guadalajara, Sociodemográficos }
 
-
-```{r, fig.cap=paste("Participación electoral a nivel municipal 2012 mapa"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
-
-
+Descripción de la población
+Ingre
 
 
+```{r, fig.cap=paste("Ingresos mensuales por escolaridad", 3T 2015), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+
+```
+
+
+```{r, fig.cap=paste("Ingresos mensuales por Estado de la República, 3T 2015"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 
 ```
 

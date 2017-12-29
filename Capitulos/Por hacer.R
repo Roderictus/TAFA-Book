@@ -24,3 +24,8 @@ Por hacer:
   23. Cambio en informalidad, mujeres, por edad
   24. Puntos, antes de x elección, último periodo observable, etc. 
   25. Varias ENOEs, tamaños de muestra 
+  26. Cortes de población en jalisco, tablas descriptivas. 
+  27. Intercensal, municipal
+  28. Normalizar elecciones para Jalisco 2012, 2015 
+  29. Mapas con secciones hexagonales 
+  30. 

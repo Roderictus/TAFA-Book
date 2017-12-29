@@ -305,38 +305,29 @@ ENOE<- mutate(ENOE, ANIOS_ESC_Pob = ANIOS_ESC * FAC)
 ENOE<- mutate(ENOE, SUB_O_POB = SUB_O * FAC)
 #Codificación de las variables de escolaridad
 ENOE$CS_P13_1<- factor(ENOE$CS_P13_1, labels = c("Ninguna", "Preescolar", "Primaria", "Secundaria","Preparatoria o bach", "Normal", "Carrera técnica", "Profesional", "Maestría", "Doctorado", "No sabe"))
-#Para cada nivel de escolaridad
-ENOE$Ninguna<-ifelse(ENOE$CS_P13_1 == "Ninguna",1,0) #Ninguna
-ENOE$Ninguna<-ENOE$Ninguna * ENOE$FAC
-ENOE$Preescolar<-ifelse(ENOE$CS_P13_1 == "Preescolar",1,0)
-ENOE$Preescolar<-ENOE$Preescolar * ENOE$FAC
-ENOE$Primaria<-ifelse(ENOE$CS_P13_1 == "Primaria",1,0)
-ENOE$Primaria<-ENOE$Primaria * ENOE$FAC
-ENOE$Secundaria<-ifelse(ENOE$CS_P13_1 == "Secundaria",1,0)
-ENOE$Secundaria<-ENOE$Secundaria * ENOE$FAC
-ENOE$Preparatoria<-ifelse(ENOE$CS_P13_1 == "Preparatoria o bach",1,0)
-ENOE$Preparatoria<-ENOE$Preparatoria * ENOE$FAC
-ENOE$Normal<-ifelse(ENOE$CS_P13_1 == "Normal",1,0)
-ENOE$Normal<-ENOE$Normal * ENOE$FAC
-ENOE$Tecnica<-ifelse(ENOE$CS_P13_1 == "Carrera técnica",1,0)
-ENOE$Tecnica<-ENOE$Tecnica * ENOE$FAC
-ENOE$Profesional<-ifelse(ENOE$CS_P13_1 == "Profesional",1,0)
-ENOE$Profesional<-ENOE$Profesional * ENOE$FAC
-ENOE$Maestria<-ifelse(ENOE$CS_P13_1 == "Maestría",1,0)
-ENOE$Maestria<-ENOE$Maestria * ENOE$FAC
-ENOE$Doctorado<-ifelse(ENOE$CS_P13_1 == "Doctorado",1,0)
-ENOE$Doctorado<-ENOE$Doctorado * ENOE$FAC
-ENOE$NS<-ifelse(ENOE$CS_P13_1 == "No sabe",1,0)
+
 ENOE$NS<-ENOE$NS * ENOE$FAC
+
+write.csv(x = ENOE,file = "Datos/ENOE/Sociodemografico/Formateados CSV/Sdem215.csv")
+
 ##### Para las gráficas 
 ENOEB <- ENOE[ENOE$EDA <=75,] #ENOEB restringe la edad de 14 a 75 años para comparación de ingreso salarial 
 ENOEB <- ENOEB[ENOEB$INGOCUP >0,]#ojo
 #####
-IngresoOcup <- ggplot(ENOEB, aes(EDA, INGOCUP, color = SEX)) #edad, Ingreso mensual, sexo, todas las escolaridades 
+
+ENOEB %>%
+  filter(CS_P13_1 == c("Ninguna", "Primaria", "Secundaria", "Preparatoria o bach", "Carrera técnica", "Profesional"))
+
+
+
+IngresoOcup <- ggplot(filter(.data = ENOEB, CS_P13_1 == c("Ninguna", "Primaria", "Secundaria", "Preparatoria o bach", "Carrera técnica", "Profesional")), 
+                      aes(EDA, INGOCUP, color = SEX)) #edad, Ingreso mensual, sexo, todas las escolaridades 
 IngresoOcup <- IngresoOcup + geom_smooth(aes(weight = FAC))
 IngresoOcup <- IngresoOcup + xlab("Edad (14 a 75 años)") +ylab("Ingreso Mensual")  + ggtitle("Ingreso Mensual declarado por  Sexo(ENOE, II 2015) ")
-IngresoOcup + facet_wrap(~Estado)
-IngresoOcup + facet_wrap(~CS_P13_1) + geom_jitter(alpha = 0.01) + coord_cartesian( xlim = c(0, 75), ylim = c(0, 25000))
+IngresoOcup + facet_wrap(~Estado) #Por Estado 
+IngresoOcup + facet_wrap(~CS_P13_1) + geom_jitter(alpha = 0.01) + coord_cartesian( xlim = c(0, 75), ylim = c(0, 25000))#
+
+IngresoO
 
 head(ENOE)
 
@@ -346,7 +337,52 @@ head(ENOE)
 #####################################################################################################
 ##############      Intercensal     #################################################################
 #####################################################################################################
+#sacarlo para Jalisco, municipal, homologarlo con shapefiles. 
+PersonaIC <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_PERSONA14.CSV")#perona intercensal, jalisco 
+#la codificación de las etiquetas se obtiene del cuestionario 
+#http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/especiales/intercensal/2015/doc/eic2015_cuestionario.pdf
 
+PersonaIC$SEXO<-factor(PersonaIC$SEXO, labels = c("Hombre", "Mujer"))
+PPJal <- PersonaIC %>% group_by(SEXO) %>% count(vars = EDAD, wt = FACTOR) 
+colnames(PPJal) <- c('Sexo', "Edad", "Pob")
+PPJal <- PPJal[ PPJal$Edad < 111,] #quitamos unos  NA's 999 
+
+ggplot(data=PPJal) +
+  geom_bar(aes(Edad,Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Mujer"), width = .8) +
+  geom_bar(aes(Edad,-Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Hombre"), width = .8) +
+  #scale_y_continuous(breaks=seq(-100,40,10),labels=abs(seq(-100,40,10))) +
+  coord_flip()
+
+
+
+
+
+head(PersonaIC)
+
+table(PersonaIC$FACTOR)
+table(PersonaIC$NOM_LOC)
+length(unique(PersonaIC$ID_PERSONA))#1,266,418
+
+
+sum(PersonaIC$FACTOR) #población de Jalisco
+PersonasIC #mujeres de Jalisco
+#hombres de Jalisco
+#rangos de edad 
+
+####### piramide poblacional
+
+
+
+
+ggplot(PersonaIC) + geom_bar(aes(EDAD, ))
+
+
+PersonaIC %>% group_by(MUN, NOM_MUN) %>% 
+  summarise(Total = sum(FACTOR))
+
+
+
+ViviendaIC <-read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA14.CSV")
 
 
 #shapefiles con formas estatales
