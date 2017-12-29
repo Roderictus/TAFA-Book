@@ -93,6 +93,8 @@ Plot_Map
 
 Mapa con resultados a nivel sección electoral para Guadalajara y principales municipios urbanos. 
 
+El tamaño de la lista nominal para la elección 2015 
+
 
 ```{r, fig.cap=paste("Mapa de densidad de votos "), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 ```
@@ -125,14 +127,27 @@ Descripción de la población
 Ingre
 
 
-```{r, fig.cap=paste("Ingresos mensuales por escolaridad", 3T 2015), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
-
+```{r, fig.cap=paste("Ingresos mensuales por escolaridad y sexo ", 3T 2015), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 ```
 
 
 ```{r, fig.cap=paste("Ingresos mensuales por Estado de la República, 3T 2015"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
-
 ```
+
+\subsection{Guadalajara, Análisis a nivel vivienda}
+
+Jalisco, de acuerdo a la encuesta Intercensal 2015, tiene xxx vivendas, de las cuales xxxx (%) tienen como jefe del hogar a un hombre y xxx (%) a una mujer. El ingreso promedio de los hogares que tienen como jefe a un hombre es xxx y aquellos que tienen como jefe a una mujer es xxxx. La edad promedio es xxx y xxx . El tamaño promedio del hogar es xxx y xxx, el número promedio de menores de edad y de adultos mayores xxxx, xxxx. 
+
+Cuadro con lo de arriba 
+
+
+```{r, fig.cap=paste("Intercensal, Personas que reciben ingreso de otro país"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+```
+
+```{r, fig.cap=paste("Intercensal, Personas que reciben ingresos de programas de gobierno"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+```
+
+
 
 
 \subsection{Guadalajara, Ingreso }

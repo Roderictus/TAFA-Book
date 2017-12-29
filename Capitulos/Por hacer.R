@@ -25,7 +25,11 @@ Por hacer:
   24. Puntos, antes de x elección, último periodo observable, etc. 
   25. Varias ENOEs, tamaños de muestra 
   26. Cortes de población en jalisco, tablas descriptivas. 
-  27. Intercensal, municipal
+  #27. Intercensal, municipal
   28. Normalizar elecciones para Jalisco 2012, 2015 
   29. Mapas con secciones hexagonales 
-  30. 
+  30. Análisis de componentes principales
+  31. Gráficas de hierarchichal clustering 
+  32. Secciones electorales y leaflet,. "Resultados de sección electoral "
+  33. Lista de los principales municipios
+  34.

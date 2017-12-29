@@ -342,8 +342,21 @@ PersonaIC <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal
 ViviendaIC <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA14.CSV")#persona intercensal, jalisco 
 #la codificación de las etiquetas se obtiene del cuestionario 
 #http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/especiales/intercensal/2015/doc/eic2015_cuestionario.pdf
-
 PersonaIC$SEXO<-factor(PersonaIC$SEXO, labels = c("Hombre", "Mujer"))
+ViviendaIC$JEFE_SEXO<-factor(ViviendaIC$JEFE_SEXO, labels = c("Hombre", "Mujer"))
+summary(ViviendaIC$INGTRHOG)
+
+
+ViviendaIC[ViviendaIC$JEFE_EDAD == "999", ]$JEFE_EDAD <- NA#clasificar correctamente los NAs de edad del jefe del hogar
+ViviendaIC %>% filter(JEFE_EDAD != "NA") %>% group_by(MUN, NOM_MUN, JEFE_SEXO ) %>% summarise(EDAD_JEFE_PROMEDIO = weighted.mean(JEFE_EDAD, FACTOR)) #para sacar las promedios ponderados, corte municipio y sexo 
+ViviendaIC %>% filter(INGTRHOG != c("NA", "999999") %>% group_by(MUN, NOM_MUN, JEFE_SEXO ) %>% summarise(INGRESO_VIVIENDA_PROMEDIO = weighted.mean(JEFE_EDAD, FACTOR), weighted.mean(Ingreso_Hogar, FACTOR)) #para sacar las promedios ponderados, corte municipio y sexo 
+
+
+
+
+table(ViviendaIC$JEFE_EDAD)
+colnames(ViviendaIC)
+
 PPJal <- PersonaIC %>% group_by(SEXO) %>% count(vars = EDAD, wt = FACTOR) 
 #suma del tiempo dedicado a actividades sin pago 
 colnames(PPJal) <- c('Sexo', "Edad", "Pob")
@@ -369,6 +382,8 @@ PPJal<-mutate(PPJal, Edad_grupo =
                                                                                                                          ifelse(Edad <= 84, "80-84",
                                                                                                                                 ifelse(Edad <= 89, "85-89",
                                                                                                                                        ifelse(Edad <= 94, "90-94","95+"))))))))))))))))))))
+#piramide poblacional 
+
 ggplot(data=PPJal) +
   geom_bar(aes(Edad_grupo,Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Mujer"), width = .8) +
   geom_bar(aes(Edad_grupo,-Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Hombre"), width = .8) +
@@ -378,18 +393,61 @@ ggplot(data=PPJal) +
   scale_fill_brewer(palette = "Set1") + 
   xlab(label = "Edad") + ylab("Población") + ggtitle("Población Jalisco, Encuesta Intercensal 2015") +
   theme_bw()
-
-
-
+#####################
 sum(PersonaIC$FACTOR) #población de Jalisco
-head(PersonaIC)
-
 PersonaIC %>% filter(SEXO == "Mujer") %>% select(FACTOR) %>% sum() #Mujeres de Jalisco
 PersonaIC %>% filter(SEXO == "Hombre") %>% select(FACTOR) %>% sum() #Hombres de Jalisco
+#######   Base de vivienda, variables a nivel municipal 
+
+
+
+summary(ViviendaIC$JEFE_EDAD)
+
+
+
+ggplot(ViviendaIC, aes(JEFE_EDAD, INGTRHOG, fill = JEFE_SEXO)) + geom_smooth(aes(weight = FAC))
+ENOEB %>%
+  filter(CS_P13_1 == c("Ninguna", "Primaria", "Secundaria", "Preparatoria o bach", "Carrera técnica", "Profesional"))
+
+
+
+IngresoOcup <- ggplot(filter(.data = ENOEB, CS_P13_1 == c("Ninguna", "Primaria", "Secundaria", "Preparatoria o bach", "Carrera técnica", "Profesional")), 
+                      aes(EDA, INGOCUP, color = SEX)) #edad, Ingreso mensual, sexo, todas las escolaridades 
+IngresoOcup <- IngresoOcup + geom_smooth(aes(weight = FAC))
+IngresoOcup <- IngresoOcup + xlab("Edad (14 a 75 años)") +ylab("Ingreso Mensual")  + ggtitle("Ingreso Mensual declarado por  Sexo(ENOE, II 2015) ")
+IngresoOcup + facet_wrap(~Estado) #Por Estado 
+IngresoOcup + facet_wrap(~CS_P13_1) + geom_jitter(alpha = 0.01) + coord_cartesian( xlim = c(0, 75), ylim = c(0, 25000))#
+
+
+summarise(ViviendaIC$INGTRHOG)
+
+JEFE_SEXO, JEFE_EDAD, INGTRHOG
+
+table(ViviendaIC$JEFE_SEXO)
+
+
+
+
+ViviendaIC %>%
+  group_by(MUN,NOM_MUN) %>%
+  summarise(Total = sum(FACTOR), PROMEDIO_JEFE = weighted.mean(JEFE_EDAD, FACTOR)) #total de viviendas, total de focos  
+
+ViviendaIC %>% group_by(MUN, NOM_MUN) %>% filter()
+  summarise
+
+  #ingresos para hogares con jefes de hogar que son mujeres
+  
+  
+?median
+install.packages("spatstat")
+library(spatstat)
+weighted.mean(ViviendaIC$JEFE_EDAD, ViviendaIC$FACTOR)
+
+
 #hombres de Jalisco
 #rangos de edad 
 
-####### piramide poblacional
+
 
 
 
