@@ -6,6 +6,8 @@ Se analizan los resultados electorales para la elección de municipes, concurren
 
 \subsection{Guadalajara, Descriptivos del voto }
 
+Descripción del último proceso electoral a nivel estatal correspondiente a la elección del 2015. 
+
 Número de casillas `r nrow(JAL2015)`
 Voto total `r sum(JALSECCMUN$VotosTotales)`
 Voto total valido `r sum(JALSECCMUN$VotosValidos)`
@@ -18,6 +20,8 @@ TopMunJal2015  <- JALMUNMUN2015 %>%
   top_n(20, Validos_Por)
 colnames(TopMunJal2015) <- c("Municipio", "Lista Nominal", "% Participación", "% estatalvalidos" , "% MC", "% PAN", "% PRI")
 kable(TopMunJal2015)
+
+LPM<-c("GUADALAJARA", "ZAPOPAN", "SAN PEDRO TLAQUEPAQUE", "TLAJOMULCO DE ZUÑIGA", "TONALÁ") #lista de los 5 principales municipios
 
 ```
 
@@ -38,8 +42,6 @@ JALSECCMUN2015 %>%
   dplyr::select(PAN_por, PRI_por, MC_por, PVEM_por, MORENA_por, Por_Part) %>%
   chart.Correlation(histogram = TRUE)
 ```
-
-
 
 Mapa con resultados electorales a nivel municipal para las principales fuerzas políticas y 
 ```{r, fig.cap=paste("Participación electoral 2015 Municipios"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
@@ -114,21 +116,100 @@ Secciones_Map$Por_PRI <-  ((Secciones_Map$PRI + Secciones_Map$PRI_PVEM) /
                              (Secciones_Map$TOTAL_VOTOS-Secciones_Map$NUM_VOTOS_NULOS))*100
 Secciones_Map[is.na(Secciones_Map$Por_PRI),]$Por_PRI <- median(Secciones_Map$Por_PRI,na.rm = TRUE) #imputando el valor de las medianas
 Secciones_Map[is.na(Secciones_Map$Por_Participacion),]$Por_Participacion <- median(Secciones_Map$Por_Participacion,na.rm = TRUE) #imputando el valor de las medianas
-
 ```
 
 ```{r, fig.cap=paste("Resultados electorales Zapopan"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 ```
 
 
-\subsection{Guadalajara, Sociodemográficos }
+\subsection{Jalisco, Sociodemográficos }
 
-Descripción de la población
-Ingre
+Realizamos un análisis de la situación económica de la población en el estado de Jalisco. La información relativa a ingresos por ocupación proviene de la Encuesta Nacional de Empleo (ENOE) para el último trimestre disponible a la elaboración de esta sección, 3er trimestre de 2017. La información a nivel vivienda (datos sobre jefatura de hogar, recibo de remesas) fueron obtenidas a partir de la encuesta Intercensal 2015 que es estadísticamente significativa a nivel Municipal. Los datos de distribución poblacional (piramide poblacional), fueron calculados utilizando los factores de expansión de la encuesta intercensal y coinciden con las estadísticas oficiales.
 
+El análisis de ingreso aquí presentado es distinto a los oficialmente reportados, aunque se basa en los mismos datos. Los datos comunmente reportados se refieren a términos como población económicamente activa(PEA) y no activa (PNEA), ocupada, ocupada parcialmente, formal, informal, etc. dado que los porcentajes de estas variables son cálculados sobre sub-categorias (ej.formalidad es una proporción de PEA ocupada) no transmiten fácilmente un entendimiento sobre la situación económica de la población y requieren de un análisis que involucre el entendimiento de estas categorías. 
 
-```{r, fig.cap=paste("Ingresos mensuales por escolaridad y sexo ", 3T 2015), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+En el análisis que aquí se presenta se utilizan conceptos más básicos. La población que tiene ingresos positivos es aquella que reporta tener ingresos por ocupación mensuales mayores a cero. Una consideración es que la población que afirma no tener ingresos por ocupación no necesariamente se encuentra desocupada, puede encontrarse ocupada en actividades domésticas sin paga, negocios familiares, agricultura de subsistencia. Al considerar toda la población mayor de catorce años y sus ingresos por ocupación, consideramos aquella población que se encuentra estudiando y aquella que no puede trabajar por enfermedad, edad avanzada o cualquier otra causa. El utilizar ingresos por ocupación en lugar de las categorías usadas comúnmente sobre empleo permite entender mejor la situación de vulnerabilidad de la población respecto a sus ingresos, particularmente el contraste entre los ingresos por ocupación entre hombres y mujeres.
+
+Si bien se encuentra que existe una disparidad en los ingresos percibidos entre hombres y mujeres, frecuentemente siendo menor el ingreso mensual declarado por mujeres, este es sólo un componente de la disparidad en la vulnerabilidad que se presenta por género. El primer elemento en el análisis de vulnerabilidad en los ingresos por género son las proporciones de población que tiene ingresos por ocupación, este es la primer, y más, relevante brecha de ingreso. Existen múltiples razones por las cuales existe una brecha en la generación de ingresos por ocupación,principalmente la mayor frecuencia de actividades económicas no remuneradas en la población femenina, entre ellas cuidado del hogar, de personas mayores, participación en negocios familiares y agricultura de subsistencia. 
+
+Es importante recalcar que los ingresos por ocupación no son la única fuente de ingresos para las familias, teniendo considerable importancia y alcance los ingresos por transferencias, de programas gubernamentales, remesas nacionales e internacionales. En el caso del programa Prospera la transferencia es asignada a las jefas de familia lo cual, en estos casos, compensa parcialmente esta vulnerabilidad
+
+```{r, fig.cap=paste("Piramide poblacional, Encuesta Intercensal 2015"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+
+PPJal <- read.csv(file = "Datos/Intercensal/Piramide_Jalisco_2015.csv")
+
+ggplot(data=PPJal) +
+  geom_bar(aes(Edad_grupo,Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Mujer"), width = .8) +
+  geom_bar(aes(Edad_grupo,-Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Hombre"), width = .8) +
+  scale_y_continuous(breaks = seq(-400000, 400000, 50000), 
+                     labels = paste0(as.character(c(seq(400, 0, -50), seq(50, 400, 50))))) + 
+  coord_flip() + 
+  scale_fill_brewer(palette = "Set1") + 
+  xlab(label = "Edad") + ylab("Población (miles)") + ggtitle("Población Jalisco, Encuesta Intercensal 2015") +
+  theme_bw()
+rm(PPJal)
+
+read.csv() #vivienda
+read.csv() #población
+
 ```
+
+Jalisco tiene una población de `r sum(PersonaIC$FACTOR)` habitantes, `r PersonaIC %>% filter(SEXO == "Mujer") %>% select(FACTOR) %>% sum()` mujeres,y  `r PersonaIC %>% filter(SEXO == "Hombre") %>% select(FACTOR) %>% sum()` hombres. Con `r sum(viviendaIC$FACTOR)` viviendas, de las cuales `r ViviendaIC %>% filter(JEFE_SEXO == "Mujer") %>% select(FACTOR) %>% sum()` declaran tener como jefe del hogar a una mujer y `r ViviendaIC %>% filter(JEFE_SEXO == "Hombre") %>% select(FACTOR) %>% sum()` tienen como jefe del hogar a un hombre. 
+
+Hay dos perspectivas posibles respecto a la situación de ingreso. Una es a partir de los ingresos por ocupación de los individuos y la otra es sobre el total de los ingresos que reportan tener las viviendas. La primer perspectiva aclara elementos de distribución y revela disparidades relaativas a las actividades económicas de acuerdo al sexo y a la educación, para este análisis se utiliza la Encuesta Nacional de Ocupación y Empleo(ENOE). La segunda persepectiva es la relativa a los ingresos que reciben los hogares, para esto utilizamos la información producida por la Encuesta Intercensal 2015 (EI2015)
+
+Presentamos una tabla con los ingresos promedio mensuales de los hogares en los principales municipios, desviación estandar, y promedio de ingreso de acuerdo al sexo del jefe del hogar
+
+Este es un mapa con el ingreso promedio por jefatura de hogar
+
+```{r, fig.cap=paste("Tabla con ingresos promedio mensuales de los hogares en Jalisco"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+
+
+ViviendaIC %>% 
+  group_by(NOM_MUN, JEFE_SEXO) %>% 
+  filter(INGTRHOG  != "NA") %>% 
+  summarise(Hogares = sum(FACTOR), 
+            Ingreso_promedio_mensual =  weighted.mean((INGTRHOG)/3, w = FACTOR))
+```
+head(viviendaIC)
+
+
+Ingreso promedio mensual del hogar de acuerdo a edad y sexo del jefe del hogar 
+
+```{r, fig.cap=paste("Mapa con ingresos promedio"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+
+```
+
+
+```{r, fig.cap=paste("Personas que reportan no recibir ingreso"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+```
+
+
+
+Análisis de personas que reportan ingresos positivos.
+
+
+```{r, fig.cap=paste("Ingresos por ocupación mensuales por escolaridad y sexo, ENOE Jalisco ", 3T 2017), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+ENOE <- read.csv(file = "Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.csv")
+ENOEB <- ENOE[ENOE$EDA <=75,] #ENOEB restringe la edad de 14 a 75 años para comparación de ingreso salarial 
+ENOEB <- ENOEB[ENOEB$INGOCUP >0,]#ojo
+ENOEB %>%
+  filter(CS_P13_1 == c("Ninguna", "Primaria", "Secundaria", "Preparatoria o bach", "Carrera técnica", "Profesional"))
+
+
+IngresoOcup <- ggplot(filter(.data = ENOEB, CS_P13_1 == c("Ninguna", "Primaria", "Secundaria", "Preparatoria o bach", "Carrera técnica", "Profesional")), 
+                      aes(EDA, INGOCUP, color = SEX)) #edad, Ingreso mensual, sexo, todas las escolaridades 
+IngresoOcup <- IngresoOcup + geom_smooth(aes(weight = FAC))
+IngresoOcup <- IngresoOcup + xlab("Edad (14 a 75 años)") +ylab("Ingreso Mensual")  + ggtitle("Ingreso Mensual declarado por  Sexo(ENOE, II 2015) ")
+
+IngresoOcup + facet_wrap(~CS_P13_1) + geom_jitter(alpha = 0.01) + coord_cartesian( xlim = c(0, 75), ylim = c(0, 25000))#
+```
+
+
+```{r, fig.cap=paste("Ingresos mensuales por Estado de la república", 3T 2015), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+IngresoOcup + facet_wrap(~Estado) #Por Estado 
+```
+
 
 
 ```{r, fig.cap=paste("Ingresos mensuales por Estado de la República, 3T 2015"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
@@ -142,12 +223,17 @@ Cuadro con lo de arriba
 
 
 ```{r, fig.cap=paste("Intercensal, Personas que reciben ingreso de otro país"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+
+
+
+
 ```
 
 ```{r, fig.cap=paste("Intercensal, Personas que reciben ingresos de programas de gobierno"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 ```
 
-
+```{r, fig.cap=paste("Intercensal, Jefas de Familia"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+```
 
 
 \subsection{Guadalajara, Ingreso }

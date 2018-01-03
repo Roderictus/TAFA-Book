@@ -32,4 +32,10 @@ Por hacer:
   31. Gráficas de hierarchichal clustering 
   32. Secciones electorales y leaflet,. "Resultados de sección electoral "
   33. Lista de los principales municipios
-  34.
+  34. Verificar empate correcto de secciones electorales.
+  35. Verificar diversos archivos de secciones electorales contra pdfs de la elección. 
+  36. ¿Como ha cambiado el número de secciones electorales por municipio en el país? Considerar unir de acuerdo a centroides. 
+  37. ENOES acumuladas
+  38. Última ENOE para datos descriptivos de JAL2015
+  39. Transferencias gubernamentales por sexo de la jefatura del hogar  
+  40. Piramide poblacional para los principales Municipios
