@@ -223,7 +223,7 @@ JALMUNMUN2015<- JALMUNMUN2015 %>%
          JPK_por    = (JPK/VotosValidos)*100, 
          Boletas_Por= (Boletas/sum(Boletas)*100),#porcentaje de la lista nominal que tiene cada municipio
          Validos_Por= (VotosValidos/ sum(VotosValidos)*100))#porcentaje de la votación efectiva de cada municipio 
-write.csv(x = JALMUNMUN2015, file = "Datos/Electorales/Jalisco/JALMUNMUN2015.csv")
+
 
 #Bases de construcción cartográfica
 
@@ -264,6 +264,7 @@ MunMapJal$NOM_MUN_JOIN<- chartr('áéíóúñ','aeioun',tolower(MunMapJal$NOM_MU
 MunMapJal2015<-left_join(x = MunMapJal, y = JALMUNMUN2015, by = "NOM_MUN_JOIN")#a la izquierda van el data set más grande, datos geográficos
 #guardemos la base para después invocarla en el código principal 
 write.csv(x = MunMapJal2015, file = "Datos/Electorales/Jalisco/MunMapJal2015.csv")
+write.csv(x = JALMUNMUN2015, file = "Datos/Electorales/Jalisco/JALMUNMUN2015.csv")
 
 #####################################################################################################
 ##############      ENOE a nivel municipal      ####################################################
@@ -329,7 +330,7 @@ ViviendaIC %>% filter(INGTRHOG != c("NA", "999999")) %>% group_by(MUN, NOM_MUN, 
 PPJal <- PersonaIC %>% group_by(SEXO) %>% count(vars = EDAD, wt = FACTOR) 
 #suma del tiempo dedicado a actividades sin pago 
 colnames(PPJal) <- c('Sexo', "Edad", "Pob")
-PPJal <- PPJal[ PPJal$Edad < 111,] #quitamos unos  NA's 999 
+PPJal <- PPJal[ PPJal$Edad < 111,] #quitamos unos  NA's codificados como 999 
 #elaboramos las categorias de edad 
 PPJal<-mutate(PPJal, Edad_grupo = 
          ifelse(Edad <= 4, "0-04", 
@@ -413,11 +414,6 @@ ViviendaIC %>% group_by(MUN, NOM_MUN) %>% filter()
   #ingresos para hogares con jefes de hogar que son mujeres
   
   
-?median
-install.packages("spatstat")
-library(spatstat)
-weighted.mean(ViviendaIC$JEFE_EDAD, ViviendaIC$FACTOR)
-
 
 #hombres de Jalisco
 #rangos de edad 

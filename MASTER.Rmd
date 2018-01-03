@@ -30,6 +30,7 @@ library(lattice)
 library(PerformanceAnalytics)#para correlaciones del voto 
 library(broom) #tidy en vez de fortify
 library(foreign )
+library(spatstat)
 
 # Función para referencia de entradas 
 fig <- local({
