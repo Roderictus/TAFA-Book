@@ -1,7 +1,7 @@
 Por hacer:
   #1. poner municipios en ambos lados del join de municipios.
   #2. Checar que empaten los nombres de los Municipios
-  3. Mapa de participación municipal en quintiles. 
+  #3. Mapa de participación municipal en quintiles. 
   #4. Reemplazar lectura de bases en internet con bases locales 
   #6. Homologar nombres
   7. Empatar por Estado-Nombre (En lugar de clave única)
@@ -39,7 +39,14 @@ Por hacer:
   39. Transferencias gubernamentales por sexo de la jefatura del hogar  
   40. Piramide poblacional para los principales Municipios
   41. Leaflet y map widgets
-  42.
+  42.Pitch
+  43. Correr capítulo 6 
+  44. Relación edad, sexo, ingreso de los hogares. 
+  45. Hacer un repositorio privado 
+  46. Ingresos por deciles en mapa, ingreso promedio de los hogares, Municipios_Cart
+  47. Unir municipios intercensal con datos electorales. 
+  48. Integrantes promedio de la vivienda 
+  49. Mapa con ingreso promedio por habitante 
   
   MENÚ
   

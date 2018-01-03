@@ -308,8 +308,6 @@ write.csv(x = ENOE,file = "Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.c
 
 
 #para mujeres por rangos de edad
-
-
 #####################################################################################################
 ##############      Intercensal     #################################################################
 #####################################################################################################
@@ -324,8 +322,9 @@ ViviendaIC$JEFE_SEXO<-factor(ViviendaIC$JEFE_SEXO, labels = c("Hombre", "Mujer")
 ViviendaIC[ViviendaIC$JEFE_EDAD == "999", ]$JEFE_EDAD <- NA#clasificar correctamente los NAs de edad del jefe del hogar
 ViviendaIC %>% filter(JEFE_EDAD != "NA") %>% group_by(MUN, NOM_MUN, JEFE_SEXO ) %>% summarise(EDAD_JEFE_PROMEDIO = weighted.mean(JEFE_EDAD, FACTOR)) #para sacar las promedios ponderados, corte municipio y sexo 
 ViviendaIC %>% filter(INGTRHOG != c("NA", "999999")) %>% group_by(MUN, NOM_MUN, JEFE_SEXO ) %>% summarise(INGRESO_VIVIENDA_PROMEDIO = weighted.mean(JEFE_EDAD, FACTOR), weighted.mean(Ingreso_Hogar, FACTOR)) #para sacar las promedios ponderados, corte municipio y sexo 
-                      
+write.csv(x = ViviendaIC, file = "Datos/Intercensal/Vivienda_2015.csv")
 
+####    Pirámide Poblacional ####
 
 PPJal <- PersonaIC %>% group_by(SEXO) %>% count(vars = EDAD, wt = FACTOR) 
 #suma del tiempo dedicado a actividades sin pago 
@@ -359,24 +358,7 @@ write.csv(PPJal, file = "Datos/Intercensal/Piramide_Jalisco_2015.csv")
 sum(PersonaIC$FACTOR) #población de Jalisco
 PersonaIC %>% filter(SEXO == "Mujer") %>% select(FACTOR) %>% sum() #Mujeres de Jalisco
 PersonaIC %>% filter(SEXO == "Hombre") %>% select(FACTOR) %>% sum() #Hombres de Jalisco
-
-
 #######   Base de vivienda, variables a nivel municipal 
-
-head(ViviendaIC)
-#Viviendas, jefaturas de hogar por sexo
-#como % de viviendas
-
-table(ViviendaIC$FACTOR)
-sum(ViviendaIC$FACTOR)
-
-#tabla de descriptivos de la población
-
-
-
-
-
-
 
 #Ingresos por jefatura de hogar
 
@@ -384,9 +366,6 @@ ggplot(ViviendaIC, aes(JEFE_EDAD, INGTRHOG, fill = JEFE_SEXO)) + geom_smooth(aes
 
 ENOEB %>%
   filter(CS_P13_1 == c("Ninguna", "Primaria", "Secundaria", "Preparatoria o bach", "Carrera técnica", "Profesional"))
-
-
-
 IngresoOcup <- ggplot(filter(.data = ENOEB, CS_P13_1 == c("Ninguna", "Primaria", "Secundaria", "Preparatoria o bach", "Carrera técnica", "Profesional")), 
                       aes(EDA, INGOCUP, color = SEX)) #edad, Ingreso mensual, sexo, todas las escolaridades 
 IngresoOcup <- IngresoOcup + geom_smooth(aes(weight = FAC))
@@ -394,35 +373,14 @@ IngresoOcup <- IngresoOcup + xlab("Edad (14 a 75 años)") +ylab("Ingreso Mensual
 IngresoOcup + facet_wrap(~Estado) #Por Estado 
 IngresoOcup + facet_wrap(~CS_P13_1) + geom_jitter(alpha = 0.01) + coord_cartesian( xlim = c(0, 75), ylim = c(0, 25000))#
 
-
-summarise(ViviendaIC$INGTRHOG)
-
-JEFE_SEXO, JEFE_EDAD, INGTRHOG
-
-table(ViviendaIC$JEFE_SEXO)
-
-
-
-
-ViviendaIC %>%
-  group_by(MUN,NOM_MUN) %>%
-  summarise(Total = sum(FACTOR), PROMEDIO_JEFE = weighted.mean(JEFE_EDAD, FACTOR)) #total de viviendas, total de focos  
-
-ViviendaIC %>% group_by(MUN, NOM_MUN) %>% filter()
-  summarise
-
-  #ingresos para hogares con jefes de hogar que son mujeres
-  
-  
+############################################################################################
+##########################    Base para Mapas, Intercensal 2015   #########################
+############################################################################################
 
 #hombres de Jalisco
 #rangos de edad 
-
-
-
-
-
-
 #shapefiles con formas estatales
 #agregar datos a nivel estatal
 #tabla con resultados agregados por estado, participación electoral y principales partidos
+
+

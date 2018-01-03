@@ -133,11 +133,11 @@ Realizamos un análisis de la situación económica de la población en el estad
 
 El análisis de ingreso aquí presentado es distinto a los oficialmente reportados, aunque se basa en los mismos datos. Los datos comúnmente reportados se refieren a términos como población económicamente activa(PEA) y no activa (PNEA), ocupada, ocupada parcialmente, formal, informal, etc. dado que los porcentajes de estas variables son calculados sobre sub-categorías (ej.formalidad es una proporción de PEA ocupada) no transmiten fácilmente un entendimiento sobre la situación económica de la población y requieren de un análisis que involucre el entendimiento de estas categorías. 
 
-En el análisis que aquí se presenta se utilizan conceptos más básicos. La población que tiene ingresos positivos es aquella que reporta tener ingresos por ocupación mensuales mayores a cero. Una consideración es que la población que afirma no tener ingresos por ocupación no necesariamente se encuentra desocupada, puede encontrarse ocupada en actividades domésticas sin paga, negocios familiares, agricultura de subsistencia, etc. Al considerar toda la población mayor de catorce años y sus ingresos por ocupación, consideramos aquella población que se encuentra estudiando y aquella que no puede trabajar por enfermedad, edad avanzada o cualquier otra causa. 
+En el análisis que aquí se presenta se utilizan conceptos más básicos. La población que tiene ingresos positivos es aquella que reporta tener ingresos por ocupación mensuales mayores a cero. Una consideración es que la población que afirma no tener ingresos por ocupación no necesariamente se encuentra desocupada, puede encontrarse ocupada en actividades domésticas sin paga, negocios familiares con pago en especie, agricultura de subsistencia, etc. Al considerar toda la población mayor de catorce años y sus ingresos por ocupación, consideramos aquella población que se encuentra estudiando y aquella que no puede trabajar por enfermedad, edad avanzada o cualquier otra causa lo que es una diferencia respecto a los datos oficiales donde no se incluye a esta población en la PEA. 
 
 Si bien se encuentra que existe una disparidad en los ingresos percibidos entre hombres y mujeres, frecuentemente siendo menor el ingreso mensual declarado por mujeres, este es sólo un componente de la disparidad en la vulnerabilidad que se presenta por género. El primer elemento en el análisis de vulnerabilidad en los ingresos por género son las proporciones de población que tiene ingresos por ocupación, este es la primer, y más, relevante brecha de ingreso. Existen múltiples razones por las cuales existe una brecha en la generación de ingresos por ocupación,principalmente la mayor frecuencia de actividades económicas no remuneradas en la población femenina, entre ellas cuidado del hogar, de personas mayores, participación en negocios familiares y agricultura de subsistencia. 
 
-Es importante recalcar que los ingresos por ocupación no son la única fuente de ingresos para las familias, teniendo considerable importancia y alcance los ingresos por transferencias, de programas gubernamentales, remesas nacionales e internacionales. En el caso del programa Prospera la transferencia es asignada a las jefas de familia lo cual, en estos casos, compensa parcialmente esta vulnerabilidad
+Es importante recalcar que los ingresos por ocupación no son la única fuente de ingresos para las familias, teniendo considerable importancia y alcance los ingresos por transferencias, de programas gubernamentales, remesas nacionales e internacionales. En el caso del programa Prospera la transferencia es asignada a las jefas de familia lo cual, en estos casos potencialmente compensa parcialmente esta vulnerabilidad.
 
 ```{r, fig.cap=paste("Piramide poblacional, Encuesta Intercensal 2015"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 
@@ -153,7 +153,6 @@ ggplot(data=PPJal) +
   xlab(label = "Edad") + ylab("Población (miles)") + ggtitle("Población Jalisco, Encuesta Intercensal 2015") +
   theme_bw()
 rm(PPJal)
-
 read.csv() #vivienda
 read.csv() #población
 
@@ -163,23 +162,36 @@ Jalisco tiene una población de `r sum(PersonaIC$FACTOR)` habitantes, `r Persona
 
 Hay dos perspectivas posibles respecto a la situación de ingreso. Una es a partir de los ingresos por ocupación de los individuos y la otra es sobre el total de los ingresos que reportan tener las viviendas. La primer perspectiva aclara elementos de distribución y revela disparidades relaativas a las actividades económicas de acuerdo al sexo y a la educación, para este análisis se utiliza la Encuesta Nacional de Ocupación y Empleo(ENOE). La segunda persepectiva es la relativa a los ingresos que reciben los hogares, para esto utilizamos la información producida por la Encuesta Intercensal 2015 (EI2015)
 
-Presentamos una tabla con los ingresos promedio mensuales de los hogares en los principales municipios, desviación estandar, y promedio de ingreso de acuerdo al sexo del jefe del hogar
+Presentamos una tabla con los ingresos promedio mensuales de los hogares en los principales municipios de acuerdo al sexo del jefe del hogar. En  las viviendas que declaran tener como jefe del hogar a una mujer el ingreso promedio mensual es de `r ViviendaIC %>% filter(INGTRHOG  != "NA" & INGTRHOG != "999999" & JEFE_SEXO =="Mujer") %>% summarise( " " = weighted.mean((INGTRHOG)/3, w = FACTOR))` y aquellas que tienen a un hombre es `r ViviendaIC %>% filter(INGTRHOG  != "NA" & INGTRHOG != "999999" & JEFE_SEXO =="Hombre") %>% summarise( " " = weighted.mean((INGTRHOG)/3, w = FACTOR))`, aquellos hogares con un hombre como jefe del hogar tienen un ingreso 17% mayor. El tamaño promedio del hogar es de `r`
 
-Este es un mapa con el ingreso promedio por jefatura de hogar
+
 
 ```{r, fig.cap=paste("Tabla con ingresos promedio mensuales de los hogares en Jalisco"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
-
-
 ViviendaIC %>% 
   group_by(NOM_MUN, JEFE_SEXO) %>% 
-  filter(INGTRHOG  != "NA") %>% 
-  summarise(Hogares = sum(FACTOR), 
-            Ingreso_promedio_mensual =  weighted.mean((INGTRHOG)/3, w = FACTOR))
+  filter(INGTRHOG  != "NA" & INGTRHOG != "999999") %>% 
+           filter(NOM_MUN %in% c("Guadalajara", "Zapopan", "San Pedro Tlaquepaque", 
+                                 "Tlajomulco de Zúñiga", "Tonalá")) %>% 
+  summarise(Ingreso_promedio_mensual =  weighted.mean((INGTRHOG)/3, w = FACTOR))
+
+
+INGVIV <- ViviendaIC %>% 
+  group_by(NOM_MUN, JEFE_SEXO) %>% 
+  filter(INGTRHOG  != "NA" & INGTRHOG != "999999") %>% 
+           filter(NOM_MUN %in% c("Guadalajara", "Zapopan", "San Pedro Tlaquepaque", 
+                                 "Tlajomulco de Zúñiga", "Tonalá")) %>% 
+  summarise(Ingreso_promedio_mensual =  weighted.mean((INGTRHOG)/3, w = FACTOR),
+            Integrantes_Promedio = weighted.mean(NUMPERS, w =FACTOR))
+
+INGVIV$Promedio_por_integrante <- INGVIV$Ingreso_promedio_mensual/INGVIV$Integrantes_Promedio
+
+head(ViviendaIC)
+
+table(ViviendaIC$NUMPERS)
+
 ```
-head(viviendaIC)
 
 
-Ingreso promedio mensual del hogar de acuerdo a edad y sexo del jefe del hogar 
 
 ```{r, fig.cap=paste("Mapa con ingresos promedio"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 
