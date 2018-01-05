@@ -47,6 +47,7 @@ Por hacer:
   47. Unir municipios intercensal con datos electorales. 
   48. Integrantes promedio de la vivienda 
   49. Mapa con ingreso promedio por habitante 
+  50. geom points con variables sd y resultados electorales, datos municipales
   
   MENÚ
   
@@ -54,3 +55,6 @@ Por hacer:
   2. Descriptivos sociodemográficos -> análisis de problemática regional
   3. Resultados electorales -> modelos de resultados cruzando con resultados de encuesta 
   4. 
+  
+  BUENAS PRÁCTICAS
+  1. knitr funciona solamente, en mi máquina, con rutas absolutas

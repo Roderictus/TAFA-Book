@@ -12,7 +12,7 @@ library(data.table)
 #######################################################################################################
 
 P2006Secc<-fread(input = "http://siceef.ine.mx/BD/Presidente2006Seccion.csv", 
-                 sep = ",", encoding = "UTF-8")
+                 sep = ",", encoding = "UTF-8")q3
 P2006Secc$CVE_SECC <-str_c(str_pad(P2006Secc$ID_ESTADO, width =2, "left", "0"),         #Estado Sección
                            str_pad(P2006Secc$SECCION, width = 4, "left", "0"))
 P2006Secc$CV_MUN   <- str_c(str_pad(P2006Secc$ID_ESTADO, width = 2, "left", "0"),       #Estado Municipio
@@ -149,7 +149,6 @@ write.csv(x = P2012Edo, file = "Datos/Electorales/P2012Edo.csv")# N
 JAL2015 <- read_xlsx(path = "C:/Proyectos R/Datos-Electorales/2015 Guadalajara/ResultadosPorCasilla2015.xlsx", 
                      range = "A4:AD18734")
 colnames(JAL2015) <- make.names(colnames(JAL2015))
-head(JAL2015)
 JALSECC2015 <- JAL2015 %>%
   group_by(Municipio, Sección, Elección) %>%
   summarise(PAN = sum(PAN), 
@@ -309,20 +308,31 @@ write.csv(x = ENOE,file = "Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.c
 
 #para mujeres por rangos de edad
 #####################################################################################################
-##############      Intercensal     #################################################################
+##############      Intercensal, Jalisco     ########################################################
 #####################################################################################################
 #sacarlo para Jalisco, municipal, homologarlo con shapefiles. 
 PersonaIC <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_PERSONA14.CSV")#persona intercensal, jalisco 
 PersonaIC$SEXO<-factor(PersonaIC$SEXO, labels = c("Hombre", "Mujer"))
-
-ViviendaIC <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA14.CSV")#persona intercensal, jalisco 
+ViviendaIC <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA14.CSV")#Vivienda intercensal, jalisco 
 #la codificación de las etiquetas se obtiene del cuestionario 
 #http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/especiales/intercensal/2015/doc/eic2015_cuestionario.pdf
 ViviendaIC$JEFE_SEXO<-factor(ViviendaIC$JEFE_SEXO, labels = c("Hombre", "Mujer"))
 ViviendaIC[ViviendaIC$JEFE_EDAD == "999", ]$JEFE_EDAD <- NA#clasificar correctamente los NAs de edad del jefe del hogar
 ViviendaIC %>% filter(JEFE_EDAD != "NA") %>% group_by(MUN, NOM_MUN, JEFE_SEXO ) %>% summarise(EDAD_JEFE_PROMEDIO = weighted.mean(JEFE_EDAD, FACTOR)) #para sacar las promedios ponderados, corte municipio y sexo 
 ViviendaIC %>% filter(INGTRHOG != c("NA", "999999")) %>% group_by(MUN, NOM_MUN, JEFE_SEXO ) %>% summarise(INGRESO_VIVIENDA_PROMEDIO = weighted.mean(JEFE_EDAD, FACTOR), weighted.mean(Ingreso_Hogar, FACTOR)) #para sacar las promedios ponderados, corte municipio y sexo 
-write.csv(x = ViviendaIC, file = "Datos/Intercensal/Vivienda_2015.csv")
+
+#1. Dos bases, personas y vivienda, sacar información a nivel municipal
+#2. Unir datos de las dos bases
+#3. Unir con base broomificada para mapas 
+write.csv(x = PersonaIC, file = "Datos/Intercensal/Persona_2015.csv")# Persona intercensal 
+
+write.csv(x = ViviendaIC, file = "Datos/Intercensal/Vivienda_2015.csv")# vivienda intercensal 
+############################################################################################
+##########################    Base para Mapas, Intercensal 2015   #########################
+############################################################################################
+#unir información municipal de Jalisco (fuente intercensal) don datos electorales 
+
+
 
 ####    Pirámide Poblacional ####
 
@@ -373,9 +383,10 @@ IngresoOcup <- IngresoOcup + xlab("Edad (14 a 75 años)") +ylab("Ingreso Mensual
 IngresoOcup + facet_wrap(~Estado) #Por Estado 
 IngresoOcup + facet_wrap(~CS_P13_1) + geom_jitter(alpha = 0.01) + coord_cartesian( xlim = c(0, 75), ylim = c(0, 25000))#
 
-############################################################################################
-##########################    Base para Mapas, Intercensal 2015   #########################
-############################################################################################
+
+
+
+
 
 #hombres de Jalisco
 #rangos de edad 

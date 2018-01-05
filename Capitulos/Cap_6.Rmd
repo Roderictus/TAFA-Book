@@ -1,32 +1,57 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 \section{Capítulo 6 Estudio de Caso; Guadalajara}
 
-Se analizan los resultados electorales para la elección de municipes, concurrente con diputados locales, para el año de 2015 a nivel municipal y sección electoral. Se realiza la comparación la elección Federal 2012 encontrando los principales cambios en participación electoral y tendencias generales del voto. Se presentan resultados y descriptivos de acuerdo a la base pública de resultados 
-
-
+Se analizan los resultados electorales para la elección de municipes, concurrente con diputados locales, para el año de 2015 a nivel municipal y sección electoral. Se realiza la comparación la elección Federal 2012 encontrando los principales cambios en participación electoral y tendencias generales del voto. Se presentan resultados y descriptivos de acuerdo a la base pública de resultados electorales 2012 y 2015. 
 
 \subsection{Guadalajara, Descriptivos del voto }
 
-Descripción del último proceso electoral a nivel estatal correspondiente a la elección del 2015. 
+```{r set, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(magrittr)
+library(knitr)
+library(rgeos)
+library(rgdal)
+library(raster)
+library(ggplot2)
+library(dplyr)
+library(gtable)
+library(grid)
+library(stringr)
+library(data.table)
+library(viridis)
+library(tidyr)
+library(kableExtra)
+library(gridExtra)
+library(lattice)
+library(PerformanceAnalytics)#para correlaciones del voto 
+library(broom) #tidy en vez de fortify
+library(foreign )
+library(spatstat)
+```
 
-Número de casillas `r nrow(JAL2015)`
-Voto total `r sum(JALSECCMUN$VotosTotales)`
-Voto total valido `r sum(JALSECCMUN$VotosValidos)`
-
-Se muestra una lista de los principales municipios que acumularon el xx% de la lista nominal en las elecciones del 2015. Se muestra la participación (Votos Válidos / Lista Nominal), la proporción de votos validos del municipio respecto al total de votos válidos y el porcentaje de votos que obtuvieron las principales fuerzas políticas. Se observa que movimiento ciudadano presenta una alta polarización a nivel municipal pero que logra capturar los 11 municipios más importantes. 
-
-```{r, fig.cap=paste("Concentración de los votos y participación por municipio"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
-JALMUNMUN2015 <-fread(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/Jalisco/JALMUNMUN.csv")#cargar JALMUNMUN
+```{r, Carga de bases), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+getwd()
+JALMUNMUN2015 <-fread(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/Jalisco/JALMUNMUN2015.csv")#cargar JALMUNMUN
 LPM<-c("GUADALAJARA", "ZAPOPAN", "SAN PEDRO TLAQUEPAQUE", "TLAJOMULCO DE ZUÑIGA", "TONALÁ") #lista de los 5 principales municipios
 TopMunJal2015  <- JALMUNMUN2015 %>%
   dplyr::select(Municipio, Boletas, Por_Part, Validos_Por, MC_por, PAN_por, PRI_por) %>% #Porcentaje de la lista nominal que tiene cada municipio
   arrange(-Validos_Por) %>%
   top_n(20, Validos_Por)
 colnames(TopMunJal2015) <- c("Municipio", "Lista Nominal", "% Participación", "% estatalvalidos" , "% MC", "% PAN", "% PRI")
+```
+
+Se muestra una lista de los 20 principales municipios que acumularon el `r sum(TopMunJal2015$"% estatalvalidos")`% de la lista nominal en las elecciones del 2015. Se muestra la participación (Votos Válidos / Lista Nominal), la proporción de votos validos del municipio respecto al total de votos válidos y el porcentaje de votos que obtuvieron las principales fuerzas políticas. Se observa que movimiento ciudadano presenta una alta polarización a nivel municipal pero que logra capturar los 11 municipios más importantes. 
+
+```{r, fig.cap=paste("Concentración de los votos y participación por municipio"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 TopMunJal2015
 ```
 
-
-La gráfica muestra puntos, histogramas y correlaciones por parejas de partidos y participación electoral. En los puntos el efecto esperado es una correlación negativa entre el voto de los partidos al ser estos sustitutos. Lo que se aprecia es que PAN y PRI son complementarios, en donde se vota más (o menos) por uno se vota más (o menos) por el otro. En contraste Movimiento Ciudadano (MC) es un partido fuertemente sustituto del PAN (-0.65) y sustituto del PRI (-0.35). La distribución de votos de MC es bimodal (ver histograma) con alto número de municipios con una votación baja. Notoriamente la participación electoral tiene una relación positiva con la votación por el PAN y PRI y negativa con MC, PVEM y MORENA. 
+La gráfica muestra puntos, histogramas y correlaciones por parejas de partidos y participación electoral. En los puntos el efecto esperado es una correlación negativa entre el voto de los partidos al ser estos sustitutos. Lo que se aprecia es que PAN y PRI son complementarios, en donde se vota más (o menos) por uno se vota menos (o más) por el otro. Movimiento Ciudadano (MC) es un partido fuertemente sustituto del PAN (-0.65) y sustituto del PRI (-0.35). La distribución de votos de MC es bimodal (ver histograma) con alto número de municipios con una votación baja. Notoriamente la participación electoral tiene una relación positiva con la votación por el PAN y PRI y negativa con MC, PVEM y MORENA. 
 
 
 ```{r, fig.cap=paste("Correlación Municipal"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
@@ -48,8 +73,27 @@ JALSECCMUN2015 %>%
 Mostramos la participación electoral a nivel municipal en Jalisco, que comprende del 39% al 81% del voto. 
 
 ```{r, fig.cap=paste("Participación electoral 2015 Municipios"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+Municipios_Map <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/Jalisco/MunMapJal2015.csv")
 
-Municipios_Map <- read.csv(file = "Datos/Electorales/Jalisco/MunMapJal2015.csv")
+theme_map <- function(...) {
+  theme_minimal() +
+    theme(
+      text = element_text(family = "sans", color = "#22211d"),
+      axis.line = element_blank(),
+      axis.text.x = element_blank(),
+      axis.text.y = element_blank(),
+      axis.ticks = element_blank(),
+      axis.title.x = element_blank(),
+      axis.title.y = element_blank(),
+      # panel.grid.minor = element_line(color = "#ebebe5", size = 0.2),
+      panel.grid.major = element_line(color = "#ebebe5", size = 0.2),
+      panel.grid.minor = element_blank(),
+      plot.background = element_rect(fill = "#f5f5f2", color = NA), 
+      panel.background = element_rect(fill = "#f5f5f2", color = NA), 
+      legend.background = element_rect(fill = "#f5f5f2", color = NA),
+      panel.border = element_blank()
+      )
+}
 
 ####    etiquetas para los mapas
 no_classes <- 6
@@ -101,24 +145,24 @@ Se muestra un mapa con el "tamaño" o importancia relativa de los municipios de 
 ```{r, fig.cap=paste("Mapa de densidad de votos "), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 ```
 
-Mapa con resultados electorales a nivel municipal de Jalisco
+Mapa con resultados electorales a nivel sección electoral para municipios los principales municipios de Jalisco. 
 
 ```{r, fig.cap=paste("Resultados electorales Guadalajara"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 #datos de secciones
 #estados 14, municipio 41 
 #mandar orden de datos a bases
-Secciones14 <-readOGR("C:/Proyectos R/Datos-Electorales/Cartografía electoral/14/SECCION.shp", 
-                    "SECCION") #6459
-Secciones$CVE_SECC<-str_c(str_pad(Secciones$entidad, width =2, "left", "0"),
-                          str_pad(Secciones$seccion, width = 4, "left", "0"))
-Secciones_Map <- fortify(Secciones, 
-                         region = "CVE_SECC")
-Secciones_Map$CVE_SECC <- Secciones_Map$id
-Secciones_Map<-left_join(x = Secciones_Map, y = P2012SeccEdo, by = "CVE_SECC")
-Secciones_Map$Por_PRI <-  ((Secciones_Map$PRI + Secciones_Map$PRI_PVEM) /
-                             (Secciones_Map$TOTAL_VOTOS-Secciones_Map$NUM_VOTOS_NULOS))*100
-Secciones_Map[is.na(Secciones_Map$Por_PRI),]$Por_PRI <- median(Secciones_Map$Por_PRI,na.rm = TRUE) #imputando el valor de las medianas
-Secciones_Map[is.na(Secciones_Map$Por_Participacion),]$Por_Participacion <- median(Secciones_Map$Por_Participacion,na.rm = TRUE) #imputando el valor de las medianas
+#Secciones14 <-readOGR("C:/Proyectos R/Datos-Electorales/Cartografía electoral/14/SECCION.shp", 
+#                    "SECCION") #6459
+#Secciones$CVE_SECC<-str_c(str_pad(Secciones$entidad, width =2, "left", "0"),
+#                          str_pad(Secciones$seccion, width = 4, "left", "0"))
+#Secciones_Map <- fortify(Secciones, 
+#                         region = "CVE_SECC")
+#Secciones_Map$CVE_SECC <- Secciones_Map$id
+#Secciones_Map<-left_join(x = Secciones_Map, y = P2012SeccEdo, by = "CVE_SECC")
+#Secciones_Map$Por_PRI <-  ((Secciones_Map$PRI + Secciones_Map$PRI_PVEM) /
+#                             (Secciones_Map$TOTAL_VOTOS-Secciones_Map$NUM_VOTOS_NULOS))*100
+#Secciones_Map[is.na(Secciones_Map$Por_PRI),]$Por_PRI <- median(Secciones_Map$Por_PRI,na.rm = TRUE) #imputando el valor de las medianas
+#Secciones_Map[is.na(Secciones_Map$Por_Participacion),]$Por_Participacion <- median(Secciones_Map$Por_Participacion,na.rm = TRUE) #imputando el valor de las medianas
 ```
 
 Mapas con resultados electorales para algunos de los principales municipios 
@@ -129,7 +173,7 @@ Mapas con resultados electorales para algunos de los principales municipios
 
 \subsection{Jalisco, Sociodemográficos }
 
-Realizamos un análisis de la situación económica de la población en el estado de Jalisco. La información relativa a ingresos por ocupación proviene de la Encuesta Nacional de Empleo (ENOE) para el último trimestre disponible a la elaboración de esta sección, 3er trimestre de 2017. La información a nivel vivienda (datos sobre jefatura de hogar, recibo de remesas) fueron obtenidas a partir de la encuesta Intercensal 2015 que es estadísticamente significativa a nivel Municipal. Los datos de distribución poblacional (pirámide poblacional), fueron calculados utilizando los factores de expansión de la encuesta intercensal y coinciden con las estadísticas oficiales.
+Realizamos un análisis de la situación económica de la población en el estado de Jalisco. La información relativa a ingresos por ocupación proviene de la Encuesta Nacional de Empleo (ENOE) para el último trimestre disponible a la elaboración de esta sección, 3er trimestre de 2017. La información a nivel vivienda (datos sobre jefatura de hogar, recibo de remesas) fueron obtenidas a partir de la encuesta Intercensal 2015 que es estadísticamente significativa a nivel Municipal y, para algunos municipios, censal. Los datos de distribución poblacional (pirámide poblacional), fueron calculados utilizando los factores de expansión de la encuesta intercensal y coinciden con las estadísticas oficiales.
 
 El análisis de ingreso aquí presentado es distinto a los oficialmente reportados, aunque se basa en los mismos datos. Los datos comúnmente reportados se refieren a términos como población económicamente activa(PEA) y no activa (PNEA), ocupada, ocupada parcialmente, formal, informal, etc. dado que los porcentajes de estas variables son calculados sobre sub-categorías (ej.formalidad es una proporción de PEA ocupada) no transmiten fácilmente un entendimiento sobre la situación económica de la población y requieren de un análisis que involucre el entendimiento de estas categorías. 
 
@@ -140,9 +184,7 @@ Si bien se encuentra que existe una disparidad en los ingresos percibidos entre 
 Es importante recalcar que los ingresos por ocupación no son la única fuente de ingresos para las familias, teniendo considerable importancia y alcance los ingresos por transferencias, de programas gubernamentales, remesas nacionales e internacionales. En el caso del programa Prospera la transferencia es asignada a las jefas de familia lo cual, en estos casos potencialmente compensa parcialmente esta vulnerabilidad.
 
 ```{r, fig.cap=paste("Piramide poblacional, Encuesta Intercensal 2015"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
-
-PPJal <- read.csv(file = "Datos/Intercensal/Piramide_Jalisco_2015.csv")
-
+PPJal <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Intercensal/Piramide_Jalisco_2015.csv")
 ggplot(data=PPJal) +
   geom_bar(aes(Edad_grupo,Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Mujer"), width = .8) +
   geom_bar(aes(Edad_grupo,-Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Hombre"), width = .8) +
@@ -153,28 +195,35 @@ ggplot(data=PPJal) +
   xlab(label = "Edad") + ylab("Población (miles)") + ggtitle("Población Jalisco, Encuesta Intercensal 2015") +
   theme_bw()
 rm(PPJal)
-read.csv() #vivienda
-read.csv() #población
+PersonaIC  <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Intercensal/Persona_2015.csv") #vivienda
+ViviendaIC <- read.csv(file ="C:/Proyectos R/TAFA-Book/Datos/Intercensal/Vivienda_2015.csv") #población
 
 ```
 
-Jalisco tiene una población de `r sum(PersonaIC$FACTOR)` habitantes, `r PersonaIC %>% filter(SEXO == "Mujer") %>% select(FACTOR) %>% sum()` mujeres,y  `r PersonaIC %>% filter(SEXO == "Hombre") %>% select(FACTOR) %>% sum()` hombres. Con `r sum(viviendaIC$FACTOR)` viviendas, de las cuales `r ViviendaIC %>% filter(JEFE_SEXO == "Mujer") %>% select(FACTOR) %>% sum()` declaran tener como jefe del hogar a una mujer y `r ViviendaIC %>% filter(JEFE_SEXO == "Hombre") %>% select(FACTOR) %>% sum()` tienen como jefe del hogar a un hombre. 
+```{r Sin mostrar, echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 
-Hay dos perspectivas posibles respecto a la situación de ingreso. Una es a partir de los ingresos por ocupación de los individuos y la otra es sobre el total de los ingresos que reportan tener las viviendas. La primer perspectiva aclara elementos de distribución y revela disparidades relaativas a las actividades económicas de acuerdo al sexo y a la educación, para este análisis se utiliza la Encuesta Nacional de Ocupación y Empleo(ENOE). La segunda persepectiva es la relativa a los ingresos que reciben los hogares, para esto utilizamos la información producida por la Encuesta Intercensal 2015 (EI2015)
+library(tidyverse)
+PobJal       <- sum(PersonaIC$FACTOR)
+PobJalMuj    <- PersonaIC %>% filter(SEXO == "Mujer") %>% dplyr::select(FACTOR) %>% sum()
+PobJalHom    <- PersonaIC %>% filter(SEXO == "Hombre") %>% dplyr::select(FACTOR) %>% sum()
+NViviendas   <- sum(ViviendaIC$FACTOR)
+NViviendasMuj<- ViviendaIC %>% filter(JEFE_SEXO == "Mujer") %>% dplyr::select(FACTOR) %>% sum()
+NViviendasMuj<- ViviendaIC %>% filter(JEFE_SEXO == "Hombre") %>% dplyr::select(FACTOR) %>% sum()
+
+```
+
+
+
+
+Jalisco tiene una población de `r PobJal` habitantes, `r PobJalMuj` mujeres,y  `r PobJalHom` hombres. Con `r NViviendas` viviendas, de las cuales `r NViviendasMuj` declaran tener como jefe del hogar a una mujer y `r NViviendasMuj` tienen como jefe del hogar a un hombre. 
+
+Hay dos perspectivas posibles respecto a la situación de ingreso. Una es a partir de los ingresos por ocupación de los individuos(ENOE) y la otra es sobre  los ingresos que reportan tener a nivel vivienda(Intercensal). La primer perspectiva aclara elementos de distribución y revela disparidades relaativas a las actividades económicas de acuerdo al sexo y a la educación, para este análisis se utiliza la Encuesta Nacional de Ocupación y Empleo(ENOE). La segunda persepectiva es la relativa a los ingresos que reciben los hogares, para esto utilizamos la información producida por la Encuesta Intercensal 2015 (EI2015)
 
 Presentamos una tabla con los ingresos promedio mensuales de los hogares en los principales municipios de acuerdo al sexo del jefe del hogar. En  las viviendas que declaran tener como jefe del hogar a una mujer el ingreso promedio mensual es de `r ViviendaIC %>% filter(INGTRHOG  != "NA" & INGTRHOG != "999999" & JEFE_SEXO =="Mujer") %>% summarise( " " = weighted.mean((INGTRHOG)/3, w = FACTOR))` y aquellas que tienen a un hombre es `r ViviendaIC %>% filter(INGTRHOG  != "NA" & INGTRHOG != "999999" & JEFE_SEXO =="Hombre") %>% summarise( " " = weighted.mean((INGTRHOG)/3, w = FACTOR))`, aquellos hogares con un hombre como jefe del hogar tienen un ingreso 17% mayor. El tamaño promedio del hogar es de `r`
 
 
 
 ```{r, fig.cap=paste("Tabla con ingresos promedio mensuales de los hogares en Jalisco"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
-ViviendaIC %>% 
-  group_by(NOM_MUN, JEFE_SEXO) %>% 
-  filter(INGTRHOG  != "NA" & INGTRHOG != "999999") %>% 
-           filter(NOM_MUN %in% c("Guadalajara", "Zapopan", "San Pedro Tlaquepaque", 
-                                 "Tlajomulco de Zúñiga", "Tonalá")) %>% 
-  summarise(Ingreso_promedio_mensual =  weighted.mean((INGTRHOG)/3, w = FACTOR))
-
-
 INGVIV <- ViviendaIC %>% 
   group_by(NOM_MUN, JEFE_SEXO) %>% 
   filter(INGTRHOG  != "NA" & INGTRHOG != "999999") %>% 
@@ -185,9 +234,7 @@ INGVIV <- ViviendaIC %>%
 
 INGVIV$Promedio_por_integrante <- INGVIV$Ingreso_promedio_mensual/INGVIV$Integrantes_Promedio
 
-head(ViviendaIC)
-
-table(ViviendaIC$NUMPERS)
+kable(x = INGVIV,digits = 1)
 
 ```
 
@@ -206,23 +253,20 @@ table(ViviendaIC$NUMPERS)
 Análisis de personas que reportan ingresos positivos.
 
 
-```{r, fig.cap=paste("Ingresos por ocupación mensuales por escolaridad y sexo, ENOE Jalisco ", 3T 2017), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
-ENOE <- read.csv(file = "Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.csv")
+```{r, fig.cap=paste("Ingresos por ocupación mensuales por escolaridad y sexo, ENOE Jalisco , 3T 2017"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+getwd()
+ENOE <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.csv")
 ENOEB <- ENOE[ENOE$EDA <=75,] #ENOEB restringe la edad de 14 a 75 años para comparación de ingreso salarial 
 ENOEB <- ENOEB[ENOEB$INGOCUP >0,]#ojo
-ENOEB %>%
-  filter(CS_P13_1 == c("Ninguna", "Primaria", "Secundaria", "Preparatoria o bach", "Carrera técnica", "Profesional"))
-
 IngresoOcup <- ggplot(filter(.data = ENOEB, CS_P13_1 == c("Ninguna", "Primaria", "Secundaria", "Preparatoria o bach", "Carrera técnica", "Profesional")), 
                       aes(EDA, INGOCUP, color = SEX)) #edad, Ingreso mensual, sexo, todas las escolaridades 
 IngresoOcup <- IngresoOcup + geom_smooth(aes(weight = FAC))
 IngresoOcup <- IngresoOcup + xlab("Edad (14 a 75 años)") +ylab("Ingreso Mensual")  + ggtitle("Ingreso Mensual declarado por  Sexo(ENOE, II 2015) ")
-
 IngresoOcup + facet_wrap(~CS_P13_1) + geom_jitter(alpha = 0.01) + coord_cartesian( xlim = c(0, 75), ylim = c(0, 25000))#
 ```
 
 
-```{r, fig.cap=paste("Ingresos mensuales por Estado de la república", 3T 2017, echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+```{r, fig.cap=paste("Ingresos mensuales por Estado de la república, 3T 2017"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 IngresoOcup + facet_wrap(~Estado) #Por Estado 
 ```
 
@@ -244,3 +288,4 @@ IngresoOcup + facet_wrap(~Estado) #Por Estado
 
 
 \subsection{Guadalajara, Modelo a nivel municipal }
+
