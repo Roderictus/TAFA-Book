@@ -33,17 +33,16 @@ grafica_basica<-function(base,variable,main,color_inicial="white",color_fin="red
 }
 
 
-grafica_basica(base = Municipios_Map, 
-               variable = PAN_por, 
-               main = "Titulo tituloso", 
-               cortes = 10)
 base <- read.csv("Datos/Electorales/Jalisco/MunMapJal2015.csv")
-variable<- "MC_por"
+variable<- "Por_Part"
 
-head( )
 
-grafica_basica(base, variable, main = "Porcentaje de voto MC, Elecciones 2015", cortes = 5 )
-grafica_basica(base, variable, main = "Porcentaje de voto MC, Elecciones 2015", cortes = 5 )
+head(Municipios_Map)
+
+grafica_basica(base, variable, main = "Porcentaje de voto MC, Elecciones 2015", cortes = 7 )
+
+
+grafica_basica(base, variable, main = "Porcentaje de voto MC, Elecciones 2015", cortes = 5, color_fin = "blue" )
 
 
 table(base$MC_por, exclude = FALSE)
