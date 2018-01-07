@@ -58,3 +58,4 @@ Por hacer:
   
   BUENAS PRÁCTICAS
   1. knitr funciona solamente, en mi máquina, con rutas absolutas
+  2. NO usar acentos en nombres de archivos, especialmente aquellos que se suban a Github

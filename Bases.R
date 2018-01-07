@@ -162,6 +162,7 @@ write.csv(x = P2012Edo, file = "Datos/Electorales/P2012Edo.csv")# N
 #######################################################################################################
 #125 ayuntamientos
 # 39 diputados al congreso del estado, 20 de mayoría relativa por cada uno de los distritos electorales
+
 JAL2015 <- read_xlsx(path = "C:/Proyectos R/Datos-Electorales/2015 Guadalajara/ResultadosPorCasilla2015.xlsx", 
                      range = "A4:AD18734")
 colnames(JAL2015) <- make.names(colnames(JAL2015))
@@ -337,8 +338,6 @@ MunMapJal2015<-left_join(x = MunMapJal, y = JALMUNMUN2015, by = "NOM_MUN_JOIN")#
 write.csv(x = MunMapJal2015, file = "Datos/Electorales/Jalisco/MunMapJal2015.csv")
 write.csv(x = JALMUNMUN2015, file = "Datos/Electorales/Jalisco/JALMUNMUN2015.csv")
 
-
-
 #para mujeres por rangos de edad
 ############################################################################################
 ##########################    Base para Mapas, Intercensal 2015   #########################
@@ -396,15 +395,54 @@ IngresoOcup <- IngresoOcup + xlab("Edad (14 a 75 años)") +ylab("Ingreso Mensual
 IngresoOcup + facet_wrap(~Estado) #Por Estado 
 IngresoOcup + facet_wrap(~CS_P13_1) + geom_jitter(alpha = 0.01) + coord_cartesian( xlim = c(0, 75), ylim = c(0, 25000))#
 
-
-
-
-
-
 #hombres de Jalisco
 #rangos de edad 
 #shapefiles con formas estatales
 #agregar datos a nivel estatal
 #tabla con resultados agregados por estado, participación electoral y principales partidos
+
+##### Padrón  ######
+PADRON2017    <- read_excel(path = "C:/Users/Franco/Desktop/DatosAbiertos-DERFE-pl_20170731.xlsx")
+####################
+##### EDOMEX MUN 2017 ##############
+EDOMEX2017 <- read_excel(path = "C:/Users/Franco/Desktop/Resultados_computo_de_Gobernador_2017_por_casilla.xlsx")
+colnames(EDOMEX2017)
+
+EDOMEXMUN2017 <- EDOMEX2017 %>% group_by(ID_ESTADO, ID_MUNICIPIO, MUNICIPIO) %>% 
+  summarise(PRI = sum(PRI), 
+            PAN           = sum(PAN), 
+            PRD           = sum(PRD),
+            MORENA        = sum(MORENA),
+            LISTA_NOMINAL = sum(LISTA_NOMINAL),
+            TOTAL_VOTOS   = sum(TOTAL_VOTOS),
+            POR_PART = sum(TOTAL_VOTOS)/sum(LISTA_NOMINAL))
+EDOMEXMUN2017$POR_PRI <- (EDOMEXMUN2017$PRI/EDOMEXMUN2017$TOTAL_VOTOS) * 100
+#################
+
+###########################     Merge de bases    ########################
+JALMUNMUN2015 <- read.csv(file = "Electorales/Jalisco/JALMUNMUN2015.csv") 
+#homologar variable de join
+P2012JalMun <- P2012Mun %>% 
+  filter(NOMBRE_ESTADO =="JALISCO")
+#####
+intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN))),
+          chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$NOM_MUN_JOIN))))#123 aparecen en ambos
+#"manzanilla de la paz", "san pedro tlaquepaque
+#generar las variables de nombres unificados, en minúsculas sin acentos y un nombre que hay que asignar a mano
+JALMUNMUN2015$NOM_MUN_JOIN <- chartr('áéíóúñ','aeioun',tolower(JALMUNMUN2015$NOM_MUN))
+JALMUNMUN2015[JALMUNMUN2015$NOM_MUN_JOIN == "manzanilla de la paz",]$NOM_MUN_JOIN <- "la manzanilla de la paz"
+P2012JalMun[P2012JalMun$NOM_MUN_JOIN == "tlaquepaque",]$NOM_MUN_JOIN <- "san pedro tlaquepaque"
+#Juntar utilizando NOM_MUN_JOIN
+JALMUNMUN2015$NOM_MUN_JOIN   <-chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN)))
+P2012JalMun$NOM_MUN_JOIN <-chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$NOM_MUN_JOIN)))
+intersect(unique(JALMUNMUN2015$NOM_MUN_JOIN),
+          unique(P2012JalMun$NOM_MUN_JOIN))#125 de lujoso lujo 
+#nombres para distinguir 
+
+colnames(JALMUNMUN2015) <- str_c(colnames(JALMUNMUN2015), "JAL15", sep = "_")
+colnames(JALMUNMUN2015) <- str_c(colnames(P2012JalMun), "PRES12", sep = "_")
+
+JalEl<-inner_join(P2012JalMun, JALMUNMUN2015, by = "NOM_MUN_JOIN")
+rm(P2012Mun)
 
 
