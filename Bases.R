@@ -417,6 +417,8 @@ EDOMEXMUN2017 <- EDOMEX2017 %>% group_by(ID_ESTADO, ID_MUNICIPIO, MUNICIPIO) %>%
             TOTAL_VOTOS   = sum(TOTAL_VOTOS),
             POR_PART = sum(TOTAL_VOTOS)/sum(LISTA_NOMINAL))
 EDOMEXMUN2017$POR_PRI <- (EDOMEXMUN2017$PRI/EDOMEXMUN2017$TOTAL_VOTOS) * 100
+write.csv(x = EDOMEXMUN2017, file = "Electorales/Edomex/EDOMEXMUN2017.csv")
+
 #################
 
 ###########################     Merge de bases    ########################
@@ -424,25 +426,60 @@ JALMUNMUN2015 <- read.csv(file = "Electorales/Jalisco/JALMUNMUN2015.csv")
 #homologar variable de join
 P2012JalMun <- P2012Mun %>% 
   filter(NOMBRE_ESTADO =="JALISCO")
+JALMUNMUN2015$NOM_MUN_JOIN   <-chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN)))
+P2012JalMun$NOM_MUN_JOIN <-chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$MUNICIPIO)))
+
 #####
 intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN))),
           chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$NOM_MUN_JOIN))))#123 aparecen en ambos
 #"manzanilla de la paz", "san pedro tlaquepaque
 #generar las variables de nombres unificados, en minúsculas sin acentos y un nombre que hay que asignar a mano
-JALMUNMUN2015$NOM_MUN_JOIN <- chartr('áéíóúñ','aeioun',tolower(JALMUNMUN2015$NOM_MUN))
 JALMUNMUN2015[JALMUNMUN2015$NOM_MUN_JOIN == "manzanilla de la paz",]$NOM_MUN_JOIN <- "la manzanilla de la paz"
 P2012JalMun[P2012JalMun$NOM_MUN_JOIN == "tlaquepaque",]$NOM_MUN_JOIN <- "san pedro tlaquepaque"
 #Juntar utilizando NOM_MUN_JOIN
-JALMUNMUN2015$NOM_MUN_JOIN   <-chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN)))
-P2012JalMun$NOM_MUN_JOIN <-chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$NOM_MUN_JOIN)))
 intersect(unique(JALMUNMUN2015$NOM_MUN_JOIN),
           unique(P2012JalMun$NOM_MUN_JOIN))#125 de lujoso lujo 
-#nombres para distinguir 
 
-colnames(JALMUNMUN2015) <- str_c(colnames(JALMUNMUN2015), "JAL15", sep = "_")
-colnames(JALMUNMUN2015) <- str_c(colnames(P2012JalMun), "PRES12", sep = "_")
+#nombres para distinguir 
+colnames(JALMUNMUN2015) <- str_c("JAL15",  colnames(JALMUNMUN2015), sep = "_")
+colnames(P2012JalMun)   <- str_c("PRES12", colnames(P2012JalMun), sep = "_" )
+
+colnames(JALMUNMUN2015)[28] <- "NOM_MUN_JOIN"
+colnames(P2012JalMun)[37]   <- "NOM_MUN_JOIN"
 
 JalEl<-inner_join(P2012JalMun, JALMUNMUN2015, by = "NOM_MUN_JOIN")
-rm(P2012Mun)
+########    EDOMEX    ##########################################
+
+#EDOMEXMUN2017
+
+#homologar variable de join
+P2012EdomexMun <- P2012Mun %>% 
+  filter(NOMBRE_ESTADO =="MEXICO")
+
+P2012EdoMexMun$NOM_
+JALMUNMUN2015$NOM_MUN_JOIN   <-chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN)))
+P2012JalMun$NOM_MUN_JOIN <-chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$MUNICIPIO)))
+
+#####
+intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN))),
+          chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$NOM_MUN_JOIN))))#123 aparecen en ambos
+#"manzanilla de la paz", "san pedro tlaquepaque
+#generar las variables de nombres unificados, en minúsculas sin acentos y un nombre que hay que asignar a mano
+JALMUNMUN2015[JALMUNMUN2015$NOM_MUN_JOIN == "manzanilla de la paz",]$NOM_MUN_JOIN <- "la manzanilla de la paz"
+P2012JalMun[P2012JalMun$NOM_MUN_JOIN == "tlaquepaque",]$NOM_MUN_JOIN <- "san pedro tlaquepaque"
+#Juntar utilizando NOM_MUN_JOIN
+intersect(unique(JALMUNMUN2015$NOM_MUN_JOIN),
+          unique(P2012JalMun$NOM_MUN_JOIN))#125 de lujoso lujo 
+
+#nombres para distinguir 
+colnames(JALMUNMUN2015) <- str_c("JAL15",  colnames(JALMUNMUN2015), sep = "_")
+colnames(P2012JalMun)   <- str_c("PRES12", colnames(P2012JalMun), sep = "_" )
+
+colnames(JALMUNMUN2015)[28] <- "NOM_MUN_JOIN"
+colnames(P2012JalMun)[37]   <- "NOM_MUN_JOIN"
+
+JalEl<-inner_join(P2012JalMun, JALMUNMUN2015, by = "NOM_MUN_JOIN")
+
+
 
 
