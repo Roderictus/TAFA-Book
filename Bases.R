@@ -276,22 +276,53 @@ write.csv(x = ENOE,file = "Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.c
 #####################################################################################################
 ##############      Intercensal, Jalisco     ########################################################
 #####################################################################################################
-#sacarlo para Jalisco, municipal, homologarlo con shapefiles. 
-PersonaIC      <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_PERSONA14.CSV")#persona intercensal, jalisco 
-PersonaIC$SEXO <-factor(PersonaIC$SEXO, labels = c("Hombre", "Mujer"))
-ViviendaIC     <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA14.CSV")#Vivienda intercensal, jalisco 
 #la codificación de las etiquetas se obtiene del cuestionario 
 #http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/especiales/intercensal/2015/doc/eic2015_cuestionario.pdf
+##############    Vivienda    #############################################
+ViviendaICJal     <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA14.CSV")#Vivienda intercensal, jalisco 
+ViviendaICEdoMex     <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA15.CSV")#Vivienda intercensal, Edomex 
+ViviendaIC <- bind_rows(ViviendaICJal, ViviendaICEdoMex) #Eventualmente para todos los estados programáticamente
+rm(ViviendaICJal)
+rm(ViviendaICEdoMex)
 ViviendaIC$JEFE_SEXO<-factor(ViviendaIC$JEFE_SEXO, labels = c("Hombre", "Mujer"))
 ViviendaIC[ViviendaIC$JEFE_EDAD == "999", ]$JEFE_EDAD <- NA#clasificar correctamente los NAs de edad del jefe del hogar
-ViviendaIC %>% filter(JEFE_EDAD != "NA") %>% group_by(MUN, NOM_MUN, JEFE_SEXO ) %>% summarise(EDAD_JEFE_PROMEDIO = weighted.mean(JEFE_EDAD, FACTOR)) #para sacar las promedios ponderados, corte municipio y sexo 
+
+#jefatura de hombre y jefatura de mujer, % jefatura de hombre
+head(ViviendaIC)
+ViviendaIC %>% group_by(ENT, MUN, NOM_MUN)
+
+
+
+
+
+
+
+temp <- ViviendaIC %>% 
+  filter(JEFE_EDAD != "NA") %>% 
+  group_by(MUN, NOM_MUN, JEFE_SEXO ) %>% 
+  summarise(EDAD_JEFE_PROMEDIO = weighted.mean(JEFE_EDAD, FACTOR)) #para sacar las promedios ponderados, corte municipio y sexo 
+
+temp <- spread(temp, JEFE_SEXO, EDAD_JEFE_PROMEDIO)[,c(2:4)]
+
+ICMunViv <-  
+
 ViviendaIC %>% filter(INGTRHOG != c("NA", "999999")) %>% group_by(MUN, NOM_MUN, JEFE_SEXO ) %>% summarise(INGRESO_VIVIENDA_PROMEDIO = weighted.mean(JEFE_EDAD, FACTOR), weighted.mean(Ingreso_Hogar, FACTOR)) #para sacar las promedios ponderados, corte municipio y sexo 
+
+
+
+
 
 #1. Dos bases, personas y vivienda, sacar información a nivel municipal
 #2. Unir datos de las dos bases
-#3. Unir con base broomificada para mapas 
-write.csv(x = PersonaIC, file = "Datos/Intercensal/Persona_2015.csv")# Persona intercensal 
 write.csv(x = ViviendaIC, file = "Datos/Intercensal/Vivienda_2015.csv")# vivienda intercensal 
+
+#sacarlo para Jalisco, municipal, homologarlo con shapefiles. 
+PersonaICJal      <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_PERSONA14.CSV")#persona intercensal, jalisco
+PersonaICEdoMex      <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_PERSONA15.CSV")#persona intercensal, jalisco 
+PersonaIC$SEXO <-factor(PersonaIC$SEXO, labels = c("Hombre", "Mujer"))
+write.csv(x = PersonaIC, file = "Datos/Intercensal/Persona_2015.csv")# Persona intercensal 
+
+
 ##########################################################################
 ################      Bases de construcción cartográfica      ############
 ##########################################################################
@@ -459,12 +490,12 @@ write.csv(x = EdoMex1215, file = "Datos/Electorales/Edomex/EdoMex1215.csv")
 ICV2015 <- read.csv(file = "Datos/Intercensal/Vivienda_2015.csv")
 
 head(ICV2015)
+table(ICV2015$NOM_ENT)
 
 
 write.csv(x = ENOE,file = "Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.csv")
 write.csv(x = PersonaIC, file = "Datos/Intercensal/Persona_2015.csv")# Persona intercensal 
 write.csv(x = ViviendaIC, file = "Datos/Intercensal/Vivienda_2015.csv")# vivienda intercensal 
-
 
 
 
