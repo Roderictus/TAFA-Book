@@ -192,7 +192,7 @@ JALSECC2015<- JALSECC2015 %>%
          MC_por     = (MC/VotosValidos)*100,
          MORENA_por = (MORENA/VotosValidos)*100,
          JPK_por    = (JPK/VotosValidos)*100)
-JALSECCMUN2015 <- JALSECC2015 %>% filter(Elección == "Municipes")
+JALSECCMUN2015 <- JALSECC2015 %>% filter(Elección == "Municipes") 
 JALSECCDIP2015 <- JALSECC2015 %>% filter(Elección == "Diputados MR")
 
 ###################################         Jalisco a Nivel Municipal       ################################
@@ -482,4 +482,4 @@ JalEl<-inner_join(P2012JalMun, JALMUNMUN2015, by = "NOM_MUN_JOIN")
 
 
 
-
+asdfasd 
