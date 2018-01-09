@@ -4,7 +4,7 @@ Por hacer:
   #3. Mapa de participación municipal en quintiles. 
   #4. Reemplazar lectura de bases en internet con bases locales 
   #6. Homologar nombres
-  7. Empatar por Estado-Nombre (En lugar de clave única)
+  #7. Empatar por Estado-Nombre (En lugar de clave única)
   8. en funcion de mapas municipales (Para secciones electorales) añadir el nombre de Municipios
   9. ENOE a nivel municipal
   #10. Variables a nivel municipal de la intercensal 2015 
@@ -48,6 +48,9 @@ Por hacer:
   48. Integrantes promedio de la vivienda 
   49. Mapa con ingreso promedio por habitante 
   50. geom points con variables sd y resultados electorales, datos municipales
+  51. Bases municipales nacionales programáticas para intercensal, vivienda y personas 
+  
+  
   
   MENÚ
   
