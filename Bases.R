@@ -276,6 +276,13 @@ write.csv(x = ENOE,file = "Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.c
 #####################################################################################################
 ##############      Intercensal, Jalisco     ########################################################
 #####################################################################################################
+<<<<<<< HEAD
+=======
+#sacarlo para Jalisco, municipal, homologarlo con shapefiles. 
+PersonaIC      <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_PERSONA14.CSV")#persona intercensal, jalisco 
+PersonaIC$SEXO <-factor(PersonaIC$SEXO, labels = c("Hombre", "Mujer"))
+ViviendaIC     <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA14.CSV")#Vivienda intercensal, jalisco 
+>>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 #la codificación de las etiquetas se obtiene del cuestionario 
 #http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/especiales/intercensal/2015/doc/eic2015_cuestionario.pdf
 ##############    Vivienda    #############################################
@@ -322,6 +329,12 @@ PersonaICEdoMex      <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos 
 PersonaIC$SEXO <-factor(PersonaIC$SEXO, labels = c("Hombre", "Mujer"))
 write.csv(x = PersonaIC, file = "Datos/Intercensal/Persona_2015.csv")# Persona intercensal 
 
+<<<<<<< HEAD
+=======
+write.csv(x = ViviendaIC, file = "Datos/Intercensal/Vivienda_2015.csv")# vivienda intercensal 
+
+
+>>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 
 ##########################################################################
 ################      Bases de construcción cartográfica      ############
@@ -332,7 +345,13 @@ rm(Municipios)#WastenotWantNot RAM
 MunMapJal<-tidy(x = MunMapJal15, region = "NOM_MUN")
 MunMapJal$NOM_MUN <- MunMapJal$id #probando unirlos por nombre, mayor certeza de que está bien
 #el paso siguiente se hace para tener CVE_MUN
+<<<<<<< HEAD
 #unión de cartografía con los datos electorales 
+=======
+
+#unión de cartografía con los datos electorales 
+
+>>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 MunMapJal2015 <- left_join(MunMapJal, MunMapJal15@data, by = "NOM_MUN") #notar el @data, MunMapJal15 no es data.frame 
 #añadir datos de resultados electorales Municipales
 #revisar que empaten nombres de municipios
@@ -340,10 +359,18 @@ JALMUNMUN2015$NOM_MUN <- JALMUNMUN2015$Municipio
 #Código para encontrar al que hay que renombrar
 #intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN))),
 #          chartr('áéíóúñ','aeioun',unique(tolower(MunMapJal$NOM_MUN))))#124 aparecen en ambos
+<<<<<<< HEAD
+=======
+
+>>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 #setdiff(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN))),
 #        intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN))),
 #                  chartr('áéíóúñ','aeioun',unique(tolower(MunMapJal$NOM_MUN)))))
 #"manzanilla de la paz"
+<<<<<<< HEAD
+=======
+
+>>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 #setdiff(chartr('áéíóúñ','aeioun',unique(tolower(MunMapJal$NOM_MUN))),
 #        intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN))),
 #                  chartr('áéíóúñ','aeioun',unique(tolower(MunMapJal$NOM_MUN)))))
@@ -410,13 +437,28 @@ IngresoOcup <- IngresoOcup + xlab("Edad (14 a 75 años)") +ylab("Ingreso Mensual
 IngresoOcup + facet_wrap(~Estado) #Por Estado 
 IngresoOcup + facet_wrap(~CS_P13_1) + geom_jitter(alpha = 0.01) + coord_cartesian( xlim = c(0, 75), ylim = c(0, 25000))#
 
+<<<<<<< HEAD
 #tabla con resultados agregados por estado, participación electoral y principales partidos
+=======
+#hombres de Jalisco
+#rangos de edad 
+#shapefiles con formas estatales
+#agregar datos a nivel estatal
+#tabla con resultados agregados por estado, participación electoral y principales partidos
+
+>>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 ##### Padrón  ######
 PADRON2017    <- read_excel(path = "C:/Users/Franco/Desktop/DatosAbiertos-DERFE-pl_20170731.xlsx")
 ####################
 ##### EDOMEX MUN 2017 ##############
+<<<<<<< HEAD
 #EDOMEX2017 <- read_excel(path = "C:/Users/Franco/Desktop/Resultados_computo_de_Gobernador_2017_por_casilla.xlsx") #laptop
 EDOMEX2017 <- read_excel(path = "Datos/Electorales/Edomex/Resultados_computo_de_Gobernador_2017_por_casilla.xlsx") #mounstruo
+=======
+EDOMEX2017 <- read_excel(path = "C:/Users/Franco/Desktop/Resultados_computo_de_Gobernador_2017_por_casilla.xlsx")
+colnames(EDOMEX2017)
+
+>>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 EDOMEXMUN2017 <- EDOMEX2017 %>% group_by(ID_ESTADO, ID_MUNICIPIO, MUNICIPIO) %>% 
   summarise(PRI = sum(PRI), 
             PAN           = sum(PAN), 
@@ -426,6 +468,7 @@ EDOMEXMUN2017 <- EDOMEX2017 %>% group_by(ID_ESTADO, ID_MUNICIPIO, MUNICIPIO) %>%
             TOTAL_VOTOS   = sum(TOTAL_VOTOS),
             POR_PART = sum(TOTAL_VOTOS)/sum(LISTA_NOMINAL))
 EDOMEXMUN2017$POR_PRI <- (EDOMEXMUN2017$PRI/EDOMEXMUN2017$TOTAL_VOTOS) * 100
+<<<<<<< HEAD
 write.csv(x = EDOMEXMUN2017, file = "Datos/Electorales/Edomex/EDOMEXMUN2017.csv")
 ###########################     Merge de bases    ########################
 #JALMUNMUN2015 <- read.csv(file = "Electorales/Jalisco/JALMUNMUN2015.csv") #laptop
@@ -438,6 +481,23 @@ P2012JalMun$NOM_MUN_JOIN <-chartr('áéíóúñ','aeioun',unique(tolower(P2012Ja
 #####
 intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN))),
           chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$NOM_MUN_JOIN))))#124aparecen en ambos
+=======
+write.csv(x = EDOMEXMUN2017, file = "Electorales/Edomex/EDOMEXMUN2017.csv")
+
+#################
+
+###########################     Merge de bases    ########################
+JALMUNMUN2015 <- read.csv(file = "Electorales/Jalisco/JALMUNMUN2015.csv") 
+#homologar variable de join
+P2012JalMun <- P2012Mun %>% 
+  filter(NOMBRE_ESTADO =="JALISCO")
+JALMUNMUN2015$NOM_MUN_JOIN   <-chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN)))
+P2012JalMun$NOM_MUN_JOIN <-chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$MUNICIPIO)))
+
+#####
+intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN))),
+          chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$NOM_MUN_JOIN))))#123 aparecen en ambos
+>>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 #"manzanilla de la paz", "san pedro tlaquepaque
 #generar las variables de nombres unificados, en minúsculas sin acentos y un nombre que hay que asignar a mano
 JALMUNMUN2015[JALMUNMUN2015$NOM_MUN_JOIN == "manzanilla de la paz",]$NOM_MUN_JOIN <- "la manzanilla de la paz"
@@ -445,6 +505,7 @@ P2012JalMun[P2012JalMun$NOM_MUN_JOIN == "tlaquepaque",]$NOM_MUN_JOIN <- "san ped
 #Juntar utilizando NOM_MUN_JOIN
 intersect(unique(JALMUNMUN2015$NOM_MUN_JOIN),
           unique(P2012JalMun$NOM_MUN_JOIN))#125 de lujoso lujo 
+<<<<<<< HEAD
 #nombres para distinguir 
 colnames(JALMUNMUN2015) <- str_c("JAL15",  colnames(JALMUNMUN2015), sep = "_")
 colnames(P2012JalMun)   <- str_c("PRES12", colnames(P2012JalMun), sep = "_" )
@@ -456,10 +517,25 @@ write.csv(x = JalEl, file = "Datos/Electorales/Jalisco/JalEl1215.csv")
 ########    EDOMEX    ##########################################
 #EDOMEXMUN2017
 EDOMEXMUN2017 <- read.csv(file = "Datos/Electorales/Edomex/EDOMEXMUN2017.csv")
+=======
+
+#nombres para distinguir 
+colnames(JALMUNMUN2015) <- str_c("JAL15",  colnames(JALMUNMUN2015), sep = "_")
+colnames(P2012JalMun)   <- str_c("PRES12", colnames(P2012JalMun), sep = "_" )
+
+colnames(JALMUNMUN2015)[28] <- "NOM_MUN_JOIN"
+colnames(P2012JalMun)[37]   <- "NOM_MUN_JOIN"
+
+JalEl<-inner_join(P2012JalMun, JALMUNMUN2015, by = "NOM_MUN_JOIN")
+########    EDOMEX    ##########################################
+
+#EDOMEXMUN2017
+>>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 
 #homologar variable de join
 P2012EdomexMun <- P2012Mun %>% 
   filter(NOMBRE_ESTADO =="MEXICO")
+<<<<<<< HEAD
 EDOMEXMUN2017$NOM_MUN_JOIN   <- chartr('áéíóúñ','aeioun',unique(tolower(EDOMEXMUN2017$MUNICIPIO)))
 P2012EdomexMun$NOM_MUN_JOIN  <- chartr('áéíóúñ','aeioun',unique(tolower(P2012EdomexMun$MUNICIPIO)))
 #####
@@ -497,6 +573,33 @@ write.csv(x = ENOE,file = "Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.c
 write.csv(x = PersonaIC, file = "Datos/Intercensal/Persona_2015.csv")# Persona intercensal 
 write.csv(x = ViviendaIC, file = "Datos/Intercensal/Vivienda_2015.csv")# vivienda intercensal 
 
+=======
+
+P2012EdoMexMun$NOM_
+JALMUNMUN2015$NOM_MUN_JOIN   <-chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN)))
+P2012JalMun$NOM_MUN_JOIN <-chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$MUNICIPIO)))
+
+#####
+intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN))),
+          chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$NOM_MUN_JOIN))))#123 aparecen en ambos
+#"manzanilla de la paz", "san pedro tlaquepaque
+#generar las variables de nombres unificados, en minúsculas sin acentos y un nombre que hay que asignar a mano
+JALMUNMUN2015[JALMUNMUN2015$NOM_MUN_JOIN == "manzanilla de la paz",]$NOM_MUN_JOIN <- "la manzanilla de la paz"
+P2012JalMun[P2012JalMun$NOM_MUN_JOIN == "tlaquepaque",]$NOM_MUN_JOIN <- "san pedro tlaquepaque"
+#Juntar utilizando NOM_MUN_JOIN
+intersect(unique(JALMUNMUN2015$NOM_MUN_JOIN),
+          unique(P2012JalMun$NOM_MUN_JOIN))#125 de lujoso lujo 
+
+#nombres para distinguir 
+colnames(JALMUNMUN2015) <- str_c("JAL15",  colnames(JALMUNMUN2015), sep = "_")
+colnames(P2012JalMun)   <- str_c("PRES12", colnames(P2012JalMun), sep = "_" )
+
+colnames(JALMUNMUN2015)[28] <- "NOM_MUN_JOIN"
+colnames(P2012JalMun)[37]   <- "NOM_MUN_JOIN"
+
+JalEl<-inner_join(P2012JalMun, JALMUNMUN2015, by = "NOM_MUN_JOIN")
+>>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 
 
 
+asdfasd 
