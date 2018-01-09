@@ -41,7 +41,7 @@ P2006Mun<-P2006Secc %>% #2442 Municipios
             Municipio     = unique(MUNICIPIO), 
             ID_Municipio  = unique(ID_MUNICIPIO))
 P2006Mun$CV_MUN <- str_c(str_pad(P2006Mun$ID_ESTADO, width = 2, "left", "0"),       #Estado Municipio
-                            str_pad(P2006Mun$ID_MUNICIPIO, width = 3, "left", "0"))
+                         str_pad(P2006Mun$ID_MUNICIPIO, width = 3, "left", "0"))
 P2006Mun$Por_Part   <- (P2006Mun$TOTAL / P2006Mun$Lista_Nominal) * 100 
 P2006Mun$PAN_por    <- (P2006Mun$PAN/P2006Mun$TOTAL) * 100
 P2006Mun$APM_por    <- (P2006Mun$APM/P2006Mun$TOTAL) * 100
@@ -276,13 +276,6 @@ write.csv(x = ENOE,file = "Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.c
 #####################################################################################################
 ##############      Intercensal, Jalisco     ########################################################
 #####################################################################################################
-<<<<<<< HEAD
-=======
-#sacarlo para Jalisco, municipal, homologarlo con shapefiles. 
-PersonaIC      <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_PERSONA14.CSV")#persona intercensal, jalisco 
-PersonaIC$SEXO <-factor(PersonaIC$SEXO, labels = c("Hombre", "Mujer"))
-ViviendaIC     <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA14.CSV")#Vivienda intercensal, jalisco 
->>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 #la codificación de las etiquetas se obtiene del cuestionario 
 #http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/especiales/intercensal/2015/doc/eic2015_cuestionario.pdf
 ##############    Vivienda    #############################################
@@ -294,26 +287,37 @@ rm(ViviendaICEdoMex)
 ViviendaIC$JEFE_SEXO<-factor(ViviendaIC$JEFE_SEXO, labels = c("Hombre", "Mujer"))
 ViviendaIC[ViviendaIC$JEFE_EDAD == "999", ]$JEFE_EDAD <- NA#clasificar correctamente los NAs de edad del jefe del hogar
 
-#jefatura de hombre y jefatura de mujer, % jefatura de hombre
+#para ingresos
+ICMUN <- ViviendaIC %>% 
+  group_by(ENT, NOM_ENT, MUN, NOM_MUN) %>% 
+  filter(INGTRHOG  != "NA" & INGTRHOG != "999999") %>% #subset para cálculo de Ingreso
+  summarise(Ingreso_promedio_mensual =  weighted.mean((INGTRHOG)/3, w = FACTOR),
+            Integrantes_Promedio = weighted.mean(NUMPERS, w =FACTOR),
+            Edad_Promedio_Jefatura = weighted.mean(JEFE_EDAD, w =FACTOR,na.rm = TRUE)) #sólo para las jefaturas que reportan ingresos  
+
+summary(ICMUN$Edad_Promedio_Jefatura)
+
+ViviendaIC %>%
+  group_by(ENT, NOM_ENT, MUN, NOM_MUN) %>%
+  summarise(Viviendas = sum(FACTOR),
+            Jefe_Hombre = sum(FACTOR[JEFE_SEXO == "Hombre"]),
+            Jefe_Mujer  = sum(FACTOR[JEFE_SEXO == "Mujer"]),
+            Ingreso_Otro_Pais = sum(FACTOR[INGR_PEROTROPAIS == "1"]),
+            Ingreso_del_país = sum(FACTOR[INGR_PERDENTPAIS == "3"]),
+            Ingreso_Prog_Gobierno = sum(FACTOR[INGR_AYUGOB == "5"]),
+            Poca_Variedad_Alimentos)
+
+
 head(ViviendaIC)
-ViviendaIC %>% group_by(ENT, MUN, NOM_MUN)
 
+#Para intercensal 
+#personas que reciben dinero de alguien que vive en otro país, 1 si, 2 No
+#en otra vivienda del país, 3 Si, 4 No
+#de programas de gobierno 5 Si, 6 No
+#tuvo paca variedad en sus alimentos por falta de dinero 5 Si, 6 No.
+#edad promedio del jefe de familia
+#proporción de jefatura de hombres
 
-
-
-
-
-
-temp <- ViviendaIC %>% 
-  filter(JEFE_EDAD != "NA") %>% 
-  group_by(MUN, NOM_MUN, JEFE_SEXO ) %>% 
-  summarise(EDAD_JEFE_PROMEDIO = weighted.mean(JEFE_EDAD, FACTOR)) #para sacar las promedios ponderados, corte municipio y sexo 
-
-temp <- spread(temp, JEFE_SEXO, EDAD_JEFE_PROMEDIO)[,c(2:4)]
-
-ICMunViv <-  
-
-ViviendaIC %>% filter(INGTRHOG != c("NA", "999999")) %>% group_by(MUN, NOM_MUN, JEFE_SEXO ) %>% summarise(INGRESO_VIVIENDA_PROMEDIO = weighted.mean(JEFE_EDAD, FACTOR), weighted.mean(Ingreso_Hogar, FACTOR)) #para sacar las promedios ponderados, corte municipio y sexo 
 
 
 
@@ -324,17 +328,7 @@ ViviendaIC %>% filter(INGTRHOG != c("NA", "999999")) %>% group_by(MUN, NOM_MUN, 
 write.csv(x = ViviendaIC, file = "Datos/Intercensal/Vivienda_2015.csv")# vivienda intercensal 
 
 #sacarlo para Jalisco, municipal, homologarlo con shapefiles. 
-PersonaICJal      <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_PERSONA14.CSV")#persona intercensal, jalisco
-PersonaICEdoMex      <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_PERSONA15.CSV")#persona intercensal, jalisco 
-PersonaIC$SEXO <-factor(PersonaIC$SEXO, labels = c("Hombre", "Mujer"))
 write.csv(x = PersonaIC, file = "Datos/Intercensal/Persona_2015.csv")# Persona intercensal 
-
-<<<<<<< HEAD
-=======
-write.csv(x = ViviendaIC, file = "Datos/Intercensal/Vivienda_2015.csv")# vivienda intercensal 
-
-
->>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 
 ##########################################################################
 ################      Bases de construcción cartográfica      ############
@@ -345,13 +339,7 @@ rm(Municipios)#WastenotWantNot RAM
 MunMapJal<-tidy(x = MunMapJal15, region = "NOM_MUN")
 MunMapJal$NOM_MUN <- MunMapJal$id #probando unirlos por nombre, mayor certeza de que está bien
 #el paso siguiente se hace para tener CVE_MUN
-<<<<<<< HEAD
 #unión de cartografía con los datos electorales 
-=======
-
-#unión de cartografía con los datos electorales 
-
->>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 MunMapJal2015 <- left_join(MunMapJal, MunMapJal15@data, by = "NOM_MUN") #notar el @data, MunMapJal15 no es data.frame 
 #añadir datos de resultados electorales Municipales
 #revisar que empaten nombres de municipios
@@ -359,18 +347,10 @@ JALMUNMUN2015$NOM_MUN <- JALMUNMUN2015$Municipio
 #Código para encontrar al que hay que renombrar
 #intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN))),
 #          chartr('áéíóúñ','aeioun',unique(tolower(MunMapJal$NOM_MUN))))#124 aparecen en ambos
-<<<<<<< HEAD
-=======
-
->>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 #setdiff(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN))),
 #        intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN))),
 #                  chartr('áéíóúñ','aeioun',unique(tolower(MunMapJal$NOM_MUN)))))
 #"manzanilla de la paz"
-<<<<<<< HEAD
-=======
-
->>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 #setdiff(chartr('áéíóúñ','aeioun',unique(tolower(MunMapJal$NOM_MUN))),
 #        intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN))),
 #                  chartr('áéíóúñ','aeioun',unique(tolower(MunMapJal$NOM_MUN)))))
@@ -400,25 +380,25 @@ colnames(PPJal) <- c('Sexo', "Edad", "Pob")
 PPJal <- PPJal[ PPJal$Edad < 111,] #quitamos unos  NA's codificados como 999 
 #elaboramos las categorias de edad 
 PPJal<-mutate(PPJal, Edad_grupo = 
-         ifelse(Edad <= 4, "0-04", 
-                ifelse(Edad <= 9, "05-09",
-                       ifelse(Edad <= 14, "10-14",
-                              ifelse(Edad <= 19, "15-19",
-                                     ifelse(Edad <= 24, "20-24",
-                                            ifelse(Edad <= 29, "25-29",
-                                                   ifelse(Edad <= 34, "30-34",
-                                                          ifelse(Edad <= 39, "35-39",
-                                                                 ifelse(Edad <= 44, "40-44",
-                                                                        ifelse(Edad <= 49, "45-49",
-                                                                               ifelse(Edad <= 54, "50-54",
-                                                                                      ifelse(Edad <= 59, "55-59",
-                                                                                             ifelse(Edad <=64, "60-64",
-                                                                                                    ifelse(Edad <= 69, "65-69",
-                                                                                                           ifelse(Edad <=74, "70-74",
-                                                                                                                  ifelse(Edad <= 79, "75-79", 
-                                                                                                                         ifelse(Edad <= 84, "80-84",
-                                                                                                                                ifelse(Edad <= 89, "85-89",
-                                                                                                                                       ifelse(Edad <= 94, "90-94","95+"))))))))))))))))))))
+                ifelse(Edad <= 4, "0-04", 
+                       ifelse(Edad <= 9, "05-09",
+                              ifelse(Edad <= 14, "10-14",
+                                     ifelse(Edad <= 19, "15-19",
+                                            ifelse(Edad <= 24, "20-24",
+                                                   ifelse(Edad <= 29, "25-29",
+                                                          ifelse(Edad <= 34, "30-34",
+                                                                 ifelse(Edad <= 39, "35-39",
+                                                                        ifelse(Edad <= 44, "40-44",
+                                                                               ifelse(Edad <= 49, "45-49",
+                                                                                      ifelse(Edad <= 54, "50-54",
+                                                                                             ifelse(Edad <= 59, "55-59",
+                                                                                                    ifelse(Edad <=64, "60-64",
+                                                                                                           ifelse(Edad <= 69, "65-69",
+                                                                                                                  ifelse(Edad <=74, "70-74",
+                                                                                                                         ifelse(Edad <= 79, "75-79", 
+                                                                                                                                ifelse(Edad <= 84, "80-84",
+                                                                                                                                       ifelse(Edad <= 89, "85-89",
+                                                                                                                                              ifelse(Edad <= 94, "90-94","95+"))))))))))))))))))))
 write.csv(PPJal, file = "Datos/Intercensal/Piramide_Jalisco_2015.csv") 
 #piramide poblacional 
 #####################
@@ -437,28 +417,13 @@ IngresoOcup <- IngresoOcup + xlab("Edad (14 a 75 años)") +ylab("Ingreso Mensual
 IngresoOcup + facet_wrap(~Estado) #Por Estado 
 IngresoOcup + facet_wrap(~CS_P13_1) + geom_jitter(alpha = 0.01) + coord_cartesian( xlim = c(0, 75), ylim = c(0, 25000))#
 
-<<<<<<< HEAD
 #tabla con resultados agregados por estado, participación electoral y principales partidos
-=======
-#hombres de Jalisco
-#rangos de edad 
-#shapefiles con formas estatales
-#agregar datos a nivel estatal
-#tabla con resultados agregados por estado, participación electoral y principales partidos
-
->>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 ##### Padrón  ######
 PADRON2017    <- read_excel(path = "C:/Users/Franco/Desktop/DatosAbiertos-DERFE-pl_20170731.xlsx")
 ####################
 ##### EDOMEX MUN 2017 ##############
-<<<<<<< HEAD
 #EDOMEX2017 <- read_excel(path = "C:/Users/Franco/Desktop/Resultados_computo_de_Gobernador_2017_por_casilla.xlsx") #laptop
 EDOMEX2017 <- read_excel(path = "Datos/Electorales/Edomex/Resultados_computo_de_Gobernador_2017_por_casilla.xlsx") #mounstruo
-=======
-EDOMEX2017 <- read_excel(path = "C:/Users/Franco/Desktop/Resultados_computo_de_Gobernador_2017_por_casilla.xlsx")
-colnames(EDOMEX2017)
-
->>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 EDOMEXMUN2017 <- EDOMEX2017 %>% group_by(ID_ESTADO, ID_MUNICIPIO, MUNICIPIO) %>% 
   summarise(PRI = sum(PRI), 
             PAN           = sum(PAN), 
@@ -468,7 +433,6 @@ EDOMEXMUN2017 <- EDOMEX2017 %>% group_by(ID_ESTADO, ID_MUNICIPIO, MUNICIPIO) %>%
             TOTAL_VOTOS   = sum(TOTAL_VOTOS),
             POR_PART = sum(TOTAL_VOTOS)/sum(LISTA_NOMINAL))
 EDOMEXMUN2017$POR_PRI <- (EDOMEXMUN2017$PRI/EDOMEXMUN2017$TOTAL_VOTOS) * 100
-<<<<<<< HEAD
 write.csv(x = EDOMEXMUN2017, file = "Datos/Electorales/Edomex/EDOMEXMUN2017.csv")
 ###########################     Merge de bases    ########################
 #JALMUNMUN2015 <- read.csv(file = "Electorales/Jalisco/JALMUNMUN2015.csv") #laptop
@@ -481,23 +445,6 @@ P2012JalMun$NOM_MUN_JOIN <-chartr('áéíóúñ','aeioun',unique(tolower(P2012Ja
 #####
 intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN))),
           chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$NOM_MUN_JOIN))))#124aparecen en ambos
-=======
-write.csv(x = EDOMEXMUN2017, file = "Electorales/Edomex/EDOMEXMUN2017.csv")
-
-#################
-
-###########################     Merge de bases    ########################
-JALMUNMUN2015 <- read.csv(file = "Electorales/Jalisco/JALMUNMUN2015.csv") 
-#homologar variable de join
-P2012JalMun <- P2012Mun %>% 
-  filter(NOMBRE_ESTADO =="JALISCO")
-JALMUNMUN2015$NOM_MUN_JOIN   <-chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN)))
-P2012JalMun$NOM_MUN_JOIN <-chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$MUNICIPIO)))
-
-#####
-intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN))),
-          chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$NOM_MUN_JOIN))))#123 aparecen en ambos
->>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 #"manzanilla de la paz", "san pedro tlaquepaque
 #generar las variables de nombres unificados, en minúsculas sin acentos y un nombre que hay que asignar a mano
 JALMUNMUN2015[JALMUNMUN2015$NOM_MUN_JOIN == "manzanilla de la paz",]$NOM_MUN_JOIN <- "la manzanilla de la paz"
@@ -505,7 +452,6 @@ P2012JalMun[P2012JalMun$NOM_MUN_JOIN == "tlaquepaque",]$NOM_MUN_JOIN <- "san ped
 #Juntar utilizando NOM_MUN_JOIN
 intersect(unique(JALMUNMUN2015$NOM_MUN_JOIN),
           unique(P2012JalMun$NOM_MUN_JOIN))#125 de lujoso lujo 
-<<<<<<< HEAD
 #nombres para distinguir 
 colnames(JALMUNMUN2015) <- str_c("JAL15",  colnames(JALMUNMUN2015), sep = "_")
 colnames(P2012JalMun)   <- str_c("PRES12", colnames(P2012JalMun), sep = "_" )
@@ -517,25 +463,10 @@ write.csv(x = JalEl, file = "Datos/Electorales/Jalisco/JalEl1215.csv")
 ########    EDOMEX    ##########################################
 #EDOMEXMUN2017
 EDOMEXMUN2017 <- read.csv(file = "Datos/Electorales/Edomex/EDOMEXMUN2017.csv")
-=======
-
-#nombres para distinguir 
-colnames(JALMUNMUN2015) <- str_c("JAL15",  colnames(JALMUNMUN2015), sep = "_")
-colnames(P2012JalMun)   <- str_c("PRES12", colnames(P2012JalMun), sep = "_" )
-
-colnames(JALMUNMUN2015)[28] <- "NOM_MUN_JOIN"
-colnames(P2012JalMun)[37]   <- "NOM_MUN_JOIN"
-
-JalEl<-inner_join(P2012JalMun, JALMUNMUN2015, by = "NOM_MUN_JOIN")
-########    EDOMEX    ##########################################
-
-#EDOMEXMUN2017
->>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 
 #homologar variable de join
 P2012EdomexMun <- P2012Mun %>% 
   filter(NOMBRE_ESTADO =="MEXICO")
-<<<<<<< HEAD
 EDOMEXMUN2017$NOM_MUN_JOIN   <- chartr('áéíóúñ','aeioun',unique(tolower(EDOMEXMUN2017$MUNICIPIO)))
 P2012EdomexMun$NOM_MUN_JOIN  <- chartr('áéíóúñ','aeioun',unique(tolower(P2012EdomexMun$MUNICIPIO)))
 #####
@@ -562,8 +493,9 @@ write.csv(x = EdoMex1215, file = "Datos/Electorales/Edomex/EdoMex1215.csv")
 ########    Juntar el resto de las bases a nivel municipal  ################
 ############################################################################
 
-#Intercensal Vivienda
-ICV2015 <- read.csv(file = "Datos/Intercensal/Vivienda_2015.csv")
+
+
+
 
 head(ICV2015)
 table(ICV2015$NOM_ENT)
@@ -573,33 +505,5 @@ write.csv(x = ENOE,file = "Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.c
 write.csv(x = PersonaIC, file = "Datos/Intercensal/Persona_2015.csv")# Persona intercensal 
 write.csv(x = ViviendaIC, file = "Datos/Intercensal/Vivienda_2015.csv")# vivienda intercensal 
 
-=======
-
-P2012EdoMexMun$NOM_
-JALMUNMUN2015$NOM_MUN_JOIN   <-chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN)))
-P2012JalMun$NOM_MUN_JOIN <-chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$MUNICIPIO)))
-
-#####
-intersect(chartr('áéíóúñ','aeioun',unique(tolower(JALMUNMUN2015$NOM_MUN_JOIN))),
-          chartr('áéíóúñ','aeioun',unique(tolower(P2012JalMun$NOM_MUN_JOIN))))#123 aparecen en ambos
-#"manzanilla de la paz", "san pedro tlaquepaque
-#generar las variables de nombres unificados, en minúsculas sin acentos y un nombre que hay que asignar a mano
-JALMUNMUN2015[JALMUNMUN2015$NOM_MUN_JOIN == "manzanilla de la paz",]$NOM_MUN_JOIN <- "la manzanilla de la paz"
-P2012JalMun[P2012JalMun$NOM_MUN_JOIN == "tlaquepaque",]$NOM_MUN_JOIN <- "san pedro tlaquepaque"
-#Juntar utilizando NOM_MUN_JOIN
-intersect(unique(JALMUNMUN2015$NOM_MUN_JOIN),
-          unique(P2012JalMun$NOM_MUN_JOIN))#125 de lujoso lujo 
-
-#nombres para distinguir 
-colnames(JALMUNMUN2015) <- str_c("JAL15",  colnames(JALMUNMUN2015), sep = "_")
-colnames(P2012JalMun)   <- str_c("PRES12", colnames(P2012JalMun), sep = "_" )
-
-colnames(JALMUNMUN2015)[28] <- "NOM_MUN_JOIN"
-colnames(P2012JalMun)[37]   <- "NOM_MUN_JOIN"
-
-JalEl<-inner_join(P2012JalMun, JALMUNMUN2015, by = "NOM_MUN_JOIN")
->>>>>>> a10416f5bd50088e80d38d0edd2f10e89df3f824
 
 
-
-asdfasd 
