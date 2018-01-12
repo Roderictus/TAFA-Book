@@ -110,13 +110,13 @@ P2012Mun<-P2012Secc %>%   #2448
             Num_Casillas  = length(unique(na.omit(CASILLAS))))
 P2012Mun$Por_Part   <- (P2012Mun$TOTAL / P2012Mun$Lista_Nominal) * 100  
 P2012Mun$PAN_por         <- (P2012Mun$PAN/P2012Mun$TOTAL)  * 100
-P2012Mun$PRI_por         <- (P2012Mun$PRI/P2012Mun$TOTAL)  * 100
+P2012Mun$PRI_por         <- (P2012Mun$PRI/P2012Mun$TOTAL)  * 100          #Alianza PRI
 P2012Mun$PRD_por         <- (P2012Mun$PRD/P2012Mun$TOTAL)  * 100
 P2012Mun$PVEM_por        <- (P2012Mun$PVEM/P2012Mun$TOTAL) * 100
 P2012Mun$PT_por          <- (P2012Mun$PT/P2012Mun$TOTAL)   * 100
 P2012Mun$MC_por          <- (P2012Mun$MC/P2012Mun$TOTAL)   * 100
 P2012Mun$NVA_ALIANZA_por <- (P2012Mun$NVA_ALIANZA/P2012Mun$TOTAL)   * 100
-P2012Mun$PRI_PVEM_por    <- (P2012Mun$PRI_PVEM/P2012Mun$TOTAL)   * 100
+P2012Mun$PRI_PVEM_por    <- (P2012Mun$PRI_PVEM/P2012Mun$TOTAL)   * 100    #Alianza PRI
 P2012Mun$PRD_PT_MC_por   <- (P2012Mun$PRD_PT_MC/P2012Mun$TOTAL)   * 100
 P2012Mun$PRD_PT_por      <- (P2012Mun$PRD_PT/P2012Mun$TOTAL)   * 100
 P2012Mun$PRD_MC_por      <- (P2012Mun$PRD_MC/P2012Mun$TOTAL)   * 100
@@ -241,7 +241,7 @@ write.csv(x = JALSECCDIP2015, file = "Datos/Electorales/Jalisco/JALSECCDIP2015.c
 ENOE <- read.dbf(file = "Datos/ENOE/Sociodemografico/sdemt317.dbf") #  3er trimestre 2017 
 ENOE <- filter(ENOE, R_DEF == "00") #00 Resultado definitivo de la entrevista, entrevista completa
 ENOE$EDA<-as.numeric(ENOE$EDA)
-ENOE <- filter(ENOE, EDA >= 14)
+ENOE <- filter(ENOE, EDA >= 18) #sólo para mayores de 18 años
 ENOE <- filter(ENOE, EDA <=98)
 ENOE <- filter(ENOE, C_RES == 1 | C_RES == 3) #Condiciónn de la residencia, 1 Residente Habitual, 3 Nuevo residente 
 # Nuevas variables
@@ -272,9 +272,19 @@ ENOE<- mutate(ENOE, SUB_O_POB = SUB_O * FAC)
 ENOE$CS_P13_1<- factor(ENOE$CS_P13_1, labels = c("Ninguna", "Preescolar", "Primaria", "Secundaria","Preparatoria o bach", "Normal", "Carrera técnica", "Profesional", "Maestría", "Doctorado", "No sabe"))
 #ENOE$NS<-ENOE$NS * ENOE$FAC
 write.csv(x = ENOE,file = "Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.csv")
+ENOE <- read.csv("Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.csv")
+ENOE <- ENOE %>% filter(Estado %in% c("JAL", "MEX"))#10998 y 14313 casos Jalisco y Mex
 
+#Clase1 1:PEA y 2:PNEA
+#Clase2 1: Población Ocupada, 2: Población desocupada, 3: Disponibles, 4:  No Disponibles
+#POS_OCU 1: Trabajadores subordinados y remunerados, 2. Empleadores, 3. Trabajadores por cuenta propia
+
+#hombres y mujeres por municipio
+#escolaridad
+
+#ordenar a nivel municipal
 #####################################################################################################
-##############      Intercensal, Jalisco     ########################################################
+##############      Intercensal, Jalisco, EDOMEX     ########################################################
 #####################################################################################################
 #la codificación de las etiquetas se obtiene del cuestionario 
 #http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/especiales/intercensal/2015/doc/eic2015_cuestionario.pdf
@@ -295,21 +305,25 @@ ICMUN <- ViviendaIC %>%
             Integrantes_Promedio = weighted.mean(NUMPERS, w =FACTOR),
             Edad_Promedio_Jefatura = weighted.mean(JEFE_EDAD, w =FACTOR,na.rm = TRUE)) #sólo para las jefaturas que reportan ingresos  
 
-summary(ICMUN$Edad_Promedio_Jefatura)
-
-ViviendaIC %>%
+ICMUN2 <- ViviendaIC %>%
   group_by(ENT, NOM_ENT, MUN, NOM_MUN) %>%
   summarise(Viviendas = sum(FACTOR),
             Jefe_Hombre = sum(FACTOR[JEFE_SEXO == "Hombre"]),
             Jefe_Mujer  = sum(FACTOR[JEFE_SEXO == "Mujer"]),
             Ingreso_Otro_Pais = sum(FACTOR[INGR_PEROTROPAIS == "1"]),
-            Ingreso_del_país = sum(FACTOR[INGR_PERDENTPAIS == "3"]),
-            Ingreso_Prog_Gobierno = sum(FACTOR[INGR_AYUGOB == "5"]),
-            Poca_Variedad_Alimentos)
+            Ingreso_del_Pais = sum(FACTOR[INGR_PERDENTPAIS == "3"]),
+            Ingreso_Gobierno = sum(FACTOR[INGR_AYUGOB == "5"]),
+            Poca_Variedad_Alimentos = sum(FACTOR[ING_ALIM_ADU3 == "5"])) %>%
+  mutate(Por_Jefe_Hombre = (Jefe_Hombre/Viviendas) * 100,
+         Por_Jefe_Mujer = (Jefe_Mujer/Viviendas) *100, 
+         Por_Ingreso_otro_Pais= (Ingreso_Otro_Pais/Viviendas) * 100,
+         Por_Ingreso_del_Pais = (Ingreso_del_Pais/Viviendas) * 100,
+         Por_Ingreso_Gobierno = (Ingreso_Gobierno/Viviendas) * 100,
+         Por_Poca_Variedad_Alimentos = (Poca_Variedad_Alimentos/Viviendas) * 100)
+Intercensal2015 <- inner_join(ICMUN, ICMUN2, by = c("ENT", "NOM_ENT","MUN","NOM_MUN"))
+colnames(Intercensal2015) <- str_c("IC", colnames(Intercensal2015), sep = "_")
 
-
-head(ViviendaIC)
-
+write.csv(x = Intercensal2015, file = "Datos/Intercensal/IntercensalMunicipal.csv")
 #Para intercensal 
 #personas que reciben dinero de alguien que vive en otro país, 1 si, 2 No
 #en otra vivienda del país, 3 Si, 4 No
@@ -317,11 +331,6 @@ head(ViviendaIC)
 #tuvo paca variedad en sus alimentos por falta de dinero 5 Si, 6 No.
 #edad promedio del jefe de familia
 #proporción de jefatura de hombres
-
-
-
-
-
 
 #1. Dos bases, personas y vivienda, sacar información a nivel municipal
 #2. Unir datos de las dos bases
@@ -373,8 +382,15 @@ write.csv(x = JALMUNMUN2015, file = "Datos/Electorales/Jalisco/JALMUNMUN2015.csv
 ##########################    Base para Mapas, Intercensal 2015   #########################
 ############################################################################################
 #unir información municipal de Jalisco (fuente intercensal) don datos electorales 
-####    Pirámide Poblacional ####
-PPJal <- PersonaIC %>% group_by(SEXO) %>% count(vars = EDAD, wt = FACTOR) 
+PersonaIC <- read.csv(file = "Datos/Intercensal/Persona_2015.csv")
+###################################################################
+###################    Pirámide Poblacional #######################
+###################################################################
+#PPJal <- PersonaIC %>% group_by(SEXO) %>% count(vars = EDAD, wt = FACTOR)#para todo el estado
+# lo mismo pero para un municipio
+Municipio_piramide <- "San Pedro Tlaquepaque"
+#PPJal <- PersonaIC %>% group_by(SEXO) %>% count(vars = EDAD, wt = FACTOR) #todo el estado
+PPJal <- PersonaIC %>% filter(NOM_MUN == Municipio_piramide) %>% group_by(SEXO) %>% count(vars = EDAD, wt = FACTOR) #para usar con algún municipio
 #suma del tiempo dedicado a actividades sin pago 
 colnames(PPJal) <- c('Sexo', "Edad", "Pob")
 PPJal <- PPJal[ PPJal$Edad < 111,] #quitamos unos  NA's codificados como 999 
@@ -399,8 +415,53 @@ PPJal<-mutate(PPJal, Edad_grupo =
                                                                                                                                 ifelse(Edad <= 84, "80-84",
                                                                                                                                        ifelse(Edad <= 89, "85-89",
                                                                                                                                               ifelse(Edad <= 94, "90-94","95+"))))))))))))))))))))
-write.csv(PPJal, file = "Datos/Intercensal/Piramide_Jalisco_2015.csv") 
-#piramide poblacional 
+#write.csv(PPJal, file = "Datos/Intercensal/Piramide_Jalisco_2015.csv") 
+#write.csv(PPJal, file = "Datos/Intercensal/Piramide_SPT_2015.csv") 
+
+#piramide poblacional electoral
+#incorporar listas nominales
+#listas nominales a nivel sección electoral
+table(PersonaIC$NOM_MUN)
+Municipio_piramide <- "Zapopan"
+#PPJal <- PersonaIC %>% group_by(SEXO) %>% count(vars = EDAD, wt = FACTOR) #todo el estado
+PPJal <- PersonaIC %>% filter(NOM_MUN == Municipio_piramide) %>% group_by(SEXO) %>% count(vars = EDAD, wt = FACTOR) #para usar con algún municipio
+#suma del tiempo dedicado a actividades sin pago 
+colnames(PPJal) <- c('Sexo', "Edad", "Pob")
+PPJal <- PPJal[ PPJal$Edad < 111,] #quitamos unos  NA's codificados como 999 
+#elaboramos las categorias de edad 
+PPJal<-mutate(PPJal, Edad_grupo = 
+                ifelse(Edad <= 4, "0-04", 
+                       ifelse(Edad <= 9, "05-09",
+                              ifelse(Edad <= 14, "10-14",
+                                     ifelse(Edad <= 17, "15-17",
+                                            ifelse(Edad <= 22, "18-22",
+                                                   ifelse(Edad <= 27, "23-27",
+                                                          ifelse(Edad <= 32, "28-32",
+                                                                 ifelse(Edad <= 37, "33-37",
+                                                                        ifelse(Edad <= 42, "37-42",
+                                                                               ifelse(Edad <= 47, "43-47",
+                                                                                      ifelse(Edad <= 52, "48-52",
+                                                                                             ifelse(Edad <= 57, "53-57",
+                                                                                                    ifelse(Edad <=62, "58-62",
+                                                                                                           ifelse(Edad <= 67, "63-67",
+                                                                                                                  ifelse(Edad <=72, "68-72",
+                                                                                                                         ifelse(Edad <= 77, "73-77", 
+                                                                                                                                ifelse(Edad <= 82, "78-82",
+                                                                                                                                       ifelse(Edad <= 87, "83-87",
+                                                                                                                                              ifelse(Edad <= 92, "88-92","93+"))))))))))))))))))))
+ggplot(data = (PPJal %>% filter(Edad >= 18))) +
+  geom_bar(aes(Edad_grupo,Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Mujer" & Edad >= 18), width = .8) +
+  geom_bar(aes(Edad_grupo,-Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Hombre"& Edad >= 18), width = .8) +
+  #scale_y_continuous(breaks = seq(-400000, 400000, 50000), 
+  #                   labels = paste0(as.character(c(seq(400, 0, -50), seq(50, 400, 50))))) +
+  scale_y_continuous(breaks = seq(-40000, 40000, 5000), 
+                     labels = paste0(as.character(c(seq(400, 0, -50), seq(50, 400, 50))))) +
+  coord_flip() + 
+  scale_fill_brewer(palette = "Set1") + 
+  #xlab(label = "Edad") + ylab("Población (miles)") + ggtitle("Población Jalisco, Encuesta Intercensal 2015") +
+  xlab(label = "Edad") + ylab("Población (miles)") + ggtitle("Población Zapopan") +
+  theme_bw()
+
 #####################
 sum(PersonaIC$FACTOR) #población de Jalisco
 PersonaIC %>% filter(SEXO == "Mujer") %>% select(FACTOR) %>% sum() #Mujeres de Jalisco
@@ -420,19 +481,58 @@ IngresoOcup + facet_wrap(~CS_P13_1) + geom_jitter(alpha = 0.01) + coord_cartesia
 #tabla con resultados agregados por estado, participación electoral y principales partidos
 ##### Padrón  ######
 PADRON2017    <- read_excel(path = "C:/Users/Franco/Desktop/DatosAbiertos-DERFE-pl_20170731.xlsx")
-####################
-##### EDOMEX MUN 2017 ##############
+
+########################################
+##### EDOMEX SECCIÓN 2017 ##############
 #EDOMEX2017 <- read_excel(path = "C:/Users/Franco/Desktop/Resultados_computo_de_Gobernador_2017_por_casilla.xlsx") #laptop
-EDOMEX2017 <- read_excel(path = "Datos/Electorales/Edomex/Resultados_computo_de_Gobernador_2017_por_casilla.xlsx") #mounstruo
-EDOMEXMUN2017 <- EDOMEX2017 %>% group_by(ID_ESTADO, ID_MUNICIPIO, MUNICIPIO) %>% 
-  summarise(PRI = sum(PRI), 
+EDOMEX2017 <- read_excel(path = "Datos/Electorales/Edomex/Resultados_computo_de_Gobernador_2017_por_casilla.xlsx") #laptop y mounstruo?
+colnames(EDOMEX2017) <- make.names(colnames(EDOMEX2017))
+EDOMEXSECC2017 <- EDOMEX2017 %>% 
+  group_by(ID_ESTADO, ID_MUNICIPIO, MUNICIPIO, SECCIÓN) %>% 
+  summarise(PRI           = sum(PRI), 
             PAN           = sum(PAN), 
             PRD           = sum(PRD),
+            PT            = sum(PT),
+            PVEM          = sum(PVEM),
             MORENA        = sum(MORENA),
+            Nueva.A       = sum(NA.),
             LISTA_NOMINAL = sum(LISTA_NOMINAL),
+            TOTAL_VALIDOS = sum(NUM_VOTOS_VALIDOS),
             TOTAL_VOTOS   = sum(TOTAL_VOTOS),
-            POR_PART = sum(TOTAL_VOTOS)/sum(LISTA_NOMINAL))
-EDOMEXMUN2017$POR_PRI <- (EDOMEXMUN2017$PRI/EDOMEXMUN2017$TOTAL_VOTOS) * 100
+            POR_PART      = sum(TOTAL_VOTOS)/sum(LISTA_NOMINAL) * 100)
+
+EDOMEXSECC2017$POR_PRI     <- (EDOMEXSECC2017$PRI/EDOMEXSECC2017$TOTAL_VALIDOS) * 100 #Ojo, sobre total de votos validos
+EDOMEXSECC2017$POR_PAN     <- (EDOMEXSECC2017$PAN/EDOMEXSECC2017$TOTAL_VALIDOS) * 100 
+EDOMEXSECC2017$POR_PRD     <- (EDOMEXSECC2017$PRD/EDOMEXSECC2017$TOTAL_VALIDOS) * 100
+EDOMEXSECC2017$POR_PT      <- (EDOMEXSECC2017$PT/EDOMEXSECC2017$TOTAL_VALIDOS)  * 100 
+EDOMEXSECC2017$POR_PVEM    <- (EDOMEXSECC2017$PVEM/EDOMEXSECC2017$TOTAL_VALIDOS)    * 100 
+EDOMEXSECC2017$POR_MORENA  <- (EDOMEXSECC2017$MORENA/EDOMEXSECC2017$TOTAL_VALIDOS)  * 100 
+EDOMEXSECC2017$POR_Nueva.A <- (EDOMEXSECC2017$Nueva.A/EDOMEXSECC2017$TOTAL_VALIDOS) * 100 
+write.csv(x = EDOMEXSECC2017, file = "Datos/Electorales/Edomex/EDOMEXSECC2017.csv")
+
+
+#### EDOMEX MUN 2017 ##############
+EDOMEXMUN2017 <- EDOMEX2017 %>% group_by(ID_ESTADO, ID_MUNICIPIO, MUNICIPIO) %>% 
+  summarise(PRI           = sum(PRI), 
+            PAN           = sum(PAN), 
+            PRD           = sum(PRD),
+            PT            = sum(PT),
+            PVEM          = sum(PVEM),
+            MORENA        = sum(MORENA),
+            Nueva.A       = sum(NA.),
+            LISTA_NOMINAL = sum(LISTA_NOMINAL),
+            TOTAL_VALIDOS = sum(NUM_VOTOS_VALIDOS),
+            TOTAL_VOTOS   = sum(TOTAL_VOTOS),
+            POR_PART      = sum(TOTAL_VOTOS)/sum(LISTA_NOMINAL) * 100)
+
+EDOMEXMUN2017$POR_PRI     <- (EDOMEXMUN2017$PRI/EDOMEXMUN2017$TOTAL_VALIDOS) * 100 #Ojo, sobre total de votos validos
+EDOMEXMUN2017$POR_PAN     <- (EDOMEXMUN2017$PAN/EDOMEXMUN2017$TOTAL_VALIDOS) * 100 
+EDOMEXMUN2017$POR_PRD     <- (EDOMEXMUN2017$PRD/EDOMEXMUN2017$TOTAL_VALIDOS) * 100
+EDOMEXMUN2017$POR_PT      <- (EDOMEXMUN2017$PT/EDOMEXMUN2017$TOTAL_VALIDOS)  * 100 
+EDOMEXMUN2017$POR_PVEM    <- (EDOMEXMUN2017$PVEM/EDOMEXMUN2017$TOTAL_VALIDOS)    * 100 
+EDOMEXMUN2017$POR_MORENA  <- (EDOMEXMUN2017$MORENA/EDOMEXMUN2017$TOTAL_VALIDOS)  * 100 
+EDOMEXMUN2017$POR_Nueva.A <- (EDOMEXMUN2017$Nueva.A/EDOMEXMUN2017$TOTAL_VALIDOS) * 100 
+
 write.csv(x = EDOMEXMUN2017, file = "Datos/Electorales/Edomex/EDOMEXMUN2017.csv")
 ###########################     Merge de bases    ########################
 #JALMUNMUN2015 <- read.csv(file = "Electorales/Jalisco/JALMUNMUN2015.csv") #laptop
@@ -505,5 +605,19 @@ write.csv(x = ENOE,file = "Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.c
 write.csv(x = PersonaIC, file = "Datos/Intercensal/Persona_2015.csv")# Persona intercensal 
 write.csv(x = ViviendaIC, file = "Datos/Intercensal/Vivienda_2015.csv")# vivienda intercensal 
 
+##############################################
+######    Lista Nominal   ##################
+
+PE <-read_xlsx(path = "./Datos/Electorales/Padron Electoral/DatosAbiertos-DERFE-pl_20170731.xlsx")
+head(PE)
 
 
+temp<-PE %>% filter(ESTADO == "14") %>% group_by(MUNICIPIO) %>% summarize(Lista_Nominal = sum(LISTA), Hombres = sum(LISTA_HOMBRES), Mujeres = sum(LISTA_MUJERES)) %>% arrange(-Lista_Nominal)
+PE 
+
+sort(table(PE$MUNICIPIO))
+
+
+
+PE %>% filter(ESTADO == "14", MUNICIPIO %in% c(120,99,102, 98,69,55)) %>% 
+  ggplot(aes(x = LISTA, colour = LISTA)) +  geom_histogram()  + facet_wrap(~MUNICIPIO)

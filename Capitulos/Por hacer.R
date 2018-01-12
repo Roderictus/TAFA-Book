@@ -49,7 +49,7 @@ Por hacer:
   49. Mapa con ingreso promedio por habitante 
   50. geom points con variables sd y resultados electorales, datos municipales
   51. Bases municipales nacionales programáticas para intercensal, vivienda y personas 
-  
+  52. Añadir si son municipios rurales, urbanods
   
   
   MENÚ

@@ -185,14 +185,21 @@ Es importante recalcar que los ingresos por ocupación no son la única fuente d
 
 ```{r, fig.cap=paste("Piramide poblacional, Encuesta Intercensal 2015"), echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
 PPJal <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Intercensal/Piramide_Jalisco_2015.csv")
-ggplot(data=PPJal) +
-  geom_bar(aes(Edad_grupo,Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Mujer"), width = .8) +
-  geom_bar(aes(Edad_grupo,-Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Hombre"), width = .8) +
-  scale_y_continuous(breaks = seq(-400000, 400000, 50000), 
-                     labels = paste0(as.character(c(seq(400, 0, -50), seq(50, 400, 50))))) + 
+
+
+#ggplot(data=PPJal) +
+#piramide para un municipio particular
+ggplot(data = (PPJal %>% filter(Edad >= 18))) +
+  geom_bar(aes(Edad_grupo,Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Mujer" & Edad >= 18), width = .8) +
+  geom_bar(aes(Edad_grupo,-Pob,group=Sexo,fill=Sexo), stat = "identity",subset(PPJal,PPJal$Sexo=="Hombre"& Edad >= 18), width = .8) +
+  #scale_y_continuous(breaks = seq(-400000, 400000, 50000), 
+  #                   labels = paste0(as.character(c(seq(400, 0, -50), seq(50, 400, 50))))) +
+  scale_y_continuous(breaks = seq(-40000, 40000, 5000), 
+                     labels = paste0(as.character(c(seq(400, 0, -50), seq(50, 400, 50))))) +
   coord_flip() + 
   scale_fill_brewer(palette = "Set1") + 
-  xlab(label = "Edad") + ylab("Población (miles)") + ggtitle("Población Jalisco, Encuesta Intercensal 2015") +
+  #xlab(label = "Edad") + ylab("Población (miles)") + ggtitle("Población Jalisco, Encuesta Intercensal 2015") +
+  xlab(label = "Edad") + ylab("Población (miles)") + ggtitle("Población San Pedro Tlaquepaque") +
   theme_bw()
 rm(PPJal)
 PersonaIC  <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Intercensal/Persona_2015.csv") #vivienda
