@@ -21,7 +21,7 @@ Por hacer:
   20. Desempeño por variables
   22. Variación de ingreso, mujeres grupos de edad Jalisco, corte urbano, rural.  
   23. Cambio en informalidad, mujeres, por edad
-  24. Puntos, antes de x elección, último periodo observable, etc. 
+  24. Puntos, antes de x elección, último periodo observable, etc
   25. Varias ENOEs, tamaños de muestra 
   26. Cortes de población en jalisco, tablas descriptivas. 
   #27. Intercensal, municipal

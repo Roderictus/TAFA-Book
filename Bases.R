@@ -24,7 +24,7 @@ P2006Secc$CV_TODO  <- str_c(str_c(str_pad(P2006Secc$ID_ESTADO, width = 2, "left"
 P2006Secc<-filter(P2006Secc, MUNICIPIO != "Voto en el Extranjero")
 write.csv(x = P2006Secc, file = "Datos/Electorales/P2006Secc.csv")
 
-####################      P2006 Mun      ##############################################################
+####################      P2006 Mun      #############################################################
 P2006Mun<-P2006Secc %>% #2442 Municipios 
   group_by(CIRCUNSCRIPCION, ID_ESTADO, NOMBRE_ESTADO, ID_MUNICIPIO, MUNICIPIO) %>%
   summarise(TOTAL = sum(TOTAL_VOTOS, na.rm =TRUE),
@@ -93,13 +93,13 @@ P2012Mun<-P2012Secc %>%   #2448
   summarise(TOTAL = sum(TOTAL_VOTOS, na.rm =TRUE),
             Lista_Nominal = sum (LISTA_NOMINAL, na.rm = TRUE),
             PAN  = sum(PAN, na.rm = TRUE),
-            PRI  = sum(PRI, na.rm = TRUE),
+            PRI  = sum(PRI, na.rm = TRUE),#este
             PRD  = sum(PRD, na.rm = TRUE),
             PVEM = sum(PVEM, na.rm = TRUE),
             PT   = sum(PT, na.rm = TRUE),
             MC   = sum(MC, na.rm = TRUE),
             NVA_ALIANZA   = sum(NVA_ALIANZA, na.rm = TRUE),
-            PRI_PVEM      = sum(PRI_PVEM, na.rm = TRUE),
+            PRI_PVEM      = sum(PRI_PVEM, na.rm = TRUE),#este
             PRD_PT_MC     = sum(PRD_PT_MC, na.rm = TRUE),
             PRD_PT        = sum(PRD_PT, na.rm = TRUE),
             PRD_MC        = sum(PRD_MC, na.rm = TRUE),
@@ -156,6 +156,9 @@ P2012Edo$PRD_PT_MC_por    <- (P2012Edo$PRD_PT_MC/P2012Edo$TOTAL) * 100
 P2012Edo$PRD_PT_por       <- (P2012Edo$PRD_PT/P2012Edo$TOTAL) * 100
 P2012Edo$PRD_MC_por       <- (P2012Edo$PRD_MC/P2012Edo$TOTAL) * 100
 write.csv(x = P2012Edo, file = "Datos/Electorales/P2012Edo.csv")# N
+
+P2012Edo <-read.csv(file = "Datos/Electorales/P2012Edo.csv")
+
 
 #######################################################################################################
 ################### M2016 Jalisco     #################################################################
@@ -289,9 +292,13 @@ ENOE <- ENOE %>% filter(Estado %in% c("JAL", "MEX"))#10998 y 14313 casos Jalisco
 #la codificación de las etiquetas se obtiene del cuestionario 
 #http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/especiales/intercensal/2015/doc/eic2015_cuestionario.pdf
 ##############    Vivienda    #############################################
-ViviendaICJal     <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA14.CSV")#Vivienda intercensal, jalisco 
-ViviendaICEdoMex     <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA15.CSV")#Vivienda intercensal, Edomex 
+#ViviendaICJal     <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA14.CSV")#Vivienda intercensal, jalisco 
+#ViviendaICEdoMex     <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA15.CSV")#Vivienda intercensal, Edomex 
+#Puebla
+
+
 ViviendaIC <- bind_rows(ViviendaICJal, ViviendaICEdoMex) #Eventualmente para todos los estados programáticamente
+#ViviendaIC <- ViviendaICEdoMex
 rm(ViviendaICJal)
 rm(ViviendaICEdoMex)
 ViviendaIC$JEFE_SEXO<-factor(ViviendaIC$JEFE_SEXO, labels = c("Hombre", "Mujer"))
@@ -305,6 +312,7 @@ ICMUN <- ViviendaIC %>%
             Integrantes_Promedio = weighted.mean(NUMPERS, w =FACTOR),
             Edad_Promedio_Jefatura = weighted.mean(JEFE_EDAD, w =FACTOR,na.rm = TRUE)) #sólo para las jefaturas que reportan ingresos  
 
+head(ViviendaIC)
 ICMUN2 <- ViviendaIC %>%
   group_by(ENT, NOM_ENT, MUN, NOM_MUN) %>%
   summarise(Viviendas = sum(FACTOR),
@@ -313,15 +321,19 @@ ICMUN2 <- ViviendaIC %>%
             Ingreso_Otro_Pais = sum(FACTOR[INGR_PEROTROPAIS == "1"]),
             Ingreso_del_Pais = sum(FACTOR[INGR_PERDENTPAIS == "3"]),
             Ingreso_Gobierno = sum(FACTOR[INGR_AYUGOB == "5"]),
+            No_Ingreso_Gobierno = sum(FACTOR[INGR_AYUGOB == "6"]),
             Poca_Variedad_Alimentos = sum(FACTOR[ING_ALIM_ADU3 == "5"])) %>%
   mutate(Por_Jefe_Hombre = (Jefe_Hombre/Viviendas) * 100,
          Por_Jefe_Mujer = (Jefe_Mujer/Viviendas) *100, 
          Por_Ingreso_otro_Pais= (Ingreso_Otro_Pais/Viviendas) * 100,
          Por_Ingreso_del_Pais = (Ingreso_del_Pais/Viviendas) * 100,
          Por_Ingreso_Gobierno = (Ingreso_Gobierno/Viviendas) * 100,
+         Por_Ingreso_Gobierno2 = (Ingreso_Gobierno/ (Ingreso_Gobierno + No_Ingreso_Gobierno)),
          Por_Poca_Variedad_Alimentos = (Poca_Variedad_Alimentos/Viviendas) * 100)
 Intercensal2015 <- inner_join(ICMUN, ICMUN2, by = c("ENT", "NOM_ENT","MUN","NOM_MUN"))
 colnames(Intercensal2015) <- str_c("IC", colnames(Intercensal2015), sep = "_")
+
+sum(ICMUN2$)
 
 write.csv(x = Intercensal2015, file = "Datos/Intercensal/IntercensalMunicipal.csv")
 #Para intercensal 
@@ -421,7 +433,6 @@ PPJal<-mutate(PPJal, Edad_grupo =
 #piramide poblacional electoral
 #incorporar listas nominales
 #listas nominales a nivel sección electoral
-table(PersonaIC$NOM_MUN)
 Municipio_piramide <- "Zapopan"
 #PPJal <- PersonaIC %>% group_by(SEXO) %>% count(vars = EDAD, wt = FACTOR) #todo el estado
 PPJal <- PersonaIC %>% filter(NOM_MUN == Municipio_piramide) %>% group_by(SEXO) %>% count(vars = EDAD, wt = FACTOR) #para usar con algún municipio
@@ -492,21 +503,42 @@ EDOMEXSECC2017 <- EDOMEX2017 %>%
   summarise(PRI           = sum(PRI), 
             PAN           = sum(PAN), 
             PRD           = sum(PRD),
-            PT            = sum(PT),
-            PVEM          = sum(PVEM),
-            MORENA        = sum(MORENA),
+            PT              = sum(PT),
+            PVEM            = sum(PVEM),
+            MORENA          = sum(MORENA),
+            ES              = sum(ES),
+            PRI.VERDE.NA.ES = sum(PRI.VERDE.NA.ES),
+            PRI.VERDE.NA = sum(PRI.VERDE.NA),
+            PRI.VERDE.ES = sum(PRI.VERDE.ES),
+            PRI.NA.ES = sum(PRI.NA.ES),
+            PRI.VERDE = sum(PRI.VERDE),
+            PRI.NA = sum(PRI.NA),
+            PRI.ES = sum(PRI.ES),
+            VERDE.NA.ES = sum(VERDE.NA.ES),
+            VERDE.NA = sum(VERDE.NA),
+            VERDE.ES = sum(VERDE.ES),
+            NA.ES = sum(NA.ES),
+            TERESA.CASTELL = sum(TERESA.CASTELL),
             Nueva.A       = sum(NA.),
             LISTA_NOMINAL = sum(LISTA_NOMINAL),
             TOTAL_VALIDOS = sum(NUM_VOTOS_VALIDOS),
             TOTAL_VOTOS   = sum(TOTAL_VOTOS),
             POR_PART      = sum(TOTAL_VOTOS)/sum(LISTA_NOMINAL) * 100)
-
 EDOMEXSECC2017$POR_PRI     <- (EDOMEXSECC2017$PRI/EDOMEXSECC2017$TOTAL_VALIDOS) * 100 #Ojo, sobre total de votos validos
 EDOMEXSECC2017$POR_PAN     <- (EDOMEXSECC2017$PAN/EDOMEXSECC2017$TOTAL_VALIDOS) * 100 
 EDOMEXSECC2017$POR_PRD     <- (EDOMEXSECC2017$PRD/EDOMEXSECC2017$TOTAL_VALIDOS) * 100
 EDOMEXSECC2017$POR_PT      <- (EDOMEXSECC2017$PT/EDOMEXSECC2017$TOTAL_VALIDOS)  * 100 
 EDOMEXSECC2017$POR_PVEM    <- (EDOMEXSECC2017$PVEM/EDOMEXSECC2017$TOTAL_VALIDOS)    * 100 
 EDOMEXSECC2017$POR_MORENA  <- (EDOMEXSECC2017$MORENA/EDOMEXSECC2017$TOTAL_VALIDOS)  * 100 
+EDOMEXSECC2017$PRI_ALIANZA <- (EDOMEXSECC2017$PRI + EDOMEXSECC2017$PVEM +
+                                 EDOMEXSECC2017$PRI.VERDE.NA + 
+                                 EDOMEXSECC2017$PRI.VERDE.ES + EDOMEXSECC2017$PRI.NA.ES + 
+                                 EDOMEXSECC2017$PRI.VERDE + EDOMEXSECC2017$PRI.NA + 
+                                 EDOMEXSECC2017$PRI.ES + EDOMEXSECC2017$VERDE.NA.ES + 
+                                 EDOMEXSECC2017$VERDE.NA + EDOMEXSECC2017$VERDE.ES + EDOMEXSECC2017$NA.ES +
+                                 EDOMEXSECC2017$Nueva.A + EDOMEXSECC2017$ES)
+EDOMEXSECC2017$PRI_ALIANZA_POR <- (EDOMEXSECC2017$PRI_ALIANZA/EDOMEXSECC2017$TOTAL_VALIDOS)*100
+EDOMEXSECC2017[EDOMEXSECC2017$POR_PART >=100,]$POR_PART <-100
 EDOMEXSECC2017$POR_Nueva.A <- (EDOMEXSECC2017$Nueva.A/EDOMEXSECC2017$TOTAL_VALIDOS) * 100 
 write.csv(x = EDOMEXSECC2017, file = "Datos/Electorales/Edomex/EDOMEXSECC2017.csv")
 
@@ -519,6 +551,20 @@ EDOMEXMUN2017 <- EDOMEX2017 %>% group_by(ID_ESTADO, ID_MUNICIPIO, MUNICIPIO) %>%
             PT            = sum(PT),
             PVEM          = sum(PVEM),
             MORENA        = sum(MORENA),
+            MORENA          = sum(MORENA),
+            ES            =sum(ES),
+            PRI.VERDE.NA.ES = sum(PRI.VERDE.NA.ES),
+            PRI.VERDE.NA = sum(PRI.VERDE.NA),
+            PRI.VERDE.ES = sum(PRI.VERDE.ES),
+            PRI.NA.ES = sum(PRI.NA.ES),
+            PRI.VERDE = sum(PRI.VERDE),
+            PRI.NA = sum(PRI.NA),
+            PRI.ES = sum(PRI.ES),
+            VERDE.NA.ES = sum(VERDE.NA.ES),
+            VERDE.NA = sum(VERDE.NA),
+            VERDE.ES = sum(VERDE.ES),
+            NA.ES = sum(NA.ES),
+            TERESA.CASTELL = sum(TERESA.CASTELL),
             Nueva.A       = sum(NA.),
             LISTA_NOMINAL = sum(LISTA_NOMINAL),
             TOTAL_VALIDOS = sum(NUM_VOTOS_VALIDOS),
@@ -532,8 +578,25 @@ EDOMEXMUN2017$POR_PT      <- (EDOMEXMUN2017$PT/EDOMEXMUN2017$TOTAL_VALIDOS)  * 1
 EDOMEXMUN2017$POR_PVEM    <- (EDOMEXMUN2017$PVEM/EDOMEXMUN2017$TOTAL_VALIDOS)    * 100 
 EDOMEXMUN2017$POR_MORENA  <- (EDOMEXMUN2017$MORENA/EDOMEXMUN2017$TOTAL_VALIDOS)  * 100 
 EDOMEXMUN2017$POR_Nueva.A <- (EDOMEXMUN2017$Nueva.A/EDOMEXMUN2017$TOTAL_VALIDOS) * 100 
-
+  EDOMEXMUN2017$PRI_ALIANZA <- (EDOMEXMUN2017$PRI + + EDOMEXMUN2017$PVEM + EDOMEXMUN2017$PRI.VERDE.NA +
+                                EDOMEXMUN2017$PRI.VERDE.NA.ES +
+                                 EDOMEXMUN2017$PRI.VERDE.ES + EDOMEXMUN2017$PRI.NA.ES + 
+                                 EDOMEXMUN2017$PRI.VERDE + EDOMEXMUN2017$PRI.NA + 
+                                 EDOMEXMUN2017$PRI.ES + EDOMEXMUN2017$VERDE.NA.ES + 
+                                 EDOMEXMUN2017$VERDE.NA + EDOMEXMUN2017$VERDE.ES + EDOMEXMUN2017$NA.ES +
+                                 EDOMEXMUN2017$Nueva.A + EDOMEXMUN2017$ES)
+EDOMEXMUN2017$PRI_ALIANZA_POR <- (EDOMEXMUN2017$PRI_ALIANZA/EDOMEXMUN2017$TOTAL_VALIDOS)*100
 write.csv(x = EDOMEXMUN2017, file = "Datos/Electorales/Edomex/EDOMEXMUN2017.csv")
+
+#########################################################################################
+
+library(raster)
+
+
+
+
+
+
 ###########################     Merge de bases    ########################
 #JALMUNMUN2015 <- read.csv(file = "Electorales/Jalisco/JALMUNMUN2015.csv") #laptop
 JALMUNMUN2015 <- read.csv(file = "Datos/Electorales/Jalisco/JALMUNMUN2015.csv") #mounstruo
@@ -593,14 +656,6 @@ write.csv(x = EdoMex1215, file = "Datos/Electorales/Edomex/EdoMex1215.csv")
 ########    Juntar el resto de las bases a nivel municipal  ################
 ############################################################################
 
-
-
-
-
-head(ICV2015)
-table(ICV2015$NOM_ENT)
-
-
 write.csv(x = ENOE,file = "Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.csv")
 write.csv(x = PersonaIC, file = "Datos/Intercensal/Persona_2015.csv")# Persona intercensal 
 write.csv(x = ViviendaIC, file = "Datos/Intercensal/Vivienda_2015.csv")# vivienda intercensal 
@@ -609,15 +664,14 @@ write.csv(x = ViviendaIC, file = "Datos/Intercensal/Vivienda_2015.csv")# viviend
 ######    Lista Nominal   ##################
 
 PE <-read_xlsx(path = "./Datos/Electorales/Padron Electoral/DatosAbiertos-DERFE-pl_20170731.xlsx")
+#Lista nominal Municipal
 head(PE)
+PE %>% group_by(ESTADO, DISTRITO, MUNICIPIO) %>% 
+  summarize(PADRON_HOMBRES )
 
-
-temp<-PE %>% filter(ESTADO == "14") %>% group_by(MUNICIPIO) %>% summarize(Lista_Nominal = sum(LISTA), Hombres = sum(LISTA_HOMBRES), Mujeres = sum(LISTA_MUJERES)) %>% arrange(-Lista_Nominal)
-PE 
-
-sort(table(PE$MUNICIPIO))
 
 
 
 PE %>% filter(ESTADO == "14", MUNICIPIO %in% c(120,99,102, 98,69,55)) %>% 
   ggplot(aes(x = LISTA, colour = LISTA)) +  geom_histogram()  + facet_wrap(~MUNICIPIO)
+
