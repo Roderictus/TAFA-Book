@@ -7,11 +7,7 @@ library(data.table)
 library(AER)
 
 ##EDOMEX
-
 #Cargar EDOMEXSECC2017
-
-
-
 #cambio participación
 #cambio voto PRI
 
@@ -30,48 +26,31 @@ head(EDOMEXSECC2017)
 #######   Correlación Municipios EDOMEX2017      ############################
 EDOMEXMUN2017 <- read.csv(file = "Datos/Electorales/Edomex/EDOMEXMUN2017.csv")
 chart.Correlation(EDOMEXMUN2017[, c(28,30,29,31,34)], pch = "+")
-
-head(MEX)
-
-
 chart.Correlation(
   MEX %>% 
     dplyr::select(EM_17_POR_PRI,EM_12_PRI_por, IC_Por_Ingreso_Gobierno,EM_17_POR_PART)
 )
-
 ############################################################################
 MEX<-read.csv(file = "Datos/Múltiples periodos/IC_electorales_edomex.csv")
 MEX$PRI_17_12 <- MEX$EM_17_POR_PRI - (MEX$EM_12_PRI_por + MEX$EM_12_PRI_PVEM_por) # cambio porcentual
 #lista de los municipios 
 #distribución del 80% de la lista nominal 
-head(MEX)
 #                                 Min     1st Q   Median  Mean    3rd Q   Max
 summary(MEX$PRI_17_12)#          -26.350 -15.449 -11.692 -10.547  -6.646   15.004, Min, 1st Q, Median, Mean, 3rd qu, Max
 summary(MEX$EM_17_LISTA_NOMINAL)# 3251    15809   27083   90503    66,211  1,206,075 
-head(MEX)
+
 chart.Correlation(MEX[, c(56:67, 72)])
-
-
-
-
-
-
-
-
+###################     MOdelos de regresión    ############################
 Mex_lm  <- lm (PRI_17_12 ~              
                  IC_Por_Ingreso_Gobierno +
                  IC_Por_Ingreso_otro_Pais +
                  IC_Por_Poca_Variedad_Alimentos +
                  EM_17_TOTAL_VOTOS, data = MEX)
-head(MEX)
-
 MEX$EM_17_POR_PAN <- (MEX$EM_17_PAN/MEX$EM_17_TOTAL_VOTOS)*100
 MEX$EM_17_POR_MORENA <- (MEX$EM_17_MORENA/MEX$EM_17_TOTAL_VOTOS)*100
-
 Mex_lm  <- lm (EM_17_POR_PRI ~              
                  IC_Por_Ingreso_Gobierno +
                  EM_17_TOTAL_VOTOS, data = MEX)
-
 summary(Mex_lm)
 
 #cambio neto 
@@ -90,17 +69,7 @@ write.csv(x = P2012Mun, file = "Datos/Electorales/P2012Mun.csv")# N
 #correlaciones municipio edomex 2017
 write.csv(x = EDOMEXMUN2017, file = "Datos/Electorales/Edomex/EDOMEXMUN2017.csv") #correlación edomex 2017
 
-
-
-
-
-####Municipio
-
-
-#Varianza municipal de participación
-
-
-#gráfica de bases variables 
+##########  Barplot   ###########################
 
 library(ggplot2)
 p  <- ggplot(df, aes(ymin = 0))
@@ -179,9 +148,11 @@ p <- ggplot(df, aes (ymin = 0))
 p1 <- p + geom_rect(aes(xmin = wm, xmax = w, 
                         ymax = C, fill = D), color = "black")
 p1 <- p1 + theme_bw() + labs(x = NULL, y = NULL) 
-p1<- p1 + scale_fill_manual(values = c("chocolate3","dodgerblue2","yellow2","red1"))
+p1<- p1 + scale_fill_manual(values = c("chocolate3","dodgerblue2","yellow2","chartreuse4"))
 p1 <-p1 + xlab("Miles de votos") + ylab("Cambio en el % obtenido por el alianza PRI()")
-p1+ geom_text(aes(label = A, vjust = ifelse(B >= 0, 0, 1)))
+p1 + geom_text(aes(label = A, vjust = ifelse(B >= 0, 0, 1)))
+
+library(ggplot2)
 
 ggsave(filename = "Figuras/Edomex 2017 Barplot", device = )
 

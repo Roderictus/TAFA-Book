@@ -50,7 +50,7 @@ Por hacer:
   50. geom points con variables sd y resultados electorales, datos municipales
   51. Bases municipales nacionales programáticas para intercensal, vivienda y personas 
   52. Añadir si son municipios rurales, urbanods
-  
+  52. Variable de densidad, ruralidad, o de localidad de menos de 50,000 habitantes 
   
   MENÚ
   

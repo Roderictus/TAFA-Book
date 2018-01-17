@@ -287,20 +287,58 @@ ENOE <- ENOE %>% filter(Estado %in% c("JAL", "MEX"))#10998 y 14313 casos Jalisco
 
 #ordenar a nivel municipal
 #####################################################################################################
-##############      Intercensal, Jalisco, EDOMEX     ########################################################
+##############    Base Intercensal, Nacional      ########################################################
 #####################################################################################################
 #la codificación de las etiquetas se obtiene del cuestionario 
 #http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/especiales/intercensal/2015/doc/eic2015_cuestionario.pdf
 ##############    Vivienda    #############################################
-#ViviendaICJal     <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA14.CSV")#Vivienda intercensal, jalisco 
-#ViviendaICEdoMex     <- read.csv(file = "C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA15.CSV")#Vivienda intercensal, Edomex 
-#Puebla
+
+head(ViviendaIC)
+A<-data.frame()
+for(i in 2:3){
+  print(i)
+  df <- read.csv(file = str_c("C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA",  str_pad(i, 2, "left", "0"), ".CSV"))
+  IC_Municipio <- df %>%
+    group_by(ENT, NOM_ENT, MUN, NOM_MUN) %>%
+    summarise(Viviendas                = sum(FACTOR),
+              Jefe_Hombre              = sum(FACTOR[JEFE_SEXO == "Hombre"]),
+              Jefe_Mujer               = sum(FACTOR[JEFE_SEXO == "Mujer"]),
+              Ingreso_Otro_Pais        = sum(FACTOR[INGR_PEROTROPAIS == "1"]),
+              Ingreso_del_Pais         = sum(FACTOR[INGR_PERDENTPAIS == "3"]),
+              Ingreso_Gobierno         = sum(FACTOR[INGR_AYUGOB == "5"]),
+              No_Ingreso_Gobierno      = sum(FACTOR[INGR_AYUGOB == "6"]),
+              Jubilacion_Pension       = sum(FACTOR[INGR_JUBPEN == "7"]),
+              Poca_Variedad_Alimentos  = sum(FACTOR[ING_ALIM_ADU3 == "5"]),
+              Radio                    = sum(FACTOR[RADIO == "1"]),
+              Televisor                = sum(FACTOR[TELEVISOR == "3"]),
+              Computadora              = sum(FACTOR[COMPUTADORA == "7"]),
+              Telefono_fijo            = sum(FACTOR[TELEFONO == "1"]),
+              Celular                  = sum(FACTOR[CELULAR == "3"]),
+              Internet                 = sum(FACTOR[INTERNET == "5"]),
+              Television_paga          = sum(FACTOR[SERV_TV_PAGA == "7"]),
+              Dueño                    = sum(FACTOR[TENENCIA == "1"])
+              Renta                    = sum(FACTOR[TENENCIA== "2"])
+              Hipoteca_Institucional, #INFONAVIT, FOVISSTE, PEMEX
+              
+              ) %>%
+    mutate(Por_Jefe_Hombre = (Jefe_Hombre/Viviendas) * 100,
+           Por_Jefe_Mujer = (Jefe_Mujer/Viviendas) *100, 
+           Por_Ingreso_otro_Pais= (Ingreso_Otro_Pais/Viviendas) * 100,
+           Por_Ingreso_del_Pais = (Ingreso_del_Pais/Viviendas) * 100,
+           Por_Ingreso_Gobierno = (Ingreso_Gobierno/Viviendas) * 100,
+           Por_Ingreso_Gobierno2 = (Ingreso_Gobierno/ (Ingreso_Gobierno + No_Ingreso_Gobierno)),
+           Por_Poca_Variedad_Alimentos = (Poca_Variedad_Alimentos/Viviendas) * 100)
+      A<-bind_rows(A, IC_Municipio)
+}
+head(ViviendaIC)
 
 
-ViviendaIC <- bind_rows(ViviendaICJal, ViviendaICEdoMex) #Eventualmente para todos los estados programáticamente
-#ViviendaIC <- ViviendaICEdoMex
-rm(ViviendaICJal)
-rm(ViviendaICEdoMex)
+write.csv(x = A,file = "Indice por Municipio.csv")
+A<- read.csv("Indice por Municipio.csv")
+
+
+
+
 ViviendaIC$JEFE_SEXO<-factor(ViviendaIC$JEFE_SEXO, labels = c("Hombre", "Mujer"))
 ViviendaIC[ViviendaIC$JEFE_EDAD == "999", ]$JEFE_EDAD <- NA#clasificar correctamente los NAs de edad del jefe del hogar
 
@@ -312,7 +350,6 @@ ICMUN <- ViviendaIC %>%
             Integrantes_Promedio = weighted.mean(NUMPERS, w =FACTOR),
             Edad_Promedio_Jefatura = weighted.mean(JEFE_EDAD, w =FACTOR,na.rm = TRUE)) #sólo para las jefaturas que reportan ingresos  
 
-head(ViviendaIC)
 ICMUN2 <- ViviendaIC %>%
   group_by(ENT, NOM_ENT, MUN, NOM_MUN) %>%
   summarise(Viviendas = sum(FACTOR),
