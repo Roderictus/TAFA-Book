@@ -293,48 +293,81 @@ ENOE <- ENOE %>% filter(Estado %in% c("JAL", "MEX"))#10998 y 14313 casos Jalisco
 #http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/especiales/intercensal/2015/doc/eic2015_cuestionario.pdf
 ##############    Vivienda    #############################################
 
+ViviendaIC$JEFE_SEXO<-factor(ViviendaIC$JEFE_SEXO, labels = c("Hombre", "Mujer"))
+ViviendaIC[ViviendaIC$JEFE_EDAD == "999", ]$JEFE_EDAD <- NA#clasificar correctamente los NAs de edad del jefe del hogar
+
 head(ViviendaIC)
 A<-data.frame()
-for(i in 2:3){
+for(i in 29:30){
   print(i)
   df <- read.csv(file = str_c("C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA",  str_pad(i, 2, "left", "0"), ".CSV"))
   IC_Municipio <- df %>%
     group_by(ENT, NOM_ENT, MUN, NOM_MUN) %>%
     summarise(Viviendas                = sum(FACTOR),
-              Jefe_Hombre              = sum(FACTOR[JEFE_SEXO == "Hombre"]),
-              Jefe_Mujer               = sum(FACTOR[JEFE_SEXO == "Mujer"]),
+              Jefe_Hombre              = sum(FACTOR[JEFE_SEXO        == "1"]),
+              Jefe_Mujer               = sum(FACTOR[JEFE_SEXO        == "3"]),
               Ingreso_Otro_Pais        = sum(FACTOR[INGR_PEROTROPAIS == "1"]),
               Ingreso_del_Pais         = sum(FACTOR[INGR_PERDENTPAIS == "3"]),
-              Ingreso_Gobierno         = sum(FACTOR[INGR_AYUGOB == "5"]),
-              No_Ingreso_Gobierno      = sum(FACTOR[INGR_AYUGOB == "6"]),
-              Jubilacion_Pension       = sum(FACTOR[INGR_JUBPEN == "7"]),
-              Poca_Variedad_Alimentos  = sum(FACTOR[ING_ALIM_ADU3 == "5"]),
-              Radio                    = sum(FACTOR[RADIO == "1"]),
-              Televisor                = sum(FACTOR[TELEVISOR == "3"]),
-              Computadora              = sum(FACTOR[COMPUTADORA == "7"]),
-              Telefono_fijo            = sum(FACTOR[TELEFONO == "1"]),
-              Celular                  = sum(FACTOR[CELULAR == "3"]),
-              Internet                 = sum(FACTOR[INTERNET == "5"]),
-              Television_paga          = sum(FACTOR[SERV_TV_PAGA == "7"]),
-              Dueño                    = sum(FACTOR[TENENCIA == "1"])
-              Renta                    = sum(FACTOR[TENENCIA== "2"])
-              Hipoteca_Institucional, #INFONAVIT, FOVISSTE, PEMEX
-              
-              ) %>%
+              Ingreso_Gobierno         = sum(FACTOR[INGR_AYUGOB      == "5"]),
+              No_Ingreso_Gobierno      = sum(FACTOR[INGR_AYUGOB      == "6"]),
+              Jubilacion_Pension       = sum(FACTOR[INGR_JUBPEN      == "7"]),
+              Poca_Variedad_Alimentos  = sum(FACTOR[ING_ALIM_ADU3    == "5"]),
+              Radio                    = sum(FACTOR[RADIO            == "1"],na.rm = T),
+              Radio_div                = sum(FACTOR[!is.na(RADIO)]),
+              Televisor                = sum(FACTOR[TELEVISOR        == "3"],na.rm = T),
+              Computadora              = sum(FACTOR[COMPUTADORA      == "7"],na.rm = T),
+              Telefono_fijo            = sum(FACTOR[TELEFONO         == "1"],na.rm = T),
+              Celular                  = sum(FACTOR[CELULAR          == "3"],na.rm = T),
+              Internet                 = sum(FACTOR[INTERNET         == "5"],na.rm = T),
+              Television_paga          = sum(FACTOR[SERV_TV_PAGA     == "7"],na.rm = T),
+              Dueño                    = sum(FACTOR[TENENCIA         == "1"],na.rm = T),
+              Renta                    = sum(FACTOR[TENENCIA         == "2"],na.rm = T)) %>%
     mutate(Por_Jefe_Hombre = (Jefe_Hombre/Viviendas) * 100,
            Por_Jefe_Mujer = (Jefe_Mujer/Viviendas) *100, 
            Por_Ingreso_otro_Pais= (Ingreso_Otro_Pais/Viviendas) * 100,
            Por_Ingreso_del_Pais = (Ingreso_del_Pais/Viviendas) * 100,
            Por_Ingreso_Gobierno = (Ingreso_Gobierno/Viviendas) * 100,
-           Por_Ingreso_Gobierno2 = (Ingreso_Gobierno/ (Ingreso_Gobierno + No_Ingreso_Gobierno)),
-           Por_Poca_Variedad_Alimentos = (Poca_Variedad_Alimentos/Viviendas) * 100)
-      A<-bind_rows(A, IC_Municipio)
+           Por_Jubilacion_Pension = (Jubilacion_Pension/Viviendas) * 100,
+           Por_Poca_Variedad_Alimentos = (Poca_Variedad_Alimentos/Viviendas) * 100,
+           Por_Radio = (Radio/Viviendas) * 100,
+           Por_Televisor =  (Televisor/Viviendas) * 100,
+           Por_Computadora = (Computadora/Viviendas) * 100,
+           Por_Telefono_Fijo =(Telefono_fijo /Viviendas) * 100,
+           Por_Celular = (Celular/Viviendas) * 100,
+           Por_Internet = (Internet/Viviendas) * 100,
+           Por_Television_paga = (Television_paga/Viviendas) * 100,
+           Por_Dueño =(Dueño/Viviendas) * 100,
+           Por_Renta = (Renta/Viviendas) * 100)
+        A<-bind_rows(A, IC_Municipio)
 }
-head(ViviendaIC)
+#########       Variables econónomicas
 
 
-write.csv(x = A,file = "Indice por Municipio.csv")
-A<- read.csv("Indice por Municipio.csv")
+B<-data.frame()
+for(i in 29:30){
+  print(i)
+  df <- read.csv(file = str_c("C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA",  str_pad(i, 2, "left", "0"), ".CSV"))
+  IC_Municipio <- df %>%
+    group_by(ENT, NOM_ENT, MUN, NOM_MUN) %>%
+    filter(INGTRHOG  != "NA" & INGTRHOG != "999999") %>% #subset para cálculo de Ingreso
+    summarise(Ingreso_promedio_mensual =  weighted.mean((INGTRHOG)/3, w = FACTOR),
+              Integrantes_Promedio = weighted.mean(NUMPERS, w =FACTOR)) #sólo para las jefaturas que reportan ingresos  
+  B<-bind_rows(B, IC_Municipio)
+}
+              
+              
+
+
+
+
+
+
+
+IC_Pais<- A
+rm(A)
+
+write.csv(x = IC_Pais, file = "Datos/Intercensal/IC_Pais.csv")
+
 
 
 
@@ -579,7 +612,6 @@ EDOMEXSECC2017[EDOMEXSECC2017$POR_PART >=100,]$POR_PART <-100
 EDOMEXSECC2017$POR_Nueva.A <- (EDOMEXSECC2017$Nueva.A/EDOMEXSECC2017$TOTAL_VALIDOS) * 100 
 write.csv(x = EDOMEXSECC2017, file = "Datos/Electorales/Edomex/EDOMEXSECC2017.csv")
 
-
 #### EDOMEX MUN 2017 ##############
 EDOMEXMUN2017 <- EDOMEX2017 %>% group_by(ID_ESTADO, ID_MUNICIPIO, MUNICIPIO) %>% 
   summarise(PRI           = sum(PRI), 
@@ -698,7 +730,7 @@ write.csv(x = PersonaIC, file = "Datos/Intercensal/Persona_2015.csv")# Persona i
 write.csv(x = ViviendaIC, file = "Datos/Intercensal/Vivienda_2015.csv")# vivienda intercensal 
 
 ##############################################
-######    Lista Nominal   ##################
+######    Lista Nominal   ####################
 
 PE <-read_xlsx(path = "./Datos/Electorales/Padron Electoral/DatosAbiertos-DERFE-pl_20170731.xlsx")
 #Lista nominal Municipal
@@ -706,9 +738,5 @@ head(PE)
 PE %>% group_by(ESTADO, DISTRITO, MUNICIPIO) %>% 
   summarize(PADRON_HOMBRES )
 
-
-
-
 PE %>% filter(ESTADO == "14", MUNICIPIO %in% c(120,99,102, 98,69,55)) %>% 
   ggplot(aes(x = LISTA, colour = LISTA)) +  geom_histogram()  + facet_wrap(~MUNICIPIO)
-
