@@ -358,6 +358,7 @@ for(i in 1:32){
 
 ############    Juntar las dos intercensales    ##########################
 IC_Nac <-left_join(A, B, by = c("ENT", "NOM_ENT", "MUN", "NOM_MUN"))
+write.csv(x = IC_Nac, file = "Datos/Intercensal/ICNAC_20180119.csv")
 
 ############    Juntar con padrón electoral     ##########################
 Padron_2017 <- read_xlsx(path = "Datos/Electorales/Padron Electoral/DatosAbiertos-DERFE-pl_20170731.xlsx")
