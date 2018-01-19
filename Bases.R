@@ -298,7 +298,7 @@ ViviendaIC[ViviendaIC$JEFE_EDAD == "999", ]$JEFE_EDAD <- NA#clasificar correctam
 
 head(ViviendaIC)
 A<-data.frame()
-for(i in 29:30){
+for(i in 1:32){
   print(i)
   df <- read.csv(file = str_c("C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA",  str_pad(i, 2, "left", "0"), ".CSV"))
   IC_Municipio <- df %>%
@@ -340,11 +340,11 @@ for(i in 29:30){
            Por_Renta = (Renta/Viviendas) * 100)
         A<-bind_rows(A, IC_Municipio)
 }
-#########       Variables econónomicas
 
+#########       Variables econónomicas    #######################################
 
 B<-data.frame()
-for(i in 29:30){
+for(i in 1:32){
   print(i)
   df <- read.csv(file = str_c("C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA",  str_pad(i, 2, "left", "0"), ".CSV"))
   IC_Municipio <- df %>%
@@ -354,16 +354,27 @@ for(i in 29:30){
               Integrantes_Promedio = weighted.mean(NUMPERS, w =FACTOR)) #sólo para las jefaturas que reportan ingresos  
   B<-bind_rows(B, IC_Municipio)
 }
-              
-              
+#hay algunos municipios para los que no se puede calcular el ingreso 
+
+############    Juntar las dos intercensales    ##########################
+IC_Nac <-left_join(A, B, by = c("ENT", "NOM_ENT", "MUN", "NOM_MUN"))
+
+############    Juntar con padrón electoral     ##########################
+Padron_2017 <- read_xlsx(path = "Datos/Electorales/Padron Electoral/DatosAbiertos-DERFE-pl_20170731.xlsx")
+#agregar a municipio 
+
+############    Sacar densidad por municipio    ##########################
+
+############    Unir con densidad por municipio ##########################
 
 
 
 
 
+#Necesitamos, fundamentalmente, dos variables ingreso gobierno, como porcentaje de las viviendas dentro del municipio, e ingreso
 
 
-IC_Pais<- A
+
 rm(A)
 
 write.csv(x = IC_Pais, file = "Datos/Intercensal/IC_Pais.csv")
