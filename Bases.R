@@ -88,8 +88,14 @@ write.csv(x = P2012Secc, file = "Datos/Electorales/P2012Secc.csv")# N
 ################################################################################################
 #########################   2012 Municipal      ##################################################
 ################################################################################################
-P2012Mun<-P2012Secc %>%   #2448
-  group_by(NOMBRE_ESTADO, ID_ESTADO, MUNICIPIO, ID_MUNICIPIO, CVUN =as.factor(P2012Secc$CV_MUN)) %>%
+head(P2012Secc)
+# quitar los que no tienen clave de municipio
+#sum(is.na(P2012Secc$CV_MUN))#300, distritos electorales
+#sum(P2012Secc[is.na(P2012Secc$CV_MUN),]$LISTA_NOMINAL) 59,115 votos 
+P2012Secc <- P2012Secc[!is.na(P2012Secc$CV_MUN),]
+
+P2012Mun<-P2012Secc %>%   #2446
+  group_by(NOMBRE_ESTADO, ID_ESTADO, MUNICIPIO, ID_MUNICIPIO) %>%
   summarise(TOTAL = sum(TOTAL_VOTOS, na.rm =TRUE),
             Lista_Nominal = sum (LISTA_NOMINAL, na.rm = TRUE),
             PAN  = sum(PAN, na.rm = TRUE),

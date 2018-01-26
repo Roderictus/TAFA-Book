@@ -24,12 +24,30 @@ Municipios<- readOGR(dsn = "C:/Proyectos R/TAFA-Book/Datos/Geográficos/Municipi
 
 ```{r, fig.cap=paste("Participación electoral a nivel municipal 2012 tabla"), echo = FALSE, cache = TRUE}
 
+P2012Mun <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/P2012Mun.csv")
 
 
 
-```
+
+head(P2012Mun)
+library(PerformanceAnalytics)
+
+P2012Mun %>% 
+  select(Por_Part, PAN_por, PRI_por, PRD_por, PVEM_por, PT_por, MC_por, NVA_ALIANZA_por) %>%
+  chart.Correlation(histogram = TRUE)
 
 
+JALSECCMUN2015 %>%
+  dplyr::select(PAN_por, PRI_por, MC_por, PVEM_por, MORENA_por, Por_Part) %>%
+  chart.Correlation(histogram = TRUE)
+
+
+
+
+chart.Correlation(P2012Mun$Por_Part, P2012Mun$PRI_por, P2012Mun$PRD_por)
+  
+chart
+P2012Mun %>% select (Por_Part, PRI_por)
 
 
 

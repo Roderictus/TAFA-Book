@@ -1,0 +1,72 @@
+---
+title: "Untitled"
+author: "Rodrigo Franco Fuentes"
+date: "23 de enero de 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache  = TRUE)
+library(dplyr)
+library(magrittr)
+library(knitr)
+library(rgeos)
+library(rgdal)
+library(raster)
+library(ggplot2)
+library(dplyr)
+library(gtable)
+library(grid)
+library(stringr)
+library(data.table)
+library(viridis)
+library(tidyr)
+library(kableExtra)
+library(gridExtra)
+library(lattice)
+library(PerformanceAnalytics)#para correlaciones del voto 
+library(broom) #tidy en vez de fortify
+library(foreign )
+library(spatstat)
+
+```
+
+¿Es neutral el aumento en la participación electoral? Se analiza la participación electoral dentro la dinamica de la competencia electoral. Particularmente aquellos casos donde existe variación entre las proporciones de participación en elecciones concurrentes. 
+
+Análisis exploratorio de resultados electorales muestran una correlación entre el voto a favor de los punteros. El efecto se acrecenta cuando la participación por el PRI es relativamente baja pudiendo mostrar movilización de base electoral. En este sentido se determinaria que el voto "adicional" no es neutro y posiblemente es parte de una movilización a favor de ciertos partidos, generalmente el PRU y/o los punteros. Se busca determinar el tamaño del efecto en diversas elecciones y con ello generar una medida de incidencia de estructuras electorales en los comicios.
+
+Se muestra un ejemplo reciente donde el efecto es claramente visible. Los resultados por voto para gobernador en Estado de México 2017
+
+
+```{r Correlaciones Edomex 2017, echo = FALSE, cache = TRUE}
+EDOMEXMUN2017 <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/Edomex/EDOMEXMUN2017.csv")
+EDOMEXSECC2017 <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/Edomex/EDOMEXSECC2017.csv")
+
+head(EDOMEXMUN2017)
+EDOMEXMUN2017 %>% select(POR_PART, POR_PRI, POR_MORENA, POR_PAN) %>%
+  chart.Correlation()
+```
+
+De forma similar se muestran resultados para Estado de México 2012 donde se percibe el efecto pero aparenta ser menor. 
+
+```{r Secciones por Municipio Edomex 2017, echo = FALSE, cache = TRUE}
+
+```
+
+
+
+De forma similar se muestran resultados para Estado de México 2012 donde se percibe el efecto pero aparenta ser menor. 
+
+```{r Correlaciones Edomex 2012, echo = FALSE, cache = TRUE}
+
+```
+
+Una marcada disminución del voto entre 2012 y 2017 disminuye la preferencia por el PRI y muestra lo que podría ser una estratégia electoral de promoción del voto en municipios rurales donde existe un fuerte voto por el PRI aunado a una marcada correlación positiva entre la participación electoral y la preferencia priista, tanto en municipios como en secciones electorales. 
+
+```{r Cambio Edomex 2012-2017, echo = FALSE, cache = TRUE}
+
+```
+
+
+
