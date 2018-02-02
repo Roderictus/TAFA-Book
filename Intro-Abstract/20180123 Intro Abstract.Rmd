@@ -1,7 +1,7 @@
 ---
-title: "Untitled"
+title: "Abstract"
 author: "Rodrigo Franco Fuentes"
-date: "23 de enero de 2018"
+date: "2 de febrero de 2018"
 output: pdf_document
 ---
 
@@ -29,64 +29,54 @@ library(PerformanceAnalytics)#para correlaciones del voto
 library(broom) #tidy en vez de fortify
 library(foreign )
 library(spatstat)
-
 ```
+¿Es neutral el aumento en la participación electoral? En este trabajo se busca cuantificar el efecto que tienen medios de movilización de la participación electoral. Estás prácticas buscan movilizar población para obtener voto a favor de cierto partido. Esperamos encontrar en elecciones donde exista un mayor premio  y competencia una mayor movilización electoral. 
 
-¿Es neutral el aumento en la participación electoral? En este trabajo se busca cuantificar el efecto que tienen medios de movilización de la participación electoral. Estás prácticas buscan movilizar población para obtener voto a favor de cierto partido. Esperamos encontrar que aquellas elecciones donde exista un mayor premio  y competencia mayor movilización electoral. 
+Las estructuras partidistas de movilización y de base electoral se activan en periodos electorales incentivando el voto. Se identifica al PRI como el partido con mayor estructura y capacidad de movilización por lo que se espera encontrar mayor efecto a favor de este partido utilizando datos de elecciones presidenciales 2006 y 2012. Sin embargo también se identifica un aumento en la estructura de otros partidos a partir del aumento en su control de presidencias muncipales y gobernaturas de estados en elecciones recientes.
 
-Las estructuras partidistas de movilización y de base electoral se activan en periodos electorales incentivando el voto. Se identifica al PRI como el partido con mayor estructura y capacidad de movilización por lo que se espera encontrar mayor efecto a favor de este partido, pero también se identifica un aumento en la estructura de otros partidos a partir del aumento en su cartera control de municipios y gobernaturas.
+La movilización electoral es un fenómeno que es difícil de observar y cuantificar dada la naturaleza ilegal de estas actividades. No obstante es conocida su existencia, en este trabajo se busca determinar alcance y circunstancias donde influyen en el resultado electoral.
 
-La movilización electoral es un fenómeno que es difícil de observar y cuantificar dada la naturaleza ilegal de estas actividades y que de ser demostrables pueden invalidar una elección. Sin embargo es conocida su existencia, se busca determinar su alcance y las circunstancias donde pueden motivar un cambio en el resultado electoral.
+Como ejemplo análizamos el Estado de México en su elección para gobernador 2017 donde la disminución de la preferencia electoral a favor del PRI presumiblemente revela "la base" o muestra en mayor proporción un votante "movilizado" al encontrarse menos diluida por preferencias "geuninas" del electorado. 
 
-Como ejemplo análizamos el Estado de México donde la disminución de las preferencias electoral a favor del PRI presumiblemente revela "la base" o muestra en mayor proporción la capacidad de movilización del partido siendo menos diluida por preferencias geuninas del electorado. 
-
-El efecto se acrecenta cuando el voto por  por el PRI es relativamente bajo pudiendo mostrar movilización de base electoral. En este sentido se determinaria que el voto "adicional" no es neutro y posiblemente es parte de una movilización a favor de ciertos partidos, generalmente el PRI y/o los punteros. Se busca determinar el tamaño del efecto en diversas elecciones y con ello generar una medida de incidencia de estructuras electorales en los comicios.
-
-Se muestra un ejemplo reciente donde el efecto es claramente visible. Los resultados por voto para gobernador en Estado de México 2017
-
+En este sentido se determinaria que el voto "adicional" no es neutro y posiblemente es parte de una movilización a favor de ciertos partidos, generalmente el PRI y/o los punteros. Se busca determinar el tamaño del efecto en diversas elecciones y con ello generar una medida de incidencia de estructuras y "esfuerzo" electorales en los comicios.
 
 ```{r Correlaciones Edomex 2017, echo = FALSE, cache = TRUE}
 EDOMEXMUN2017 <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/Edomex/EDOMEXMUN2017.csv")
 EDOMEXSECC2017 <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/Edomex/EDOMEXSECC2017.csv")
-
 EDOMEXMUN2017 %>% dplyr::select(POR_PART, POR_PRI, POR_MORENA, POR_PAN) %>%
   chart.Correlation()
 ```
 
-Para Estado de México 2012.
+Para Estado de México 2017. En donde observamos un importante efecto de correlación positiva entre la participación (medida como el % de votación efectiva en casilla respecto a la lista nominal) y el voto PRI (Como % del voto efectivo total). Con un efecto similar e inverso por MORENA. Mientras que el PAN no muestra una relación significativa de sustitución de voto ni en relación con la participación. 
 
 ```{r Secciones por Municipio Edomex 2017, echo = FALSE, cache = TRUE}
-head(P2012Mun)
-table(P2012Mun$NOMBRE_ESTADO)
-P2012Mun %>% filter(NOMBRE_ESTADO == "MEXICO") %>% dplyr:: select(Por_Part, PRI_por, PAN_por, PRD_por, NVA_ALIANZA_por) %>% chart.Correlation()
 EDOMEXMUN2017 %>% dplyr::select(POR_PART, POR_PRI, POR_MORENA, POR_PAN) %>%
   chart.Correlation()
 ```
 
-El efecto a nivel nacional 2012 es mucho menor, probablemente retratando efectos de dinámicas electorales de los estados.
+El efecto en 2012 es algo menor pero importante y significativo.
+
 ```{r Correlaciones Nacional 2012, echo = FALSE, cache = TRUE}
-
-P2012Secc <-read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/P2012Secc.csv")
-
+P2012Mun <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/P2012Mun.csv")
+P2012Mun %>% filter(NOMBRE_ESTADO == "MEXICO") %>% dplyr:: select(Por_Part, PRI_por, PAN_por, PRD_por) %>% chart.Correlation()
 ```
 
-
-```{r Correlaciones Nacional por Estado 2012, echo = FALSE, cache = TRUE}
-head(P2012SECC)
-P2012Secc %>% dplyr:: select(NOMBRE_ESTADO,Por_Part, PRI_por, PAN_por, PRD_por, NVA_ALIANZA_por) %>% ggplot(aes(Por_Part,PRI_por)) + geom_point() +
-  geom_smooth() + facet_wrap(~NOMBRE_ESTADO)
+Con datos de secciones electorales podemos obtener la correlación dentro de los municipios. 
 
 
-cor(x = P2012Mun,)
+```{r Secciones por Municipio Edomex 2017, echo = FALSE, cache = TRUE}
+cor(x = EDOMEXMUN2017$POR_PRI, y= EDOMEXMUN2017$POR_PART)
+class(EDOMEXMUN2017$POR_PART)
+head(EDOMEXSECC2017)
+
+
+
+
+
+install.packages("corrr")
+library(corrr)
+
+P2012
+
+
 ```
-
-
-
-Una marcada disminución del voto entre 2012 y 2017 disminuye la preferencia por el PRI y muestra lo que podría ser una estratégia electoral de promoción del voto en municipios rurales donde existe un fuerte voto por el PRI aunado a una marcada correlación positiva entre la participación electoral y la preferencia priista, tanto en municipios como en secciones electorales. 
-
-```{r Cambio Edomex 2012-2017, echo = FALSE, cache = TRUE}
-
-```
-
-
-

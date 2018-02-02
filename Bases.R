@@ -133,6 +133,7 @@ P2012Mun<-P2012Secc %>%   #2446
             NULOS         = sum(NUM_VOTOS_NULOS, na.rm = TRUE),
             Num_Secciones = length(unique(na.omit(SECCION))),
             Num_Casillas  = length(unique(na.omit(CASILLAS))))
+
 P2012Mun$Por_Part   <- (P2012Mun$TOTAL / P2012Mun$Lista_Nominal) * 100  
 P2012Mun$PAN_por         <- (P2012Mun$PAN/P2012Mun$TOTAL)  * 100
 P2012Mun$PRI_por         <- (P2012Mun$PRI/P2012Mun$TOTAL)  * 100          #Alianza PRI
@@ -650,7 +651,10 @@ EDOMEXSECC2017$POR_Nueva.A <- (EDOMEXSECC2017$Nueva.A/EDOMEXSECC2017$TOTAL_VALID
 write.csv(x = EDOMEXSECC2017, file = "Datos/Electorales/Edomex/EDOMEXSECC2017.csv")
 
 #### EDOMEX MUN 2017 ##############
-EDOMEXMUN2017 <- EDOMEX2017 %>% group_by(ID_ESTADO, ID_MUNICIPIO, MUNICIPIO) %>% 
+
+head(EDOMEXSECC2017)
+#NA´s en la información
+EDOMEXMUN2017 <- EDOMEXSECC2017 %>% group_by(ID_ESTADO, ID_MUNICIPIO, MUNICIPIO) %>% 
   summarise(PRI           = sum(PRI), 
             PAN           = sum(PAN), 
             PRD           = sum(PRD),
@@ -671,9 +675,9 @@ EDOMEXMUN2017 <- EDOMEX2017 %>% group_by(ID_ESTADO, ID_MUNICIPIO, MUNICIPIO) %>%
             VERDE.ES = sum(VERDE.ES),
             NA.ES = sum(NA.ES),
             TERESA.CASTELL = sum(TERESA.CASTELL),
-            Nueva.A       = sum(NA.),
+            Nueva.A       = sum(Nueva.A),
             LISTA_NOMINAL = sum(LISTA_NOMINAL),
-            TOTAL_VALIDOS = sum(NUM_VOTOS_VALIDOS),
+            TOTAL_VALIDOS = sum(TOTAL_VALIDOS),
             TOTAL_VOTOS   = sum(TOTAL_VOTOS),
             POR_PART      = sum(TOTAL_VOTOS)/sum(LISTA_NOMINAL) * 100)
 
