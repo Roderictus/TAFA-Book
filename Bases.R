@@ -84,6 +84,25 @@ P2012Secc$CV_MUN <- str_c(str_pad(P2012Secc$ID_ESTADO, width = 2, "left", "0"),
 P2012Secc$CV_TODO  <- str_c(str_c(str_pad(P2012Secc$ID_ESTADO, width = 2, "left", "0"), #Estado, Municipio, Sección
                                   str_pad(P2012Secc$ID_MUNICIPIO, width = 3, "left", "0")), 
                             str_pad(P2012Secc$SECCION, width = 4, "left", "0"))
+P2012Secc <- P2012Secc[!is.na(P2012Secc$CV_MUN),]
+
+P2012Secc$Por_Part        <- (P2012Secc$TOTAL_VOTOS/P2012Secc$LISTA_NOMINAL) * 100  
+P2012Secc$PAN_por         <- (P2012Secc$PAN/P2012Secc$TOTAL)             * 100
+P2012Secc$PRI_por         <- (P2012Secc$PRI/P2012Secc$TOTAL)             * 100          #Alianza PRI
+P2012Secc$PRD_por         <- (P2012Secc$PRD/P2012Secc$TOTAL)             * 100
+P2012Secc$PVEM_por        <- (P2012Secc$PVEM/P2012Secc$TOTAL)            * 100
+P2012Secc$PT_por          <- (P2012Secc$PT/P2012Secc$TOTAL)              * 100
+P2012Secc$MC_por          <- (P2012Secc$MC/P2012Secc$TOTAL)              * 100
+P2012Secc$NVA_ALIANZA_por <- (P2012Secc$NVA_ALIANZA/P2012Secc$TOTAL)     * 100
+P2012Secc$PRI_PVEM_por    <- (P2012Secc$PRI_PVEM/P2012Secc$TOTAL)        * 100    #Alianza PRI
+P2012Secc$PRD_PT_MC_por   <- (P2012Secc$PRD_PT_MC/P2012Secc$TOTAL)       * 100
+P2012Secc$PRD_PT_por      <- (P2012Secc$PRD_PT/P2012Secc$TOTAL)          * 100
+P2012Secc$PRD_MC_por      <- (P2012Secc$PRD_MC/P2012Secc$TOTAL)          * 100
+P2012Secc$PT_MC_por       <- (P2012Secc$PT_MC/P2012Secc$TOTAL)           * 100
+P2012Secc<-P2012Secc[!is.na(P2012Secc$Por_Part),]
+#quitamos los na's
+P2012Secc[P2012Secc$Por_Part >100,]$Por_Part <- 100 #acotamos a 100% la participación de las secciones
+
 write.csv(x = P2012Secc, file = "Datos/Electorales/P2012Secc.csv")# N
 ################################################################################################
 #########################   2012 Municipal      ##################################################
