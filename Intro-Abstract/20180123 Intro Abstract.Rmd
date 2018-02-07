@@ -6,8 +6,9 @@ output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(cache  = TRUE)
+knitr::opts_chunk$set(echo    = TRUE)
+knitr::opts_chunk$set(cache   = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
 library(dplyr)
 library(magrittr)
 library(knitr)
@@ -40,17 +41,70 @@ Como ejemplo análizamos el Estado de México en su elección para gobernador 20
 
 En este sentido se determinaria que el voto "adicional" no es neutro y posiblemente es parte de una movilización a favor de ciertos partidos, generalmente el PRI y/o los punteros. Se busca determinar el tamaño del efecto en diversas elecciones y con ello generar una medida de incidencia de estructuras y "esfuerzo" electorales en los comicios.
 
+Las elecciones en el Estado de México se identifican por la pérdida de voto por parte del PRI. En la gráfica se muestra el porcentaje de pérdida de votación efectiva que si bien es generalizado, 
+
+```{r Pérdida de voto del PRI por Municipio EDOMEX 2017 vs Presidencial 2012, echo = FALSE, cache = TRUE}
+#MEX<-read.csv(file = "Datos/Múltiples periodos/IC_electorales_edomex.csv")
+MEX<-read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Múltiples periodos/IC_electorales_edomex.csv")
+MEX$PRI_17_12 <- MEX$EM_17_POR_PRI - (MEX$EM_12_PRI_por + MEX$EM_12_PRI_PVEM_por) # cambio porcentual
+MEX$NOM_MUN_JOIN<-NULL
+MEX[,1:3]<-NULL
+MEX$EM_12_ID_ESTADO<-NULL
+MEX$EM_12_NOMBRE_ESTADO<-NULL
+MEX$EM_17_POR_PAN<-MEX$EM_17_PAN/MEX$EM_17_TOTAL_VOTOS*100
+MEX$EM_17_POR_PRD<-MEX$EM_17_PRD/MEX$EM_17_TOTAL_VOTOS*100
+MEX$EM_17_POR_MORENA<-MEX$EM_17_MORENA/MEX$EM_17_TOTAL_VOTOS*100
+GANADOR_POR<-numeric(nrow(MEX))
+GANADOR_PARTIDO<-character(nrow(MEX))
+PARTIDOS<-c("PRI","PAN","PRD","MORENA")
+
+for(i in 1:nrow(MEX))
+{
+  j<-which.max(MEX[i,2:5])
+  GANADOR_POR[i]<-MEX[i,(j+2)]/MEX$EM_17_TOTAL_VOTOS[i]*100
+  GANADOR_PARTIDO[i]<-PARTIDOS[j]
+}
+MEX$GANADOR_POR17<-as.numeric(GANADOR_POR)
+MEX$GANADOR_PARTIDO17<-GANADOR_PARTIDO
+table(MEX$GANADOR_PARTIDO17)
+D = 125
+#MEX$EM_17_LISTA_NOMINAL
+#head(MEX)
+MEX[1:20,]$EM_17_MUNICIPIO
+A <- MEX[1:D,]$EM_17_MUNICIPIO
+B <- (MEX[1:D,]$EM_17_TOTAL_VOTOS)/1000
+C <- MEX[1:D,]$PRI_17_12
+D <- MEX[1:D,]$GANADOR_PARTIDO17
+df <- data.frame(A,B,C,D)
+df$w <- cumsum(df$B)
+df$wm <- df$w - df$B
+df$wt <- with(df, wm + (w - wm)/2)
+p <- ggplot(df, aes (ymin = 0))
+p1 <- p + geom_rect(aes(xmin = wm, xmax = w, 
+                        ymax = C, fill = D), color = "black")
+p1 <- p1 + theme_bw() + labs(x = NULL, y = NULL) 
+p1<- p1 + scale_fill_manual(values = c("chocolate3","dodgerblue2","yellow2","chartreuse4"))
+p1 <-p1 + xlab("Miles de votos") + ylab("Cambio en el % obtenido por el alianza PRI()")
+#p1 + geom_text(aes(label = A, vjust = ifelse(B >= 0, 0, 1)))
+p1 
+```
+
+
+
+
 ```{r Correlaciones Edomex 2017, echo = FALSE, cache = TRUE}
 EDOMEXMUN2017 <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/Edomex/EDOMEXMUN2017.csv")
 EDOMEXSECC2017 <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/Edomex/EDOMEXSECC2017.csv")
-EDOMEXMUN2017 %>% dplyr::select(POR_PART, POR_PRI, POR_MORENA, POR_PAN) %>%
+EDOMEXMUN2017$LOG_TOTAL_VOTOS <- log(EDOMEXMUN2017$TOTAL_VOTOS)
+EDOMEXMUN2017 %>% dplyr::select(POR_PART, POR_PRI, POR_MORENA, POR_PAN, LOG_TOTAL_VOTOS) %>%
   chart.Correlation()
 ```
 
 Para Estado de México 2017. En donde observamos un importante efecto de correlación positiva entre la participación (medida como el % de votación efectiva en casilla respecto a la lista nominal) y el voto PRI (Como % del voto efectivo total). Con un efecto similar e inverso por MORENA. Mientras que el PAN no muestra una relación significativa de sustitución de voto ni en relación con la participación. 
 
+En secciones electorales observamos una forma similar de este efecto pero con un declive pronunciado hacia secciones con participación electoral alrededor del 55%. El efecto sigue existiendo.
 ```{r Secciones por Municipio Edomex 2017, echo = FALSE, cache = TRUE}
-EDOMEXMUN2017 %>% dplyr::select(POR_PART, POR_PRI, POR_MORENA, POR_PAN) %>%
+EDOMEXSECC2017 %>% dplyr::select(POR_PART, POR_PRI, POR_MORENA, POR_PAN) %>%
   chart.Correlation()
 ```
 
@@ -63,20 +117,13 @@ P2012Mun %>% filter(NOMBRE_ESTADO == "MEXICO") %>% dplyr:: select(Por_Part, PRI_
 
 Con datos de secciones electorales podemos obtener la correlación dentro de los municipios. 
 
+```{r Histograma Correlaciones Municipio Edomex 2017, echo = FALSE, cache = TRUE}
+cor(x = EDOMEXSECC2017$POR_PRI, y= EDOMEXSECC2017$POR_PART)
+cor(x = EDOMEXSECC2017$POR_PRI, y= EDOMEXSECC2017$POR_PART)
 
-```{r Secciones por Municipio Edomex 2017, echo = FALSE, cache = TRUE}
-cor(x = EDOMEXMUN2017$POR_PRI, y= EDOMEXMUN2017$POR_PART)
-class(EDOMEXMUN2017$POR_PART)
-head(EDOMEXSECC2017)
-
-
-
-
-
-install.packages("corrr")
-library(corrr)
-
-P2012
-
-
+CORRMUNEDOMEX2017 <- EDOMEXSECC2017 %>% group_by(MUNICIPIO) %>%
+  summarise( COR_MUN = cor(POR_PRI, POR_PART), TOTAL_VOTOS = sum(TOTAL_VOTOS)) %>%
+  arrange(-COR_MUN)
+hist(CORRMUNEDOMEX2017$COR_MUN)
+summary(CORRMUNEDOMEX2017$COR_MUN)
 ```
