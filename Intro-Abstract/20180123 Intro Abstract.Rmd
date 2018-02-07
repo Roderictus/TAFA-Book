@@ -41,7 +41,7 @@ Como ejemplo análizamos el Estado de México en su elección para gobernador 20
 
 En este sentido se determinaria que el voto "adicional" no es neutro y posiblemente es parte de una movilización a favor de ciertos partidos, generalmente el PRI y/o los punteros. Se busca determinar el tamaño del efecto en diversas elecciones y con ello generar una medida de incidencia de estructuras y "esfuerzo" electorales en los comicios.
 
-Las elecciones en el Estado de México se identifican por la pérdida de voto por parte del PRI. En la gráfica se muestra el porcentaje de pérdida de votación efectiva que si bien es generalizado, 
+Las elecciones en el Estado de México se identifican por la pérdida de voto por parte del PRI. En la gráfica se muestra el porcentaje de pérdida de votación efectiva generalizada, pero desigual. La gráfica muestra, en orden alfabético, los 125 municipios del Estado de México, el ancho de la barra es el volumen de votación efectiva. La altura es la diferencia entre el porcentaje de voto obtenido en la elección presidencial 2012, una elección muy favorable al PRI, contra el porcentaje de la votación efectiva obtenida en la votación para gobernador 2017. 
 
 ```{r Pérdida de voto del PRI por Municipio EDOMEX 2017 vs Presidencial 2012, echo = FALSE, cache = TRUE}
 #MEX<-read.csv(file = "Datos/Múltiples periodos/IC_electorales_edomex.csv")
