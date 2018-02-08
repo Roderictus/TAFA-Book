@@ -33,20 +33,25 @@ library(spatstat)
 ```
 ¿Es neutral el aumento en la participación electoral? En este trabajo se busca cuantificar el efecto que tienen medios de movilización de la participación electoral. Estás prácticas buscan movilizar población para obtener voto a favor de cierto partido. Esperamos encontrar en elecciones donde exista un mayor premio  y competencia una mayor movilización electoral. 
 
-Las estructuras partidistas de movilización y de base electoral se activan en periodos electorales incentivando el voto. Se identifica al PRI como el partido con mayor estructura y capacidad de movilización por lo que se espera encontrar mayor efecto a favor de este partido utilizando datos de elecciones presidenciales 2006 y 2012. Sin embargo también se identifica un aumento en la estructura de otros partidos a partir del aumento en su control de presidencias muncipales y gobernaturas de estados en elecciones recientes.
+Las estructuras partidistas de movilización se activan en periodos electorales incentivando el voto. Se identifica al PRI como el partido con mayor estructura y capacidad de movilización por lo que se espera encontrar mayor efecto a favor de este partido utilizando datos de elecciones presidenciales 2006 y 2012. Sin embargo también se identifica un aumento en la estructura de otros partidos a partir del aumento en su control de presidencias municipales y gobernaturas de estados en elecciones recientes.
 
-La movilización electoral es un fenómeno que es difícil de observar y cuantificar dada la naturaleza ilegal de estas actividades. No obstante es conocida su existencia, en este trabajo se busca determinar alcance y circunstancias donde influyen en el resultado electoral.
+La movilización electoral es un fenómeno que es difícil de observar y cuantificar dada la naturaleza ilegal de estas actividades. No obstante es conocida su existencia, en este trabajo se busca determinar alcance y circunstancias donde influyen en el resultado electoral.  
 
-Como ejemplo análizamos el Estado de México en su elección para gobernador 2017 donde la disminución de la preferencia electoral a favor del PRI presumiblemente revela "la base" o muestra en mayor proporción un votante "movilizado" al encontrarse menos diluida por preferencias "geuninas" del electorado. 
+Como ejemplo analizamos el Estado de México en su elección para gobernador 2017 donde la disminución de la preferencia electoral a favor del PRI presumiblemente revela "la base" o muestra en mayor proporción un votante "movilizado" al encontrarse menos diluida por preferencias "genuinas" del electorado. 
 
-En este sentido se determinaria que el voto "adicional" no es neutro y posiblemente es parte de una movilización a favor de ciertos partidos, generalmente el PRI y/o los punteros. Se busca determinar el tamaño del efecto en diversas elecciones y con ello generar una medida de incidencia de estructuras y "esfuerzo" electorales en los comicios.
+En este sentido se determinaría que el voto "adicional" no es neutro y posiblemente es parte de una movilización a favor de ciertos partidos, generalmente el PRI y/o los punteros. Se busca determinar el tamaño del efecto en diversas elecciones y con ello generar una medida de incidencia de estructuras y "esfuerzo" electorales en los comicios. Una pregunta fundamental es sobre la viabilidad de un mecanismo estadístico que permita separar este voto "adicional".
 
-Las elecciones en el Estado de México se identifican por la pérdida de voto por parte del PRI. En la gráfica se muestra el porcentaje de pérdida de votación efectiva generalizada, pero desigual. La gráfica muestra, en orden alfabético, los 125 municipios del Estado de México, el ancho de la barra es el volumen de votación efectiva. La altura es la diferencia entre el porcentaje de voto obtenido en la elección presidencial 2012, una elección muy favorable al PRI, contra el porcentaje de la votación efectiva obtenida en la votación para gobernador 2017. 
+Las elecciones en el Estado de México se identifican por la pérdida de voto por parte del PRI. En la gráfica se muestra el porcentaje de pérdida de votación efectiva generalizada, pero desigual. La gráfica muestra, en orden de municipio con mayor votación a menor, los 125 municipios del Estado de México. El ancho de la barra es el volumen de votación efectiva, en total 6,080,000 votos. La altura es la diferencia entre el porcentaje de voto efectivo obtenido en la elección presidencial 2012, una elección muy favorable al PRI, contra el porcentaje de la votación efectiva obtenida en la votación para gobernador 2017. El color corresponde al partido que obtuvo mayoria de votos en el municipio. 
 
 ```{r Pérdida de voto del PRI por Municipio EDOMEX 2017 vs Presidencial 2012, echo = FALSE, cache = TRUE}
 #MEX<-read.csv(file = "Datos/Múltiples periodos/IC_electorales_edomex.csv")
 MEX<-read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Múltiples periodos/IC_electorales_edomex.csv")
 MEX$PRI_17_12 <- MEX$EM_17_POR_PRI - (MEX$EM_12_PRI_por + MEX$EM_12_PRI_PVEM_por) # cambio porcentual
+
+MEX <- MEX %>%
+  mutate(Part_Total = EM_17_TOTAL_VOTOS/ sum(EM_17_TOTAL_VOTOS) * 100) %>% 
+  arrange(desc(Part_Total))
+
 MEX$NOM_MUN_JOIN<-NULL
 MEX[,1:3]<-NULL
 MEX$EM_12_ID_ESTADO<-NULL
@@ -88,10 +93,7 @@ p1 <-p1 + xlab("Miles de votos") + ylab("Cambio en el % obtenido por el alianza 
 #p1 + geom_text(aes(label = A, vjust = ifelse(B >= 0, 0, 1)))
 p1 
 ```
-
-
-
-
+Para esta elección observamos un importante efecto de correlación positiva entre la participación (medida como el % de votación efectiva en casilla respecto a la lista nominal) y el voto PRI (Como % del voto efectivo total). Con un efecto similar e inverso por MORENA. Mientras que el PAN no muestra una relación significativa de sustitución de voto ni en relación con la participación. 
 ```{r Correlaciones Edomex 2017, echo = FALSE, cache = TRUE}
 EDOMEXMUN2017 <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/Edomex/EDOMEXMUN2017.csv")
 EDOMEXSECC2017 <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/Edomex/EDOMEXSECC2017.csv")
@@ -99,9 +101,6 @@ EDOMEXMUN2017$LOG_TOTAL_VOTOS <- log(EDOMEXMUN2017$TOTAL_VOTOS)
 EDOMEXMUN2017 %>% dplyr::select(POR_PART, POR_PRI, POR_MORENA, POR_PAN, LOG_TOTAL_VOTOS) %>%
   chart.Correlation()
 ```
-
-Para Estado de México 2017. En donde observamos un importante efecto de correlación positiva entre la participación (medida como el % de votación efectiva en casilla respecto a la lista nominal) y el voto PRI (Como % del voto efectivo total). Con un efecto similar e inverso por MORENA. Mientras que el PAN no muestra una relación significativa de sustitución de voto ni en relación con la participación. 
-
 En secciones electorales observamos una forma similar de este efecto pero con un declive pronunciado hacia secciones con participación electoral alrededor del 55%. El efecto sigue existiendo.
 ```{r Secciones por Municipio Edomex 2017, echo = FALSE, cache = TRUE}
 EDOMEXSECC2017 %>% dplyr::select(POR_PART, POR_PRI, POR_MORENA, POR_PAN) %>%
@@ -112,18 +111,25 @@ El efecto en 2012 es algo menor pero importante y significativo.
 
 ```{r Correlaciones Nacional 2012, echo = FALSE, cache = TRUE}
 P2012Mun <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/P2012Mun.csv")
-P2012Mun %>% filter(NOMBRE_ESTADO == "MEXICO") %>% dplyr:: select(Por_Part, PRI_por, PAN_por, PRD_por) %>% chart.Correlation()
+P2012Mun %>% filter(NOMBRE_ESTADO == "VERACRUZ") %>% dplyr:: select(Por_Part, PRI_por, PAN_por, PRD_por) %>% chart.Correlation()
+
+
+cor(P2012Mun$Por_Part, P2012Mun$PRI_por, use = "complete.obs")
+cor(P2012Mun$Por_Part, P2012Mun$PAN_por, use = "complete.obs")
+cor(P2012Mun$Por_Part, P2012Mun$PRD_por, use = "complete.obs")
+
+CORREDO2017 <- P2012Mun %>% 
+  group_by(NOMBRE_ESTADO) %>% 
+  summarise(COR_EDO_PRI_PART = cor(PRI_por, Por_Part, use = "complete.obs"), 
+            COR_EDO_PAN_PART = cor(PAN_por, Por_Part, use = "complete.obs"),
+            COR_EDO_PRD_PART = cor(PRD_por, Por_Part, use = "complete.obs")) %>% 
+  arrange(-COR_EDO_PRI_PART)
 ```
 
-Con datos de secciones electorales podemos obtener la correlación dentro de los municipios. 
+El propósito es analizar la participación electoral desde dos perspectivas.
+1. Determinantes de la participación.
+2. Efecto de la participación
 
-```{r Histograma Correlaciones Municipio Edomex 2017, echo = FALSE, cache = TRUE}
-cor(x = EDOMEXSECC2017$POR_PRI, y= EDOMEXSECC2017$POR_PART)
-cor(x = EDOMEXSECC2017$POR_PRI, y= EDOMEXSECC2017$POR_PART)
+En cuanto a determinantes de la participación se buscar realizar un modelo con variables categoricas que determinen el tipo de elección que se lleva a cabo. Cercania de la competencia, estatal y municipal, valor de la cartera del estado, elecciones concurrentes o no. Utilizando dos niveles de datos, secciones que se agregan en municipios y municipios que se agregan en estados. Ya se ha realizado un trabajo de limpieza y orden de elecciones 2006 y 2012 ademas de generar variables a nivel municipio para la encuesta Intercensal 2015. 
 
-CORRMUNEDOMEX2017 <- EDOMEXSECC2017 %>% group_by(MUNICIPIO) %>%
-  summarise( COR_MUN = cor(POR_PRI, POR_PART), TOTAL_VOTOS = sum(TOTAL_VOTOS)) %>%
-  arrange(-COR_MUN)
-hist(CORRMUNEDOMEX2017$COR_MUN)
-summary(CORRMUNEDOMEX2017$COR_MUN)
-```
+Efecto de la participación 
