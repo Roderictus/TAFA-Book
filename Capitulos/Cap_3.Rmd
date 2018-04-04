@@ -1,6 +1,11 @@
 \section {Capítulo 3 Análisis Exploratorio}
 
-\subsection{Participación Electoral a nivel Estatal}
+\subsection{Participación Electoral a nivel Estatal 2012, 2015}
+
+Determinantes de la participación electoral en la literatura. 
+Elecciones concurrentes.
+#Elección 2012 Nacional
+
 
 
 \subsubsection{Prueba  de subsubsección}

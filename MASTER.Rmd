@@ -24,12 +24,13 @@ library(stringr)
 library(data.table)
 library(viridis)
 library(tidyr)
-library(kableExtra)
+#library(kableExtra)
 library(gridExtra)
 library(lattice)
 library(PerformanceAnalytics)#para correlaciones del voto 
 library(broom) #tidy en vez de fortify
 library(foreign )
+install.packages("spatstat")
 library(spatstat)
 
 # Función para referencia de entradas 

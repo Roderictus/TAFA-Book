@@ -781,3 +781,32 @@ PE %>% group_by(ESTADO, DISTRITO, MUNICIPIO) %>%
 
 PE %>% filter(ESTADO == "14", MUNICIPIO %in% c(120,99,102, 98,69,55)) %>% 
   ggplot(aes(x = LISTA, colour = LISTA)) +  geom_histogram()  + facet_wrap(~MUNICIPIO)
+
+
+###############################################
+#######   Solamente bajar bases     ###########
+###############################################
+
+#Nayarit Gobernador 2017
+
+
+#Nayarit Diputados MR 2017
+#Nayarit Diputados RP 2017
+#Nayarit Ayuntamiento 2017
+#Nayarit Regidor 2017
+#Nayarit Regidor RP 2017
+#México Gobernador 2017
+#Veracruz Gobernador 2016
+
+#Elección Extraordinaria Diputados MR 2015
+#Diputados MR 2015
+#Diputados RP 2015
+#Presidente 2012
+#Senadores MR 2012
+#Senadores RP 2012
+#Diputadoos MR 2012
+#Diputados 2012
+
+
+
+
