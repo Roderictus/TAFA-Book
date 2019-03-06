@@ -1,0 +1,21 @@
+---
+title: "Untitled"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+a. El sesgo electoral 
+La participación electoral es un fenómeno que puede representar múltiples fenómenos subyacentes 
+
+La aplicación sesgada de la promoción de la participación electoral
+
+Los efectos cuando la participación electoral es baja. Cuando la participación electoral es baja puede afectar la composición  y la representatividad del sistema político. Pero también propongo que el estimular la participación, particularmente en electorados heterogéneos, puede ser un mecanismo de sesgado a favor de cierto partido. 
+
+Ejemplo: En una elección cercana existen dos partidos A y B que, dentro de la población general, cada uno logra capturar el 50% de la preferencia electoral. Ambos grupos tienen la misma intención de participación electoral y el partido A se encuentra dirigiendo el gobierno. 
+
+Esta población no es homogénea en sus preferencias. Una encuesta previa a las elecciones muestra que el 70% de las mujeres de 18 a 35 años afirman su preferencia por el partido A. El gobierno en turno, del partido A, promueve durante periodos de veda electoral una campaña de promoción del voto "neutral" pero con un enfoque demográfico y una promoción medíatica enfocada en las mujeres de 18 a 35 años. Esta promoción de un "bien ciudadano", de ser efectiva, aumenta la proporción de voto recibida por el partido A en las elecciones, pudiendo realizarse desde el gobierno, fuera de vedas electorales, o por organizaciones no gubernamentales que ocupan un presupuesto que no es contabilizado hacia los topes de campañas. 
+
+Este es un argumento en contra de la neutralidad de las campañas de promoción del voto, las cuales, con el conocimiento del enfoque demográfico al que están dirijidas en su mensaje o en su medio de distribución, alteran resultados electorales en la proporción de sesgo existente en la población a la que apelan. 

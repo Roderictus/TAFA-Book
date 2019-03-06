@@ -1,0 +1,26 @@
+---
+title: "Evolución de la participación Electoral en Elecciones Federales 2006-2018"
+author: "Rodrigo Arturo Franco Fuentes"
+date: "July 25, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Ha terminado una de las elecciones más interesantes de la historía de México, tal vez anticipada por el cambio en las preferencias electorales reveladas en la elección del Estado de México 2017 donde el PRI pudo, apenas, retener la gobernatura, pero perdiendo todos los municipios urbanos. Esta elección, la del Edomex 2017, fue caracterizada por una mayor participación electoral en los municipios rurales que además votaron predominantemente por el PRI. Esto parece responder a una estratégia electoral de promoción del voto donde este es relativamente más "barato" o menos competido. Hay varios pasos que son relevantes para interpretar este tipo de estratégia.  
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

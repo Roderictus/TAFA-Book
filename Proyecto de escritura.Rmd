@@ -1,0 +1,43 @@
+---
+title: "Participación electoral en México 2006-2012"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Institucionalización de los partidos políticos en México
+
+La República de México hereda o imita, en lo esencial, la constitución política de Estados Unidos de Norteamérica estableciendo una República Federal con división de poderes. Esto da lugar a una estructura similar pero con un arreglo institucional que favoreció un desarrollo diferente de estructuras políticas y de sistema de partidos. A diferencia de Estados Unidos, país con un arreglo bipartidista con incentivos hacia el centro, en México se desarrolló un régimen de pártido único, altamente centralizado hacia la dirigencia partidista generalmente asumida por el presidente de la república. 
+
+México inicia un proceso de creación y maduración de partidos con presencia local y de escisiones del PRI que daría lugar a una alternancia en el gobierno federal y gobiernos del Partido Acción Nacional durante 12 años 2000-2012, para un eventual regreso al PRI 2012-2018
+
+
+Mientras que ambos régimenes son repúblicas federales la variación entre las constituciones de los Estados en EUA es mucho más heterogenea que en México, existiendo incluso leyes que pueden ser distintas o contradictorias entre los ordenes federal y estatal, un fenómeno inexistente en México. 
+
+No pretendo señalar el proceso histórico ni la totalidad de las diferencias entre este sistema y otros pero si el señalar características del arreglo institucional en México que ha, dentro de diversas teorías, contribuido a la diferenciación entre sistemas que nominalmente son similares pero que aparentemente pequeñas reglas arrojan resultados diversos. Esto tampoco es un arreglo novedoso, se ha hecho con mayor detalle en otros lados para el sistema de partidos (xxxxxx), poderes fácticos de la presidencia (Shugart Carey), proceso de transformación de votos en lugares dentro del poder legislativo() entre muchos temas insertos en la teoría política y el sistema de partidos. Esta discusión sirve para enmarcar lo relevante de las reglas del juego electoral, su relación con el actuar de los actores políticos, plantear cual sería el resultado a esperar de este arreglo institucional y con ello poder contrastarlo con su aplicación práctica. 
+
+
+Instituciones y consecuencias esperadas del régimen institucional mexicano contemporaneo.
+
+# Sistema de financiamiento principalmente público
+El financiamento público se da a partir de una formula
+
+# Sistema de partidos múltiple
+#Poder ejecutivo y gobiernos estatales de  mayoría simple
+#Reglas de selección de candidatos en fórmulas electorales
+El sistema electoral impone criterios democráticos en el ejercicio electoral, en contraste el sistema de partidos en México permite a la dirigencia de estos una amplia libertad en su organización interna. Esto arroja una amplia heterogeneidad entre partidos e incluso dentro del mismo partido a lo largo del tiempo. En la práctica los dirigentes de los partidos políticos tienen una amplia capacidad para negociar quienes participan en las listas plurinominales y quienes son elegidos como candidatos para los asientos elegidos con mayoria simple en ambas cámaras. 
+
+El partido presenta para 200 diputados, el 40% de la cámara baja, en una lista cerrada donde decide tanto quienes participan como el orden en el cual son electos. El mecanismo interno es decisión de cada partido, históricamente algunos partidos han realizado procesos internos abiertos pero son minoria. En este sentido la votación privilegia la reputación del partido antes que la reputación o desempeño individual de los legisladores. 
+
+
+
+##Candidatos de mayoria simple
+##Candidatos de representación proporcional
+
+
+#Listas abiertas (Sartori 1976, Taagepera y Shigart 1989, Ames, 1992)
+#Tamaño del distrito
+#Elecciones concurrentes 
+

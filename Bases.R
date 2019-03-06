@@ -3,7 +3,21 @@ library(readxl)
 library(stringr)
 library(foreign)
 library(data.table)
+#library(raster)
+library(dplyr)
 #Bases de datos
+
+#######################################################################################################
+##########################    2018          ###########################################################
+#######################################################################################################
+
+list.files("./")
+getwd()
+
+
+#download.file(url = "https://computos2018.ine.mx/#/descargaBase", destfile = "./Datos/2018/DescargaBase2018.zip")
+
+
 #Archivo para construir las bases de datos, se sustituye la inclusión de las bases en el cuerpo del documento con un
 #archivo auxiliar para su construcción
 
@@ -102,12 +116,12 @@ P2012Secc$PT_MC_por       <- (P2012Secc$PT_MC/P2012Secc$TOTAL)           * 100
 P2012Secc<-P2012Secc[!is.na(P2012Secc$Por_Part),]
 #quitamos los na's
 P2012Secc[P2012Secc$Por_Part >100,]$Por_Part <- 100 #acotamos a 100% la participación de las secciones
+write.csv(x = P2012Secc, file = "Datos/2018/ENSAYO/P2012Secc.csv")
 
-write.csv(x = P2012Secc, file = "Datos/Electorales/P2012Secc.csv")# N
+#write.csv(x = P2012Secc, file = "Datos/Electorales/P2012Secc.csv")# N
 ################################################################################################
 #########################   2012 Municipal      ##################################################
 ################################################################################################
-head(P2012Secc)
 # quitar los que no tienen clave de municipio
 #sum(is.na(P2012Secc$CV_MUN))#300, distritos electorales
 #sum(P2012Secc[is.na(P2012Secc$CV_MUN),]$LISTA_NOMINAL) 59,115 votos 
@@ -147,8 +161,8 @@ P2012Mun$PRD_PT_MC_por   <- (P2012Mun$PRD_PT_MC/P2012Mun$TOTAL)   * 100
 P2012Mun$PRD_PT_por      <- (P2012Mun$PRD_PT/P2012Mun$TOTAL)   * 100
 P2012Mun$PRD_MC_por      <- (P2012Mun$PRD_MC/P2012Mun$TOTAL)   * 100
 P2012Mun$PT_MC_por       <- (P2012Mun$PT_MC/P2012Mun$TOTAL)   * 100
-write.csv(x = P2012Mun, file = "Datos/Electorales/P2012Mun.csv")# N
-
+#write.csv(x = P2012Mun, file = "Datos/Electorales/P2012Mun.csv")# N
+write.csv(x = P2012Mun, file = "Datos/2018/ENSAYO/P2012Mun.csv")
 ###########################   Datos 2012 Estatal  #########################################
 P2012Edo<- P2012Mun %>% group_by(NOMBRE_ESTADO, ID_ESTADO) %>% 
   summarise(TOTAL = sum(TOTAL, na.rm = TRUE),
@@ -266,6 +280,7 @@ write.csv(x = JALSECCDIP2015, file = "Datos/Electorales/Jalisco/JALSECCDIP2015.c
 #####################################################################################################
 ##############      ENOE a nivel municipal      ####################################################
 #####################################################################################################
+
 # De sdem105.dbf a sdem416.dbf
 ENOE <- read.dbf(file = "Datos/ENOE/Sociodemografico/sdemt317.dbf") #  3er trimestre 2017 
 ENOE <- filter(ENOE, R_DEF == "00") #00 Resultado definitivo de la entrevista, entrevista completa
@@ -318,15 +333,17 @@ ENOE <- ENOE %>% filter(Estado %in% c("JAL", "MEX"))#10998 y 14313 casos Jalisco
 #la codificación de las etiquetas se obtiene del cuestionario 
 #http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/especiales/intercensal/2015/doc/eic2015_cuestionario.pdf
 ##############    Vivienda    #############################################
-
 ViviendaIC$JEFE_SEXO<-factor(ViviendaIC$JEFE_SEXO, labels = c("Hombre", "Mujer"))
 ViviendaIC[ViviendaIC$JEFE_EDAD == "999", ]$JEFE_EDAD <- NA#clasificar correctamente los NAs de edad del jefe del hogar
 
 head(ViviendaIC)
+
 A<-data.frame()
 for(i in 1:32){
   print(i)
-  df <- read.csv(file = str_c("C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA",  str_pad(i, 2, "left", "0"), ".CSV"))
+  #df <- read.csv(file = str_c("C:/Proyectos R/Datos intercensal/Datos Intercensal/TR_VIVIENDA",  str_pad(i, 2, "left", "0"), ".CSV"))
+  df <- read.csv(file = str_c("",  str_pad(i, 2, "left", "0"), ".CSV"))
+  #dirección de intercensal en laptop DELL
   IC_Municipio <- df %>%
     group_by(ENT, NOM_ENT, MUN, NOM_MUN) %>%
     summarise(Viviendas                = sum(FACTOR),
@@ -394,21 +411,9 @@ Padron_2017 <- read_xlsx(path = "Datos/Electorales/Padron Electoral/DatosAbierto
 
 ############    Unir con densidad por municipio ##########################
 
-
-
-
-
 #Necesitamos, fundamentalmente, dos variables ingreso gobierno, como porcentaje de las viviendas dentro del municipio, e ingreso
-
-
-
 rm(A)
-
 write.csv(x = IC_Pais, file = "Datos/Intercensal/IC_Pais.csv")
-
-
-
-
 
 ViviendaIC$JEFE_SEXO<-factor(ViviendaIC$JEFE_SEXO, labels = c("Hombre", "Mujer"))
 ViviendaIC[ViviendaIC$JEFE_EDAD == "999", ]$JEFE_EDAD <- NA#clasificar correctamente los NAs de edad del jefe del hogar
@@ -496,8 +501,8 @@ MunMapJal2015<-left_join(x = MunMapJal, y = JALMUNMUN2015, by = "NOM_MUN_JOIN")#
 #guardemos la base para después invocarla en el código principal 
 write.csv(x = MunMapJal2015, file = "Datos/Electorales/Jalisco/MunMapJal2015.csv")
 write.csv(x = JALMUNMUN2015, file = "Datos/Electorales/Jalisco/JALMUNMUN2015.csv")
-
 #para mujeres por rangos de edad
+
 ############################################################################################
 ##########################    Base para Mapas, Intercensal 2015   #########################
 ############################################################################################
@@ -604,8 +609,15 @@ PADRON2017    <- read_excel(path = "C:/Users/Franco/Desktop/DatosAbiertos-DERFE-
 ########################################
 ##### EDOMEX SECCIÓN 2017 ##############
 #EDOMEX2017 <- read_excel(path = "C:/Users/Franco/Desktop/Resultados_computo_de_Gobernador_2017_por_casilla.xlsx") #laptop
-EDOMEX2017 <- read_excel(path = "Datos/Electorales/Edomex/Resultados_computo_de_Gobernador_2017_por_casilla.xlsx") #laptop y mounstruo?
+#EDOMEX2017 <- read_excel(path = "Datos/Electorales/Edomex/Resultados_computo_de_Gobernador_2017_por_casilla.xlsx") #laptop y mounstruo?
+#EDOMEX2017 <- read.csv(file ="D://Proyectos R/Capstone/ParticipacionElectoralMexico/Data/Gobernadores 2017/EdoMexGob2017.csv") #Otro archivo esperando que sea el mismo pero en .csv
+
+EDOMEX2017 <- read_excel(path = "Datos/2018/ENSAYO/Resultados_computo_de_Gobernador_2017_por_casilla.xlsx")#Nueva Laptop
+
 colnames(EDOMEX2017) <- make.names(colnames(EDOMEX2017))
+
+library(dplyr)
+
 EDOMEXSECC2017 <- EDOMEX2017 %>% 
   group_by(ID_ESTADO, ID_MUNICIPIO, MUNICIPIO, SECCIÓN) %>% 
   summarise(PRI           = sum(PRI), 
@@ -632,6 +644,9 @@ EDOMEXSECC2017 <- EDOMEX2017 %>%
             TOTAL_VALIDOS = sum(NUM_VOTOS_VALIDOS),
             TOTAL_VOTOS   = sum(TOTAL_VOTOS),
             POR_PART      = sum(TOTAL_VOTOS)/sum(LISTA_NOMINAL) * 100)
+
+
+
 EDOMEXSECC2017$POR_PRI     <- (EDOMEXSECC2017$PRI/EDOMEXSECC2017$TOTAL_VALIDOS) * 100 #Ojo, sobre total de votos validos
 EDOMEXSECC2017$POR_PAN     <- (EDOMEXSECC2017$PAN/EDOMEXSECC2017$TOTAL_VALIDOS) * 100 
 EDOMEXSECC2017$POR_PRD     <- (EDOMEXSECC2017$PRD/EDOMEXSECC2017$TOTAL_VALIDOS) * 100
@@ -648,11 +663,10 @@ EDOMEXSECC2017$PRI_ALIANZA <- (EDOMEXSECC2017$PRI + EDOMEXSECC2017$PVEM +
 EDOMEXSECC2017$PRI_ALIANZA_POR <- (EDOMEXSECC2017$PRI_ALIANZA/EDOMEXSECC2017$TOTAL_VALIDOS)*100
 EDOMEXSECC2017[EDOMEXSECC2017$POR_PART >=100,]$POR_PART <-100
 EDOMEXSECC2017$POR_Nueva.A <- (EDOMEXSECC2017$Nueva.A/EDOMEXSECC2017$TOTAL_VALIDOS) * 100 
-write.csv(x = EDOMEXSECC2017, file = "Datos/Electorales/Edomex/EDOMEXSECC2017.csv")
+write.csv(x = EDOMEXSECC2017, file ="Datos/2018/ENSAYO/EDOMEXSECC2017.csv")#laptop nueva
+#write.csv(x = EDOMEXSECC2017, file = "Datos/Electorales/Edomex/EDOMEXSECC2017.csv")
 
 #### EDOMEX MUN 2017 ##############
-
-head(EDOMEXSECC2017)
 #NA´s en la información
 EDOMEXMUN2017 <- EDOMEXSECC2017 %>% group_by(ID_ESTADO, ID_MUNICIPIO, MUNICIPIO) %>% 
   summarise(PRI           = sum(PRI), 
@@ -696,18 +710,13 @@ EDOMEXMUN2017$POR_Nueva.A <- (EDOMEXMUN2017$Nueva.A/EDOMEXMUN2017$TOTAL_VALIDOS)
                                  EDOMEXMUN2017$VERDE.NA + EDOMEXMUN2017$VERDE.ES + EDOMEXMUN2017$NA.ES +
                                  EDOMEXMUN2017$Nueva.A + EDOMEXMUN2017$ES)
 EDOMEXMUN2017$PRI_ALIANZA_POR <- (EDOMEXMUN2017$PRI_ALIANZA/EDOMEXMUN2017$TOTAL_VALIDOS)*100
-write.csv(x = EDOMEXMUN2017, file = "Datos/Electorales/Edomex/EDOMEXMUN2017.csv")
+#write.csv(x = EDOMEXMUN2017, file = "Datos/Electorales/Edomex/EDOMEXMUN2017.csv")
+write.csv(x = EDOMEXMUN2017, file = "Datos/2018/ENSAYO/EDOMEXMUN2017.csv")#Laptop Dell
 
 #########################################################################################
+###########################     Merge de bases    #######################################
+#########################################################################################
 
-library(raster)
-
-
-
-
-
-
-###########################     Merge de bases    ########################
 #JALMUNMUN2015 <- read.csv(file = "Electorales/Jalisco/JALMUNMUN2015.csv") #laptop
 JALMUNMUN2015 <- read.csv(file = "Datos/Electorales/Jalisco/JALMUNMUN2015.csv") #mounstruo
 #homologar variable de join
@@ -733,45 +742,82 @@ colnames(P2012JalMun)[37]   <- "NOM_MUN_JOIN"
 ####    Guardar
 JalEl<-inner_join(as.data.frame(P2012JalMun), as.data.frame(JALMUNMUN2015), by = "NOM_MUN_JOIN")
 write.csv(x = JalEl, file = "Datos/Electorales/Jalisco/JalEl1215.csv")
-########    EDOMEX    ##########################################
-#EDOMEXMUN2017
-EDOMEXMUN2017 <- read.csv(file = "Datos/Electorales/Edomex/EDOMEXMUN2017.csv")
 
+################################################################
+########    EDOMEX    ##########################################
+################################################################
+
+
+#EDOMEXMUN2017 <- read.csv(file = "Datos/Electorales/Edomex/EDOMEXMUN2017.csv")
+#write.csv(x = EDOMEXMUN2017, file = "Datos/2018/ENSAYO/EDOMEXMUN2017.csv")#Laptop Dell
+EDOMEXMUN2017  <- read.csv(file = "Datos/2018/ENSAYO/EDOMEXMUN2017.csv")   #Laptop Dell, dos archivos
+P2012Mun <- read.csv(file = "Datos/2018/ENSAYO/P2012Mun.csv")        #Laptop Dell, dos archivos
 #homologar variable de join
-P2012EdomexMun <- P2012Mun %>% 
+P2012EDOMEXMUN <- P2012Mun %>% 
   filter(NOMBRE_ESTADO =="MEXICO")
-EDOMEXMUN2017$NOM_MUN_JOIN   <- chartr('áéíóúñ','aeioun',unique(tolower(EDOMEXMUN2017$MUNICIPIO)))
-P2012EdomexMun$NOM_MUN_JOIN  <- chartr('áéíóúñ','aeioun',unique(tolower(P2012EdomexMun$MUNICIPIO)))
+rm(P2012Mun) #ya no necesitamos todos los municipios
+
+EDOMEXMUN2017$NOM_MUN_JOIN   <- chartr('áéíóúñ','aeioun',unique(tolower(EDOMEXMUN2017$MUNICIPIO))) #del 2017
+P2012EDOMEXMUN$NOM_MUN_JOIN  <- chartr('áéíóúñ','aeioun',unique(tolower(P2012EDOMEXMUN$MUNICIPIO))) # del 2012
 #####
-intersect(EDOMEXMUN2017$NOM_MUN_JOIN, P2012EdomexMun$NOM_MUN_JOIN) #121
-setdiff(P2012EdomexMun$NOM_MUN_JOIN, EDOMEXMUN2017$NOM_MUN_JOIN) #aparecen en presidencial pero no en municipal
+intersect(EDOMEXMUN2017$NOM_MUN_JOIN, P2012EDOMEXMUN$NOM_MUN_JOIN) #121
+
+setdiff(P2012EDOMEXMUN$NOM_MUN_JOIN, EDOMEXMUN2017$NOM_MUN_JOIN) #aparecen en presidencial pero no en municipal
 #"coacalco de berriozabal" "ecatepec de morelos"     "naucalpan de juarez"     "tlalnepantla de baz" 
-setdiff(EDOMEXMUN2017$NOM_MUN_JOIN, P2012EdomexMun$NOM_MUN_JOIN) # para ver los nombres en base 2017
+setdiff(EDOMEXMUN2017$NOM_MUN_JOIN, P2012EDOMEXMUN$NOM_MUN_JOIN) # para ver los nombres en base 2017
 #"coacalco"     "ecatepec"     "naucalpan"    "tlalnepantla"
 #asignar nombres a la 2017 para homologar con presidencial 2012 
 EDOMEXMUN2017[EDOMEXMUN2017$NOM_MUN_JOIN == "coacalco",]$NOM_MUN_JOIN     <- "coacalco de berriozabal"
 EDOMEXMUN2017[EDOMEXMUN2017$NOM_MUN_JOIN == "ecatepec",]$NOM_MUN_JOIN     <- "ecatepec de morelos"
 EDOMEXMUN2017[EDOMEXMUN2017$NOM_MUN_JOIN == "naucalpan",]$NOM_MUN_JOIN    <- "naucalpan de juarez"
 EDOMEXMUN2017[EDOMEXMUN2017$NOM_MUN_JOIN == "tlalnepantla",]$NOM_MUN_JOIN <- "tlalnepantla de baz"
-intersect(EDOMEXMUN2017$NOM_MUN_JOIN, P2012EdomexMun$NOM_MUN_JOIN) #125
+intersect(EDOMEXMUN2017$NOM_MUN_JOIN, P2012EDOMEXMUN$NOM_MUN_JOIN) #125
 #nombres para distinguir 
 colnames(EDOMEXMUN2017)    <- str_c("EM_17",  colnames(EDOMEXMUN2017), sep = "_")
-colnames(P2012EdomexMun)   <- str_c("EM_12", colnames(P2012EdomexMun), sep = "_" )
-colnames(EDOMEXMUN2017)[13] <- "NOM_MUN_JOIN"
-colnames(P2012EdomexMun)[37]   <- "NOM_MUN_JOIN"
-EdoMex1215<-inner_join(EDOMEXMUN2017, P2012EdomexMun, by = "NOM_MUN_JOIN")
-write.csv(x = EdoMex1215, file = "Datos/Electorales/Edomex/EdoMex1215.csv")
+#rm(P2012EdomexMun)
+colnames(P2012EDOMEXMUN)   <- str_c("EM_12", colnames(P2012EDOMEXMUN), sep = "_" )
+#EDOMEXMUN2017[,38]
+#P2012EDOMEXMUN[,37]
+colnames(EDOMEXMUN2017)[38] <- "NOM_MUN_JOIN"
+colnames(P2012EDOMEXMUN)[37]   <- "NOM_MUN_JOIN"
+EdoMex1217<-inner_join(EDOMEXMUN2017, P2012EDOMEXMUN, by = "NOM_MUN_JOIN") #Base con los dos años
+
+rm(EDOMEXMUN2017)
+rm(P2012EDOMEXMUN)
+rm(EdoMex1217)
+
+#write.csv(x = EdoMex1217, file = "Datos/2018/ENSAYO/Edomex1217.csv")#Ajustado para laptop DELL
+#Todo lo anterior es necesario realizarlo una sola vez, ya con esto se tienen las bases con los dos 
+#años consolidadas
+
+############################################################################
+########    Escribir las bases que venimos arrastrando      ################
+############################################################################
+#write.csv(x = ENOE,file = "Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.csv")#
+#write.csv(x = PersonaIC, file = "Datos/Intercensal/Persona_2015.csv")# Persona intercensal 
+#write.csv(x = ViviendaIC, file = "Datos/Intercensal/Vivienda_2015.csv")# vivienda intercensal 
 
 ############################################################################
 ########    Juntar el resto de las bases a nivel municipal  ################
 ############################################################################
+EDOMEXENSAYO <- read.csv(file = "Datos/2018/ENSAYO/Edomex1217.csv")
 
-write.csv(x = ENOE,file = "Datos/ENOE/Sociodemografico/Formateados CSV/Sdem317.csv")
-write.csv(x = PersonaIC, file = "Datos/Intercensal/Persona_2015.csv")# Persona intercensal 
-write.csv(x = ViviendaIC, file = "Datos/Intercensal/Vivienda_2015.csv")# vivienda intercensal 
+#Añadir Vivienda IC, para añadir datos de si recibe dinero del gobierno
+
+
+######### leer las bases
+#ViviendaIC, Municipio 2012, Municipio 2017. ¿ENOE?
+read.csv(#Municipio 2012-2017
+
+######### Homologar una variable para el Join
+######### 
+
+
+
 
 ##############################################
 ######    Lista Nominal   ####################
+
 
 PE <-read_xlsx(path = "./Datos/Electorales/Padron Electoral/DatosAbiertos-DERFE-pl_20170731.xlsx")
 #Lista nominal Municipal
@@ -806,6 +852,89 @@ PE %>% filter(ESTADO == "14", MUNICIPIO %in% c(120,99,102, 98,69,55)) %>%
 #Senadores RP 2012
 #Diputadoos MR 2012
 #Diputados 2012
+
+#20190305
+#Las bases de datos electorales ya se encuentran trabajadas
+#La base de datos para la intercensal se codifica aquí
+#bajar base de datos 
+#WebEdoMex <-"https://www.inegi.org.mx/contenidos/programas/intercensal/2015/microdatos/eic2015_15_csv.zip" #Para el estado de México
+#Bases de datos bajadas a mano
+#download.file(url = WebEdoMex, destfile = "D:/Proyectos R/TAFA-Book/Datos/2018/")
+
+######################################################################################
+#####           Trabajo de bases de Intercensal sólo para el EDOMEX   ################
+#####                             VIVIENDA                            ################
+######################################################################################
+ViviendaIC$JEFE_SEXO<-factor(ViviendaIC$JEFE_SEXO, labels = c("Hombre", "Mujer"))
+ViviendaIC[ViviendaIC$JEFE_EDAD == "999", ]$JEFE_EDAD <- NA#clasificar correctamente los NAs de edad del jefe del hogar
+
+IC_Municipio <-ViviendaIC %>%
+  group_by(ENT, NOM_ENT, MUN, NOM_MUN) %>%
+  summarise(Viviendas                = sum(FACTOR),
+            Jefe_Hombre              = sum(FACTOR[JEFE_SEXO        == "1"]),
+            Jefe_Mujer               = sum(FACTOR[JEFE_SEXO        == "3"]),
+            Ingreso_Otro_Pais        = sum(FACTOR[INGR_PEROTROPAIS == "1"]),
+            Ingreso_del_Pais         = sum(FACTOR[INGR_PERDENTPAIS == "3"]),
+            Ingreso_Gobierno         = sum(FACTOR[INGR_AYUGOB      == "5"]),
+            No_Ingreso_Gobierno      = sum(FACTOR[INGR_AYUGOB      == "6"]),
+            Jubilacion_Pension       = sum(FACTOR[INGR_JUBPEN      == "7"]),
+            Poca_Variedad_Alimentos  = sum(FACTOR[ING_ALIM_ADU3    == "5"]),
+            Radio                    = sum(FACTOR[RADIO            == "1"],na.rm = T),
+            Radio_div                = sum(FACTOR[!is.na(RADIO)]),
+            Televisor                = sum(FACTOR[TELEVISOR        == "3"],na.rm = T),
+            Computadora              = sum(FACTOR[COMPUTADORA      == "7"],na.rm = T),
+            Telefono_fijo            = sum(FACTOR[TELEFONO         == "1"],na.rm = T),
+            Celular                  = sum(FACTOR[CELULAR          == "3"],na.rm = T),
+            Internet                 = sum(FACTOR[INTERNET         == "5"],na.rm = T),
+            Television_paga          = sum(FACTOR[SERV_TV_PAGA     == "7"],na.rm = T),
+            Dueño                    = sum(FACTOR[TENENCIA         == "1"],na.rm = T),
+            Renta                    = sum(FACTOR[TENENCIA         == "2"],na.rm = T)) %>%
+  mutate(Por_Jefe_Hombre = (Jefe_Hombre/Viviendas) * 100,
+         Por_Jefe_Mujer = (Jefe_Mujer/Viviendas) *100, 
+         Por_Ingreso_otro_Pais= (Ingreso_Otro_Pais/Viviendas) * 100,
+         Por_Ingreso_del_Pais = (Ingreso_del_Pais/Viviendas) * 100,
+         Por_Ingreso_Gobierno = (Ingreso_Gobierno/Viviendas) * 100,
+         Por_Jubilacion_Pension = (Jubilacion_Pension/Viviendas) * 100,
+         Por_Poca_Variedad_Alimentos = (Poca_Variedad_Alimentos/Viviendas) * 100,
+         Por_Radio = (Radio/Viviendas) * 100,
+         Por_Televisor =  (Televisor/Viviendas) * 100,
+         Por_Computadora = (Computadora/Viviendas) * 100,
+         Por_Telefono_Fijo =(Telefono_fijo /Viviendas) * 100,
+         Por_Celular = (Celular/Viviendas) * 100,
+         Por_Internet = (Internet/Viviendas) * 100,
+         Por_Television_paga = (Television_paga/Viviendas) * 100,
+         Por_Dueño =(Dueño/Viviendas) * 100,
+         Por_Renta = (Renta/Viviendas) * 100)
+)
+############################################################################################
+##############         Unión de las bases para ensayo de EDOMEX       ######################
+############################################################################################
+#Base con datos electorales
+IC_Municipio$NOM_MUN_JOIN <- IC_Municipio$NOM_MUN
+#Código para encontrar municipios que hay que renombrar
+#intersect(chartr('áéíóúñ','aeioun',unique(tolower(EDOMEXENSAYO$NOM_MUN_JOIN))),
+#          chartr('áéíóúñ','aeioun',unique(tolower(IC_Municipio$NOM_MUN_JOIN))))#124 aparecen en ambos
+#setdiff(chartr('áéíóúñ','aeioun',unique(tolower(IC_Municipio$NOM_MUN))),
+#        intersect(chartr('áéíóúñ','aeioun',unique(tolower(EDOMEXENSAYO$NOM_MUN_JOIN))),
+#                  chartr('áéíóúñ','aeioun',unique(tolower(IC_Municipio$NOM_MUN_JOIN)))))
+#acambay de ruiz castaneda
+#Seguimos los nombres de EDOMEXENSAYO
+EDOMEXENSAYO$NOM_MUN_JOIN[1]
+IC_Municipio$NOM_MUN_JOIN <- chartr('áéíóúñ','aeioun',tolower(IC_Municipio$NOM_MUN)) #minúsculas y quitar acentos
+#cambio a "acambay" en la base intercensal
+IC_Municipio$NOM_MUN_JOIN[1] <- "acambay"
+
+##############        Unir las bases                ######################
+
+EMENSAYO <- inner_join(IC_Municipio, EDOMEXENSAYO, by = "NOM_MUN_JOIN")
+rm(EDOMEXENSAYO)
+rm(IC_Municipio)
+rm(ViviendaIC)
+#guardar el archivo
+write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/ElectICEdomex20190305.csv")
+
+head(EMENSAYO)
+
 
 
 
