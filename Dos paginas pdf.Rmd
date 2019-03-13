@@ -1,0 +1,40 @@
+---
+title: "Dos paginas"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Instituciones y democracia
+
+
+#Partidos en dos periodos, elecciones federales 2006, 2012
+
+#Los partidos en los estados
+1.Número efectivo de partidos
+2.Participación electoral en México
+2.a Elecciones federales
+2.b Algunas elecciones estatales
+3. Teoría
+
+
+4. Un primer modelo de participación electoral
+a. Lo que está en juego (Presidencia, Gobernatura, legislativo federal, local)
+
+
+
+
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+

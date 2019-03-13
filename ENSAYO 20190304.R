@@ -6,6 +6,7 @@ library(tidyverse)
 #WebEdoMex <-"https://www.inegi.org.mx/contenidos/programas/intercensal/2015/microdatos/eic2015_15_csv.zip" #Para el estado de México
 #Bases de datos bajadas a mano
 #download.file(url = WebEdoMex, destfile = "D:/Proyectos R/TAFA-Book/Datos/2018/")
+
 ######################################################################################
 #####           Trabajo de bases de Intercensal sólo para el EDOMEX   ################
 #####                             VIVIENDA                            ################
