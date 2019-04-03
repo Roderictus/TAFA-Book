@@ -1,6 +1,7 @@
 library(AER)#libro de econometria con R
 library(PerformanceAnalytics)#para correlaciones del voto 
 library(tidyverse)
+library(readxl)
 
 #Las bases de datos electorales ya se encuentran trabajadas
 #La base de datos para la intercensal se codifica aquí
@@ -8,7 +9,6 @@ library(tidyverse)
 #WebEdoMex <-"https://www.inegi.org.mx/contenidos/programas/intercensal/2015/microdatos/eic2015_15_csv.zip" #Para el estado de México
 #Bases de datos bajadas a mano
 #download.file(url = WebEdoMex, destfile = "D:/Proyectos R/TAFA-Book/Datos/2018/")
-
 ######################################################################################
 #####           Trabajo de bases de Intercensal sólo para el EDOMEX   ################
 #####                             VIVIENDA                            ################
@@ -52,8 +52,8 @@ IC_Municipio <-ViviendaIC %>%
          Por_Internet = (Internet/Viviendas) * 100,
          Por_Television_paga = (Television_paga/Viviendas) * 100,
          Por_Dueño =(Dueño/Viviendas) * 100,
-         Por_Renta = (Renta/Viviendas) * 100)
-)
+         Por_Renta = (Renta/Viviendas) * 100))
+
 ############################################################################################
 ##############         Unión de las bases para ensayo de EDOMEX       ######################
 ############################################################################################
@@ -72,7 +72,9 @@ IC_Municipio$NOM_MUN_JOIN <- chartr('áéíóúñ','aeioun',tolower(IC_Municipio
 #cambio a "acambay" en la base intercensal
 IC_Municipio$NOM_MUN_JOIN[1] <- "acambay"
 
+##########################################################################
 ##############        Unir las bases                ######################
+##########################################################################
 
 EMENSAYO <- inner_join(IC_Municipio, EDOMEXENSAYO, by = "NOM_MUN_JOIN")
 rm(EDOMEXENSAYO)
@@ -108,25 +110,49 @@ AREASEDOMEX <- c(465.7 , 83.95 , 453.26, 182.65, 485.21, #5
                  66.67 , 301.47, 308.62, 201.18, 223.95, #120
                  109.54, 46.53 , 703.00, 492.25, 8.47)   #125 
 #A mano desde datos de wikipedia, chequé que estuvieran en el mismo orden los mismos nombres de municipios
+
 EMENSAYO$AREAkm <- AREASEDOMEX
 #Densidad del padrón electoral
 EMENSAYO$DLNominal12 <-(EMENSAYO$EM_12_Lista_Nominal/EMENSAYO$AREAkm) #2012
 EMENSAYO$DLNominal17 <-(EMENSAYO$EM_17_LISTA_NOMINAL/EMENSAYO$AREAkm) #2017
 EMENSAYO$CrecLN1217  <- (EMENSAYO$EM_17_LISTA_NOMINAL/EMENSAYO$EM_12_Lista_Nominal) #crecimiento de la lista nominal
 #EMENSAYO[order(EMENSAYO$DLNominal17),]$NOM_MUN_JOIN #Orden menor a mayor por densidad de Lista Nominal
+EMENSAYO$NOM_MUN_JOIN <- as.character(EMENSAYO$NOM_MUN_JOIN)  #transformar columna del join en character
 write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190310.csv")
 
 #########################################################################################
+##############  Partido que controla el municipio en 2015   #############################  
 #########################################################################################
-#########################################################################################
-# Partido que controla el municipio
-# Trabajo de bases de resultados a nivel municipal
-# Gobernaturas de presidencias municipales 2015
-#colnames(DF)[max.col(DF,ties.method="first")]
+#Participación electoral y partido ganador
+PM2015 <- read_xlsx(path = "D:/Proyectos R/TAFA-Book/Datos/2015/Computo_MUNICIPAL_2015.xlsx", range = "B7:AG132")
+PM2015 <- PM2015[,c(1,27,32)]
+colnames(PM2015) <- c("NOM_MUN_JOIN","Part_Mun_2015", "PG_Mun_2015")#renombrar para el join 
 
-#############################################################################################
+PM2015$NOM_MUN_JOIN <- chartr('áéíóúñ','aeioun',tolower(PM2015$NOM_MUN_JOIN)) #para tener nombres homogeneos
+left_join(EMENSAYO, PM2015)$Part_Mun_2015# 57 y 58
+#renombrar para que funcione el join
+PM2015$NOM_MUN_JOIN[58] <-"naucalpan de juarez"
+PM2015$NOM_MUN_JOIN[60] <- "nezahualcoyotl"
+EMENSAYO <- left_join(EMENSAYO, PM2015)
+table(EMENSAYO$PG_Mun_2015)
+#Guardar nueva versión con los resultados de las elecciones municipales 2015
+#EMENSAYO %>% select("NOM_MUN_JOIN", "PG_Mun_2015") # para corroborar con el excel
+write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
+
+######################################## Aquí termina el trabajo adicional a bases de datos  ##################
+
+
+
+###################################################################
 ##########      Gráficas de correlación     #######################
-##############################################################
+###################################################################
+
+#Seleccionar las variables cuya correlación nos interesa
+
+
+
+
+
 #subset para 2012
 EMENSAYO[, c(102:114)] %>% chart.Correlation(histogram = TRUE)
 #dividir entre municipios de alta y de baja densidad
@@ -155,12 +181,6 @@ EMENSAYO %>% ungroup() %>%
 #Elegir las columnas pertinenetes
 ######      Primero 2012
 
-Ganador2012 <- EMENSAYO %>% 
-  ungroup() %>% 
-  select(contains(match = "_POR")) %>% 
-  select(contains(match = "_12")) %>% 
-  select(-EM_12_Por_Part) 
-  #también funciona
 #colnames(Ganador2012)[max.col(Ganador2012, ties.method = "first")] %>% table() #No coincide con los resultados oficiales
 #utilizar actas de computo municipales, resultados municipales 2012, 2017
 rm(temp)
@@ -170,23 +190,23 @@ rm(temp)
 #            "EM_17_POR_PVEM", "EM_17_POR_MORENA", "EM_17_PRI_ALIANZA_POR")] 
 
 
-colnames(temp)[max.col(temp, ties.method = "first")] %>% table()
-
+#colnames(temp)[max.col(temp, ties.method = "first")] %>% table()
 #renombrar columnas
 #revisar contra resultados oficiales
-
-
 #Salvar archivo, el documento puede empezar por cargar la base
 #modelo de regresión
-
-
-
-
 #Correlaciones con densidad de lista nominal en las elecciones del 2012
 #Correlaciones con densidad de lista nominal en elecciones 2017
 #Ejemplo mínimo para correlaciones
+#Ayuntamientos 2012
 
-select()
+#http://www.ieem.org.mx/proceso_2012/re2012/seccionAyuntamientos%202012.xlsx #resultados por sección
+#el archivo ya está bajado, leerlo
+#http://www.ieem.org.mx/proceso_2012/re2012/ayuntamientos2012_TEEM.xlsx #resultados por municipio
+#http://www.ieem.org.mx/proceso_2012/planillas/ayunta2013_2015.pdf #integración de ayuntamientos
+
+
+colnames(EMENSAYO)
 
 EMENSAYO %>% ungroup() %>%
   select(EM_17_POR_PRI, EM_17_POR_MORENA) %>%
@@ -195,8 +215,8 @@ EMENSAYO %>% ungroup() %>%
 #Principales partidos de la elección 2012
 #Principales partidos de la elección 2017
 
-
-
+head(EMENSAYO)
+class(as.character(EMENSAYO$NOM_MUN))
 
 ################################################################
 #Partido que gana el municipio en el 2012

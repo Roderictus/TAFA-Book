@@ -1,0 +1,57 @@
+---
+title: "Efectos de la participación en resultados electorales en el Estado de México 2012, 2017, 2018"
+author: "Rodrigo Arturo Franco Fuentes"
+date: "March 13, 2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = TRUE)
+library(tidyverse)
+library(PerformanceAnalytics)
+library(AER)
+#########################   Cargar Bases    ###############################
+EMENSAYO <- read.csv("D:/Proyectos R/TAFA-Book/Datos/2018/ENSAYO/EMENSAYO20190310.csv")
+EMENSAYO <-EMENSAYO[, -1]#Para quitar la primer columna que añade al leer el archivo 
+```
+
+La participación es el elemento fundamental del ejercicio electoral democrático. Es la manifestación revelada de las preferencias y deseos de la ciudadania. También es una forma de manifestar castigo o premio al ejercicio de un partido en el poder. 
+
+Su intensidad es un señal con múltiples significados que no son facilmente separados. La participación electoral es una señal de:
+
+1. La importancia de la elección ante el electorado.
+2. Competencia electoral como cercania entre los partidos, o candidatos, punteros. 
+3. Promoción del voto por parte de partidos o grupos organizados. 
+
+La participación electoral no está limitada a estás dimensiones, también es función del sistema institucional, valores culturales, costos como desplazamiento y tiempo invertido, beneficios percibidos y otros. 
+
+Generalmente es representada como algo positivo, su promoción es un lugar de coincidencia entre las campañas gubernamentales, de organos electorales independientes, partidistas y de la sociedad civil. Sin embargo es también un lugar donde se manifiestan distintos elementos de la práctica electoral que suelen ser contrarios a los ideales de la práctica democrática.
+
+En particular la promoción del voto fuera de los mecanismos electoralmente aceptados. Esto incluye una familia de comportamientos cuya principal característica en común es que se practican fueran de lo aceptado legalmente. 
+Esta definición incluye muchos elementos de difícil observación, entre ellos la utilización de medios legalmente aceptados pero en una cantidad cuyo costo supere los costos de mercado, otorgamiento de programas financiados por el gobierno federal pero provistos bajo la pretensión de que provienen de un partido o que el programa depende de un resultado electoral específico para seguir existiendo. También existen mecanismos más directamente involucrados
+
+Aumento de la participación electoral en municipios altamente competidos: Esperamos encontrar  una mayor promoción del voto en aquellas unidades electorales donde para determinado resultado 
+
+Tipología electoral:
+
+
+
+Niveles estatal, municipal
+
+Las diferentes reglas del juego entre una elección estatal y municipal
+
+Mientras que esta es una definición legal y concreta las pruebas estadísticas con la información disponible públicamente no permiten observar este fenómeno directamente. 
+
+No obstante si permiten una serie de obse
+
+Este ensayo pretende hacer visible la promoción del voto
+
+de la importancia de lo que está en juego, de la lejania o cercania del ciudadano respecto a las distintas plataformas electorales. 
+
+
+La promoción del voto no 
+
+
+```{r Correlaciones2012}
+
+```
