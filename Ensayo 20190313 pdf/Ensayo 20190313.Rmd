@@ -15,20 +15,28 @@ EMENSAYO <- read.csv("D:/Proyectos R/TAFA-Book/Datos/2018/ENSAYO/EMENSAYO2019031
 EMENSAYO <-EMENSAYO[, -1]#Para quitar la primer columna que añade al leer el archivo 
 ```
 
-La participación es el elemento fundamental del ejercicio electoral democrático. Es la manifestación revelada de las preferencias y deseos de la ciudadania. También es una forma de manifestar castigo o premio al ejercicio de un partido en el poder. 
+La participación es el elemento fundamental del ejercicio electoral democrático. Es la manifestación revelada de las preferencias y deseos de la ciudadanía. También es una forma de manifestar castigo o premio al ejercicio de un partido en el poder. 
 
-Su intensidad es un señal con múltiples significados que no son facilmente separados. La participación electoral es una señal de:
+Su intensidad es una señal con múltiples significados que no son fácilmente separados. La participación electoral es una señal de:
 
 1. La importancia de la elección ante el electorado.
-2. Competencia electoral como cercania entre los partidos, o candidatos, punteros. 
+2. Competencia electoral como cercanía entre los partidos, o candidatos, punteros. 
 3. Promoción del voto por parte de partidos o grupos organizados. 
 
-La participación electoral no está limitada a estás dimensiones, también es función del sistema institucional, valores culturales, costos como desplazamiento y tiempo invertido, beneficios percibidos y otros. 
+La participación electoral no está limitada a estas dimensiones, también es función del sistema institucional, valores culturales, costos como desplazamiento y tiempo invertido, beneficios percibidos y otros. 
 
-Generalmente es representada como algo positivo, su promoción es un lugar de coincidencia entre las campañas gubernamentales, de organos electorales independientes, partidistas y de la sociedad civil. Sin embargo es también un lugar donde se manifiestan distintos elementos de la práctica electoral que suelen ser contrarios a los ideales de la práctica democrática.
+Generalmente es representada como algo positivo, su promoción es un lugar de coincidencia entre las campañas gubernamentales, de órganos electorales independientes, partidistas y de la sociedad civil. Sin embargo es también un lugar donde se manifiestan distintos elementos de la práctica electoral que suelen ser contrarios a los ideales de la práctica democrática, en particular la promoción del voto fuera de los mecanismos electoralmente regulados. 
 
-En particular la promoción del voto fuera de los mecanismos electoralmente aceptados. Esto incluye una familia de comportamientos cuya principal característica en común es que se practican fueran de lo aceptado legalmente. 
-Esta definición incluye muchos elementos de difícil observación, entre ellos la utilización de medios legalmente aceptados pero en una cantidad cuyo costo supere los costos de mercado, otorgamiento de programas financiados por el gobierno federal pero provistos bajo la pretensión de que provienen de un partido o que el programa depende de un resultado electoral específico para seguir existiendo. También existen mecanismos más directamente involucrados
+Esto incluye una familia de comportamientos cuya principal característica en común es que se practican fueran de lo aceptado legalmente. Esta definición incluye muchos elementos de difícil observación, entre ellos la utilización de medios legales pero en una cantidad cuyo costo supere las asignaciones previstas para campaña, otorgamiento de programas financiados por el gobierno federal pero provistos bajo la pretensión de que provienen de un partido o que el programa depende de un resultado electoral específico para seguir existiendo. También existen mecanismos más directamente involucrados que pueden variar entre la compra del voto, coacción, movilización bajo presión etc.
+
+El resultado electoral es el resultado de múltiples variables que se reducen a un resultado observable mientras que la complejidad e histórica del proceso no es fácilmente reducible. Sin embargo es posible distinguir elementos específicos de una elección y buscar encontrar una narrativa que la caracterize. En este sentido es necesario aclarar una tipología electoral que clarifique los incentivos que se manifestan en el proceso. Es decir, como ejemplo, que una elección presidencial concurrente con elecciones estatales locales y estatales tendrá mayor participación electoral que una elección solamente municipal, lo demás constante. Esto por la la importancia, el empuje mediático, presiones culturales, e incentivos de los partidos por promover el voto del segmento del electorado que encuentren se incline en mayor proporción a su favor. 
+
+
+H1:El costo de compra del voto es menor en lugares donde el valor marginal del dinero es mayor. Es decir que hay una menor valoración del valor del voto en municipios donde el ingreso es menor.
+
+H2: La movilización electoral a través del otorgamiento de prebendas se realiza en municipios ocn menor 
+
+En este ensayo se busca caracterizar una elección particular, la elección 
 
 Aumento de la participación electoral en municipios altamente competidos: Esperamos encontrar  una mayor promoción del voto en aquellas unidades electorales donde para determinado resultado 
 
@@ -46,7 +54,7 @@ No obstante si permiten una serie de obse
 
 Este ensayo pretende hacer visible la promoción del voto
 
-de la importancia de lo que está en juego, de la lejania o cercania del ciudadano respecto a las distintas plataformas electorales. 
+de la importancia de lo que está en juego, de la lejania o cercanía del ciudadano respecto a las distintas plataformas electorales. 
 
 
 La promoción del voto no 

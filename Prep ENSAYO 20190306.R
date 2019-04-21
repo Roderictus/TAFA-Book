@@ -135,10 +135,23 @@ PM2015$NOM_MUN_JOIN[58] <-"naucalpan de juarez"
 PM2015$NOM_MUN_JOIN[60] <- "nezahualcoyotl"
 EMENSAYO <- left_join(EMENSAYO, PM2015)
 table(EMENSAYO$PG_Mun_2015)
-#Guardar nueva versión con los resultados de las elecciones municipales 2015
 #EMENSAYO %>% select("NOM_MUN_JOIN", "PG_Mun_2015") # para corroborar con el excel
-write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 
+####Cambio en la participación electoral entre elecciones
+#Para gráfica de cambio en la participación electoral
+#2015-2017
+
+EMENSAYO$Dif1712 <- EMENSAYO$EM_17_POR_PART - EMENSAYO$EM_12_Por_Part 
+EMENSAYO$Dif1715 <- EMENSAYO$EM_17_POR_PART - (EMENSAYO$Part_Mun_2015 * 100)
+
+#Normalizar variables
+scale(x = EMENSAYO$Dif1712)
+
+
+
+#write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
+
+EMENSAYO <- read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 ######################################## Aquí termina el trabajo adicional a bases de datos  ##################
 
 
@@ -146,13 +159,23 @@ write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 ###################################################################
 ##########      Gráficas de correlación     #######################
 ###################################################################
+EMENSAYO<-read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv") 
 
+colnames(EMENSAYO)
 #Seleccionar las variables cuya correlación nos interesa
+#nombres de las variables
+EMENSAYO %>% select()
+
+EMENSAYO %>% select(Por_Ingreso_Gobierno, Por_Ingreso_otro_Pais, Por_Poca_Variedad_Alimentos,
+       EM_12_Por_Part, EM_12_PAN_por, EM_12_PRI_por, EM_12_PRD_por, EM_12_PVEM_por, EM_12_PT_por, EM_12_MC_por, 
+       EM_12_NVA_ALIANZA_por, EM_12_PRI_PVEM_por, EM_12_PRD_PT_MC_por, EM_12_PRD_PT_por, EM_12_PRD_MC_por, 
+       EM_12_PT_MC_por, EM_17_POR_PART, EM_17_POR_PRI, EM_17_PRI_ALIANZA_POR, EM_17_POR_PAN, EM_17_POR_PRD, 
+       EM_17_POR_PRI, EM_17_POR_MORENA) %>% chart.Correlation(histogram = TRUE)
 
 
 
-
-
+mcor<-round(cor(mtcars),2)
+#gráfica de algunas de la principales variables, gráfica de municipios con alta densidad del voto
 #subset para 2012
 EMENSAYO[, c(102:114)] %>% chart.Correlation(histogram = TRUE)
 #dividir entre municipios de alta y de baja densidad
@@ -222,16 +245,6 @@ class(as.character(EMENSAYO$NOM_MUN))
 #Partido que gana el municipio en el 2012
 #Partido que gana el municipio en le 2017
 
-hist(EMENSAYO$EM_17_POR_PART, breaks = 15)
-
-EMENSAYO$EM_17_POR_PRI +
-EMENSAYO$EM_17_POR_PAN +
-EMENSAYO$EM_17_POR_PRD +
-EMENSAYO$EM_17_POR_PT +
-EMENSAYO$EM_17_POR_PVEM +
-EMENSAYO$EM_17_POR_MORENA +
-EMENSAYO$EM_17_POR_Nueva.A 
-
 summary(EMENSAYO$EM_12_Por_Part)
 hist(EMENSAYO$EM_12_Por_Part, breaks = 35)
 
@@ -246,26 +259,16 @@ EMENSAYO$Por_Ingreso_del_Pais
 EMENSAYO$Por_Poca_Variedad_Alimentos
 
 
+#Por hacer
 #Participacion 2012, 2017, proxy de ingreso, urbano o rural
 #Partido que gobernaba
 #den
 #Regresión
 #Variables relevantes
-colnames(EMENSAYO)
 
 
-
-
-#Gráficas para el ensayo de EDOMEX
-
-
-
-#Por hacer
-#Densidad del municipio Polación/territorio
 #elecciones competidas y no competidas
 #los niveles y lo que se disputa en la elección
-
-
 
 #impuestos
 #correlaciones
