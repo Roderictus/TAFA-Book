@@ -10,7 +10,7 @@ library(gtable)
 library(grid)
 library(stringr)
 library(data.table)
-library(viridis)
+
 library(tidyr)
 library(kableExtra)
 library(gridExtra)
@@ -20,6 +20,11 @@ library(broom) #tidy en vez de fortify
 library(foreign )
 library(spatstat)
 
+
+
+
+
+
 #cargar mapa de municipios del Estado de México
 
 Mun_EDOMEX <- read.csv(file = "D:/Proyectos R/TAFA-Book/Datos/2019 shapefiles/MUNICIPIO/MUNICIPIO.shp")
@@ -27,73 +32,41 @@ Mun_EDOMEX <- read.csv(file = "D:/Proyectos R/TAFA-Book/Datos/2019 shapefiles/MU
 library(rgdal)
 library(plyr)   
 library(ggplot2)
+library(viridis)
+library(dplyr)
+
 
 #data.shape<-readOGR(dsn="D:/Proyectos R/TAFA-Book/Datos/2019 shapefiles/MUNICIPIO",layer="MUNICIPIO") # parece que no tiene una capa con el nombre del municipio
-
 MEXMAP <- readOGR(dsn = "D:/Proyectos R/TAFA-Book/Datos/2019 shapefiles/MUNICIPIO/2012", layer = "Muni_2012gw", use_iconv = TRUE, encoding = "UTF-8") #con esto carga bien los acentos
 DataMapEdomex <- MEXMAP[MEXMAP$CVE_ENT == 15,]@data #subseteamos los datos, MEXMAP[[3]] capa de los municipios
-MEXMAPf <- fortify(MEXMAP) #fortify a todo
+DataMapEdomex$id <- DataMapEdomex$CVE_MUN #con esta variable vamos a unir los datos con el mapa
+#head(DataMapEdomex)
+#subseteo a todo
+MEXMAP2 <-MEXMAP[MEXMAP$CVE_ENT == 15,] #esto funciona
+MEXMAPf <- fortify(MEXMAP2, region = "CVE_MUN") #fortify sólo a EDOMEX, region se muestra como "id"
+MEXMAPf <- join(x = MEXMAPf, y = DataMapEdomex)
 head(MEXMAPf)
-plot(MEXMAPf)
 
-MEXMAP[[3]] #nombre del municipio, abrir con algo que permita acentos
-MEXMAP <- MEXMAP[MEXMAP$CVE_ENT == 15,]#subset a datos del Estado de México
+#salvar data geográfica del edomex
+#write.csv(x = MEXMAPf, file = "Datos/2019 shapefiles/MEXMAPF.csv") #152,141
+#length(table(MEXMAPf$id)) #125 que es lo que esperamos 
+#unir con datos de la base principal, unir por nombre de municipio
+#subset de la variable que nos interesa para hacer el mapa
+#colnames(EMENSAYO)
+#tomamos número de municipio para ver si el join funciona con eso
+head(MEXMAPf)#CVE_MUN, para el join
+#parece que funciona
+temp <- left_join(MEXMAPf, 
+                  EMENSAYO %>% select(MUN, NOM_MUN, Por_Ingreso_Gobierno, DLNominal17,
+                                      EM_12_Por_Part,EM_12_Por_Part))
+#length(table(temp$NOM_MUN))
+#table(is.na(temp$NOM_MUN))#todo embona 
 
-plot(world.map)
-
-#reducir la resolución del mapa de municipios
-
-
-#
-
-
-
-#fortificar
-#añadir a la base 
-#mapa de municipios de México 2012
-
-
-mapa <- fortify(data.shape) #esto es para todo el país
-
-map@data$id <- rownames(mapa@data)
-mapa@data   <- join(mapa@data, data, by="CD_GEOCODI")
-mapa.df     <- fortify(mapa)
-mapa.df     <- join(mapa.df,mapa@data, by="id")
-
-
-
-
-colnames(MUNdf)
-
-MUNdf[1]#reducir para tener sólo EDOMEX
-MUNdf@data
-
-
-mapa <- readOGR(dsn=".",layer="shapefile name w/o .shp extension")
-map@data$id <- rownames(mapa@data)
-mapa@data   <- join(mapa@data, data, by="CD_GEOCODI")
-mapa.df     <- fortify(mapa)
-mapa.df     <- join(mapa.df,mapa@data, by="id")
-
-ggplot(mapa.df, aes(x=long, y=lat, group=group))+
-  geom_polygon(aes(fill=Population))+
-  coord_fixed()
-
-
-
-
-
-head(data.shape)
-plot(data.shape)
-
-
-
-
-
-
-
-
-Municipios_Map <- read.csv(file = "C:/Proyectos R/TAFA-Book/Datos/Electorales/Jalisco/MunMapJal2015.csv")
+#################################################################################
+##############    Código para Mapa    ###########################################
+#################################################################################
+mapa.df <- temp
+head(mapa.df)
 
 theme_map <- function(...) {
   theme_minimal() +
@@ -115,10 +88,9 @@ theme_map <- function(...) {
     )
 }
 
-####    etiquetas para los mapas
 no_classes <- 6
 labels <- c()
-quantiles <-quantile(Municipios_Map$Por_Part,
+quantiles <-quantile(mapa.df$EM_12_Por_Part,
                      probs = seq(0,1,length.out = no_classes + 1 ))
 labels <- c()
 for(idx in 1:length(quantiles)) {
@@ -127,17 +99,25 @@ for(idx in 1:length(quantiles)) {
                            round(quantiles[idx + 1],2)))
 }
 labels <- labels[1:length(labels)-1]
-Municipios_Map$Por_Part2 <- cut(Municipios_Map$Por_Part,
+
+mapa.df$EM_12_Por_Part2 <- cut(mapa.df$EM_12_Por_Part,
                                 breaks = quantiles, 
                                 labels = labels, 
                                 include.lowest = T)
+
+
+#ggplot(mapa.df, aes(x=long, y=lat, group=group))+
+#  geom_polygon(aes(fill=EM_12_Por_Part))+
+#  coord_fixed()
+
+####    etiquetas para los mapas
 #####
 Plot_Map <- ggplot() +
-  geom_polygon(data = Municipios_Map, aes(fill = Por_Part2, 
+  geom_polygon(data = mapa.df, aes(fill = EM_12_Por_Part2, 
                                           x = long,
                                           y = lat, 
                                           group = group)) +
-  geom_path(data = Municipios_Map, aes( x = long, 
+  geom_path(data = mapa.df, aes( x = long, 
                                         y = lat, 
                                         group = group),
             color = "white", size = 0.2) +
@@ -145,11 +125,11 @@ Plot_Map <- ggplot() +
   theme_map() +
   labs( x = NULL, 
         y = NULL, NULL,
-        title = "Participación electoral Municipal Guadalajara 2015") +
+        title = "Participación electoral municipal 2017 Estado de México") +
   theme(legend.position = "bottom") +
   scale_fill_viridis(
     option = "viridis",
-    name = "Participación Electoral Municipal Guadalajara 2015",
+    name = "placeholder",
     discrete = T,
     direction = -1,
     guide = guide_legend(
@@ -159,3 +139,15 @@ Plot_Map <- ggplot() +
     ))
 Plot_Map
 ```
+
+##########################    Otra versión de Mapa    #################
+
+
+#nc <- st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+ggplot(nc) +
+  geom_sf(aes(fill = AREA)) +
+  scale_fill_viridis("Area") +
+  ggtitle("Area of counties in North Carolina") +
+  theme_bw()
+
+st_read()
