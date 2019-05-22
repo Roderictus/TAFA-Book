@@ -2,6 +2,7 @@ library(AER)#libro de econometria con R
 library(PerformanceAnalytics)#para correlaciones del voto 
 library(tidyverse)
 library(readxl)
+library(stargazer)
 
 #Las bases de datos electorales ya se encuentran trabajadas
 #La base de datos para la intercensal se codifica aquí
@@ -143,6 +144,14 @@ table(EMENSAYO$PG_Mun_2015)
 
 EMENSAYO$Dif1712 <- EMENSAYO$EM_17_POR_PART - EMENSAYO$EM_12_Por_Part 
 EMENSAYO$Dif1715 <- EMENSAYO$EM_17_POR_PART - (EMENSAYO$Part_Mun_2015 * 100)
+#reordenar Partido Ganador del Municipio en el 2015
+#cambiar orden de los factores para poner como base a PRI
+
+#Explicación de las variables
+
+
+
+
 
 #Normalizar variables
 scale(x = EMENSAYO$Dif1712)
@@ -161,6 +170,8 @@ EMENSAYO <- read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 ###################################################################
 EMENSAYO<-read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv") 
 
+
+
 colnames(EMENSAYO)
 #Seleccionar las variables cuya correlación nos interesa
 #nombres de las variables
@@ -172,23 +183,89 @@ EMENSAYO %>% select(Por_Ingreso_Gobierno, Por_Ingreso_otro_Pais, Por_Poca_Varied
        EM_12_PT_MC_por, EM_17_POR_PART, EM_17_POR_PRI, EM_17_PRI_ALIANZA_POR, EM_17_POR_PAN, EM_17_POR_PRD, 
        EM_17_POR_PRI, EM_17_POR_MORENA) %>% chart.Correlation(histogram = TRUE)
 
-
-
-mcor<-round(cor(mtcars),2)
-#gráfica de algunas de la principales variables, gráfica de municipios con alta densidad del voto
-#subset para 2012
-EMENSAYO[, c(102:114)] %>% chart.Correlation(histogram = TRUE)
-#dividir entre municipios de alta y de baja densidad
-arrange(EMENSAYO, -DLNominal12)$DLNominal12
-
 EMENSAYO %>% ungroup() %>%
   select(EM_12_PRI_por, EM_12_PAN_por, EM_12_PRD_por, EM_12_Por_Part, DLNominal12, Por_Ingreso_Gobierno) %>%
   chart.Correlation(histogram = TRUE)
 
 
 EMENSAYO %>% ungroup() %>%
-  select(EM_17_POR_PRI, EM_17_POR_PAN, EM_17_POR_MORENA, EM_17_POR_PART, DLNominal17, Por_Ingreso_Gobierno) %>%
+  select(EM_12_PRI_por, EM_12_PAN_por, EM_12_PRD_por, EM_12_Por_Part, DLNominal12, Por_Ingreso_Gobierno, Part_Mun_2015) %>%
   chart.Correlation(histogram = TRUE)
+
+
+colnames(EMENSAYO)
+
+EMENSAYO %>% 
+  group_by(PG_Mun_2015) %>% 
+  summarise(Avg = mean(EM_17_POR_PART))
+
+
+
+###################################################################
+##########      Numeralia             #############################
+###################################################################
+
+#Descriptivos de variables
+#Por_Ingreso_Gobierno
+#Por_Poca_Variedad_Alimentos
+
+
+###################################################################
+##########      Modelo de regresión     #######################
+###################################################################
+
+colnames(EMENSAYO)
+table(EMENSAYO$PG_Mun_2015)
+
+Mod1 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno, data = EMENSAYO)
+summary(Mod1)
+anova(Mod1)
+confint(Mod1, level = 0.95)
+plot(Mod1)
+
+Mod2 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + DLNominal17, data = EMENSAYO)
+summary(Mod2)
+
+Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + DLNominal17 + PG_Mun_2015, data = EMENSAYO)
+summary(Mod3)
+
+#sólo participaciones gubernamentales
+
+
+
+
+
+
+contrasts(EMENSAYO$PG_Mun_2015)
+table(EMENSAYO$PG_Mun_2015)
+
+
+
+summary(Mod1)
+anova(Mod1)
+confint(Mod1, level = 0.95)
+plot(Mod1)
+
+
+
+
+#variable dependiente voto por el PRI en el 2017
+colnames(EMENSAYO)
+
+temp <- lm(EM_12_PRI_por ~ EM_12_Por_Part + Por_Ingreso_Gobierno + 
+     DLNominal17 + EM_12_PRI_por + Part_Mun_2015, data = EMENSAYO)
+
+stargazer(temp, type = "text")
+
+
+
+######## meadias ponderadas por partido que controla el municipio
+
+
+
+#####modelo de regresión
+
+lm(log(subs) ~ log(price/citations), data = Journals) 
 
 
 #múltiples gráficas en una sola imagen
@@ -272,6 +349,9 @@ EMENSAYO$Por_Poca_Variedad_Alimentos
 
 #impuestos
 #correlaciones
-#modelo de regresi[on]
+#modelo de regresión
+
+
+
 #ensayo
 #mapas

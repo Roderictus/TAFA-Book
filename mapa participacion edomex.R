@@ -46,8 +46,8 @@ MEXMAP2 <-MEXMAP[MEXMAP$CVE_ENT == 15,] #esto funciona
 MEXMAPf <- fortify(MEXMAP2, region = "CVE_MUN") #fortify sólo a EDOMEX, region se muestra como "id"
 MEXMAPf <- join(x = MEXMAPf, y = DataMapEdomex)
 head(MEXMAPf)
+write.csv(x = MEXMAPf, file = "Datos/Mapaedomexmun.csv")
 
-#salvar data geográfica del edomex
 #write.csv(x = MEXMAPf, file = "Datos/2019 shapefiles/MEXMAPF.csv") #152,141
 #length(table(MEXMAPf$id)) #125 que es lo que esperamos 
 #unir con datos de la base principal, unir por nombre de municipio
@@ -56,7 +56,10 @@ head(MEXMAPf)
 #tomamos número de municipio para ver si el join funciona con eso
 head(MEXMAPf)#CVE_MUN, para el join
 #parece que funciona
-temp <- left_join(MEXMAPf, 
+#Guardar los datos del mapa que después se une discrecionalmente con la base de datos principal
+
+
+Mapa <- left_join(MEXMAPf, 
                   EMENSAYO %>% select(MUN, NOM_MUN, Por_Ingreso_Gobierno, DLNominal17,
                                       EM_12_Por_Part,EM_12_Por_Part))
 #length(table(temp$NOM_MUN))
@@ -65,9 +68,7 @@ temp <- left_join(MEXMAPf,
 #################################################################################
 ##############    Código para Mapa    ###########################################
 #################################################################################
-mapa.df <- temp
-head(mapa.df)
-
+mapa.df <- Mapa
 theme_map <- function(...) {
   theme_minimal() +
     theme(
@@ -151,3 +152,67 @@ ggplot(nc) +
   theme_bw()
 
 st_read()
+
+
+
+
+
+
+
+
+
+
+Mapa <- left_join(MEXMAPf, 
+                  EMENSAYO %>% select(MUN, NOM_MUN, Por_Ingreso_Gobierno, DLNominal17,
+                                      EM_17_POR_PART))
+mapa.df <- Mapa
+#meramente visual
+theme_map <- function(...) {
+  theme_minimal() +
+    theme(
+      text = element_text(family = "sans", color = "#22211d"),
+      axis.line = element_blank(),
+      axis.text.x = element_blank(),
+      axis.text.y = element_blank(),
+      axis.ticks = element_blank(),
+      axis.title.x = element_blank(),
+      axis.title.y = element_blank(),
+      # panel.grid.minor = element_line(color = "#ebebe5", size = 0.2),
+      panel.grid.major = element_line(color = "#ebebe5", size = 0.2),
+      panel.grid.minor = element_blank(),
+      plot.background = element_rect(fill = "#f5f5f2", color = NA), 
+      panel.background = element_rect(fill = "#f5f5f2", color = NA), 
+      legend.background = element_rect(fill = "#f5f5f2", color = NA),
+      panel.border = element_blank()
+    )
+}
+
+
+Plot_Map <- ggplot() +
+  geom_polygon(data = mapa.df, aes(fill = EM_17_POR_PART, 
+                                   x = long,
+                                   y = lat, 
+                                   group = group)) +
+  geom_path(data = mapa.df, aes( x = long, 
+                                 y = lat, 
+                                 group = group),
+            color = "white", size = 0.2) +
+  coord_equal() +
+  theme_map() +
+  labs( x = NULL, 
+        y = NULL, NULL,
+        title = "Participación electoral municipal 2017 Estado de México") +
+  theme(legend.position = "bottom") +
+  scale_fill_viridis(
+    option = "viridis",
+    name = "placeholder",
+    #discrete = T,
+    direction = -1,
+    guide = guide_legend(
+      keyheight = unit(5, units = "mm"),
+      title.position = 'top',
+      reverse = T
+    ))
+Plot_Map
+
+
