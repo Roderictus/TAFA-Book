@@ -119,7 +119,6 @@ EMENSAYO$DLNominal17 <-(EMENSAYO$EM_17_LISTA_NOMINAL/EMENSAYO$AREAkm) #2017
 EMENSAYO$CrecLN1217  <- (EMENSAYO$EM_17_LISTA_NOMINAL/EMENSAYO$EM_12_Lista_Nominal) #crecimiento de la lista nominal
 #EMENSAYO[order(EMENSAYO$DLNominal17),]$NOM_MUN_JOIN #Orden menor a mayor por densidad de Lista Nominal
 EMENSAYO$NOM_MUN_JOIN <- as.character(EMENSAYO$NOM_MUN_JOIN)  #transformar columna del join en character
-write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190310.csv")
 
 #########################################################################################
 ##############  Partido que controla el municipio en 2015   #############################  
@@ -128,31 +127,45 @@ write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190310.csv")
 PM2015 <- read_xlsx(path = "D:/Proyectos R/TAFA-Book/Datos/2015/Computo_MUNICIPAL_2015.xlsx", range = "B7:AG132")
 PM2015 <- PM2015[,c(1,27,32)]
 colnames(PM2015) <- c("NOM_MUN_JOIN","Part_Mun_2015", "PG_Mun_2015")#renombrar para el join 
-
 PM2015$NOM_MUN_JOIN <- chartr('áéíóúñ','aeioun',tolower(PM2015$NOM_MUN_JOIN)) #para tener nombres homogeneos
 left_join(EMENSAYO, PM2015)$Part_Mun_2015# 57 y 58
 #renombrar para que funcione el join
 PM2015$NOM_MUN_JOIN[58] <-"naucalpan de juarez"
 PM2015$NOM_MUN_JOIN[60] <- "nezahualcoyotl"
 EMENSAYO <- left_join(EMENSAYO, PM2015)
-table(EMENSAYO$PG_Mun_2015)
-#EMENSAYO %>% select("NOM_MUN_JOIN", "PG_Mun_2015") # para corroborar con el excel
+#En Jilotepec gana Nueva Alianza pero es codificado como valor perdido
+#convertirlo a character
+EMENSAYO$PG_Mun_2015_REC  <- as.character(EMENSAYO$PG_Mun_2015_REC)
+table(EMENSAYO$PG_Mun_2015_REC)
+
+EMENSAYO[is.na(EMENSAYO$PG_Mun_2015_REC),]$PG_Mun_2015_REC <- "Nueva Alianza"
+#Recodificar 
+# PRI o PRI Alianza
+EMENSAYO[EMENSAYO$PG_Mun_2015_REC == "PRI-PVEM-NA",]$PG_Mun_2015_REC <- "PRI o PRI Alianza"
+EMENSAYO[EMENSAYO$PG_Mun_2015_REC == "PRI",]$PG_Mun_2015_REC <- "PRI o PRI Alianza"
+# PAN o PAN Alianza
+EMENSAYO[EMENSAYO$PG_Mun_2015_REC == "PAN-PT",]$PG_Mun_2015_REC <- "PAN o PAN Alianza"
+EMENSAYO[EMENSAYO$PG_Mun_2015_REC == "PAN",]$PG_Mun_2015_REC <- "PAN o PAN Alianza"
+#Otros
+EMENSAYO[EMENSAYO$PG_Mun_2015_REC == "ES",]$PG_Mun_2015_REC <- "Otros"
+EMENSAYO[EMENSAYO$PG_Mun_2015_REC == "MC",]$PG_Mun_2015_REC <- "Otros"
+EMENSAYO[EMENSAYO$PG_Mun_2015_REC == "MORENA",]$PG_Mun_2015_REC <- "Otros"
+EMENSAYO[EMENSAYO$PG_Mun_2015_REC == "PT",]$PG_Mun_2015_REC <- "Otros"
+EMENSAYO[EMENSAYO$PG_Mun_2015_REC == "Nueva Alianza",]$PG_Mun_2015_REC <- "Otros"
+#cambiar orden de los factores para poner como base a PRI
+EMENSAYO$PG_Mun_2015_REC <- as.factor(EMENSAYO$PG_Mun_2015_REC)
+EMENSAYO$PG_Mun_2015_REC <-relevel(x = EMENSAYO$PG_Mun_2015_REC, ref = "PRI o PRI Alianza")
 
 ####Cambio en la participación electoral entre elecciones
 #Para gráfica de cambio en la participación electoral
 #2015-2017
-
 EMENSAYO$Dif1712 <- EMENSAYO$EM_17_POR_PART - EMENSAYO$EM_12_Por_Part 
 EMENSAYO$Dif1715 <- EMENSAYO$EM_17_POR_PART - (EMENSAYO$Part_Mun_2015 * 100)
-#reordenar Partido Ganador del Municipio en el 2015
-#cambiar orden de los factores para poner como base a PRI
+#Incluir tabla con resultados electorales del 2015
+
+
 
 #Explicación de las variables
-
-
-
-
-
 #Normalizar variables
 scale(x = EMENSAYO$Dif1712)
 
@@ -226,7 +239,7 @@ plot(Mod1)
 Mod2 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + DLNominal17, data = EMENSAYO)
 summary(Mod2)
 
-Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + DLNominal17 + PG_Mun_2015, data = EMENSAYO)
+Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + DLNominal17 + PG_Mun_2015_REC, data = EMENSAYO)
 summary(Mod3)
 
 #sólo participaciones gubernamentales
