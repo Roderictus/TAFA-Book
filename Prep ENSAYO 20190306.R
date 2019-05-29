@@ -170,6 +170,9 @@ EMENSAYO$Dif1715 <- EMENSAYO$EM_17_POR_PART - (EMENSAYO$Part_Mun_2015 * 100)
 scale(x = EMENSAYO$Dif1712)
 
 
+colnames(EMENSAYO)[119] <- "Densidad_de_Lista_Nominal"
+colnames(EMENSAYO)[125] <- "Partido_Gobernante_2015"
+colnames(EMENSAYO)[30] <- "Ingreso_Gobierno"
 
 #write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 
@@ -239,7 +242,7 @@ plot(Mod1)
 Mod2 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + DLNominal17, data = EMENSAYO)
 summary(Mod2)
 
-Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + DLNominal17 + PG_Mun_2015_REC, data = EMENSAYO)
+Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + DLNominal17 + PG_Mun_2015_REC + Dif1712 + Dif1715, data = EMENSAYO)
 summary(Mod3)
 
 #sólo participaciones gubernamentales
