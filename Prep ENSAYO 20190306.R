@@ -162,29 +162,45 @@ EMENSAYO$PG_Mun_2015_REC <-relevel(x = EMENSAYO$PG_Mun_2015_REC, ref = "PRI o PR
 EMENSAYO$Dif1712 <- EMENSAYO$EM_17_POR_PART - EMENSAYO$EM_12_Por_Part 
 EMENSAYO$Dif1715 <- EMENSAYO$EM_17_POR_PART - (EMENSAYO$Part_Mun_2015 * 100)
 #Incluir tabla con resultados electorales del 2015
-
-
-
 #Explicación de las variables
 #Normalizar variables
 scale(x = EMENSAYO$Dif1712)
-
-
 colnames(EMENSAYO)[119] <- "Densidad_de_Lista_Nominal"
 colnames(EMENSAYO)[125] <- "Partido_Gobernante_2015"
 colnames(EMENSAYO)[30] <- "Ingreso_Gobierno"
+####################################################################################
+###################     Resultados de la elección 2011    ##########################
+####################################################################################
+colnames(EMENSAYO)[30]<- "Por_Ingreso_Gobierno" # Se repetía este nombre
+#Incorporar una base en excel
+library(readxl)
+EDOMEX2011 <- read_xls(path = "D:/Proyectos R/TAFA-Book/Datos/2011/Computo_FINAL_GOB_2011.xls", sheet = "CASILLA Y SECCIÓN", range = "A9:N17498")
+colnames(EDOMEX2011)[14] <- "Lista_Nominal" #formato adecuado para el nombre 
+EDOMEX2011 <- EDOMEX2011 %>% group_by(Municipio) %>% summarise(EM11_Total = sum(Total), EM11_Lista_Nominal= sum(Lista_Nominal), 
+                                                  EM11_UPM = sum(UPM), EM11_UPT = sum(UPT), EM11_PAN = sum(PAN))
+EDOMEX2011$EM11_Por_Part <- (EDOMEX2011$EM11_Total/EDOMEX2011$EM11_Lista_Nominal)*100
+#Incorporar a la base principal
+EDOMEX2011$NOM_MUN_JOIN <- chartr('áéíóúñ','aeioun',tolower(EDOMEX2011$Municipio)) #para tener nombres homogeneos
+#"coacalco de berriozabal"     "ecatepec de morelos"         "xalatlaco"                   "naucalpan de juarez"        
+# "tlalnepantla de baz"         "valle de chalco solidaridad"
 
+EDOMEX2011$NOM_MUN_JOIN[27]  <- "coacalco de berriozabal"
+EDOMEX2011$NOM_MUN_JOIN[34]  <- "ecatepec de morelos"
+EDOMEX2011$NOM_MUN_JOIN[45]  <- "xalatlaco"
+EDOMEX2011$NOM_MUN_JOIN[61]  <- "naucalpan de juarez"
+EDOMEX2011$NOM_MUN_JOIN[107] <- "tlalnepantla de baz"
+EDOMEX2011$NOM_MUN_JOIN[114] <- "valle de chalco solidaridad"
+
+EMENSAYO <- left_join(EMENSAYO, EDOMEX2011, by = "NOM_MUN_JOIN")
 #write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
-
 EMENSAYO <- read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 ######################################## Aquí termina el trabajo adicional a bases de datos  ##################
-
-
 
 ###################################################################
 ##########      Gráficas de correlación     #######################
 ###################################################################
 EMENSAYO<-read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv") 
+
 
 
 
