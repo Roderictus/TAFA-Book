@@ -202,18 +202,26 @@ EMENSAYO <- read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 EMENSAYO<-read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv") 
 
 
-
-
 colnames(EMENSAYO)
 #Seleccionar las variables cuya correlación nos interesa
 #nombres de las variables
 EMENSAYO %>% select()
 
 EMENSAYO %>% select(Por_Ingreso_Gobierno, Por_Ingreso_otro_Pais, Por_Poca_Variedad_Alimentos,
-       EM_12_Por_Part, EM_12_PAN_por, EM_12_PRI_por, EM_12_PRD_por, EM_12_PVEM_por, EM_12_PT_por, EM_12_MC_por, 
+       EM_12_Por_Part, EM11_Por_Part, EM_17_POR_PART,EM_12_PAN_por, EM_12_PRI_por, EM_12_PRD_por, EM_12_PVEM_por, EM_12_PT_por, EM_12_MC_por, 
        EM_12_NVA_ALIANZA_por, EM_12_PRI_PVEM_por, EM_12_PRD_PT_MC_por, EM_12_PRD_PT_por, EM_12_PRD_MC_por, 
        EM_12_PT_MC_por, EM_17_POR_PART, EM_17_POR_PRI, EM_17_PRI_ALIANZA_POR, EM_17_POR_PAN, EM_17_POR_PRD, 
        EM_17_POR_PRI, EM_17_POR_MORENA) %>% chart.Correlation(histogram = TRUE)
+
+
+EMENSAYO %>% 
+  select(Por_Ingreso_Gobierno, Por_Ingreso_otro_Pais, Por_Poca_Variedad_Alimentos,
+         EM_12_Por_Part, EM11_Por_Part, EM_17_POR_PART,EM_12_PAN_por, EM_12_PRI_por, 
+         EM_17_POR_PART, EM_17_POR_PRI, EM_17_PRI_ALIANZA_POR, EM_17_POR_PAN, 
+         EM_17_POR_PRD,EM_17_POR_PRI, EM_17_POR_MORENA) %>% 
+  chart.Correlation(histogram = TRUE)
+
+
 
 EMENSAYO %>% ungroup() %>%
   select(EM_12_PRI_por, EM_12_PAN_por, EM_12_PRD_por, EM_12_Por_Part, DLNominal12, Por_Ingreso_Gobierno) %>%
@@ -241,6 +249,13 @@ EMENSAYO %>%
 #Por_Ingreso_Gobierno
 #Por_Poca_Variedad_Alimentos
 
+###################################################################
+##########      Separación de acuerdo a densidad   ################
+###################################################################
+#Municipios ordenados por densidad de lista nominal
+
+TablaLN <- arrange(EMENSAYO, desc(EM_17_LISTA_NOMINAL)) %>%  select(NOM_MUN, EM_17_LISTA_NOMINAL, Densidad_de_Lista_Nominal, EM_17_POR_PART) %>%
+  mutate( Porcentaje_Lista_Nominal = (EM_17_LISTA_NOMINAL/sum(EMENSAYO$EM_17_LISTA_NOMINAL)*100)) %>% mutate(Suma_Acumulada_PLN = cumsum(Porcentaje_Lista_Nominal))
 
 ###################################################################
 ##########      Modelo de regresión     #######################
@@ -262,57 +277,28 @@ Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + DLNominal17 + PG_Mun_2015_REC
 summary(Mod3)
 
 #sólo participaciones gubernamentales
-
-
-
-
-
-
 contrasts(EMENSAYO$PG_Mun_2015)
 table(EMENSAYO$PG_Mun_2015)
-
-
-
 summary(Mod1)
 anova(Mod1)
 confint(Mod1, level = 0.95)
 plot(Mod1)
-
-
-
-
 #variable dependiente voto por el PRI en el 2017
 colnames(EMENSAYO)
-
 temp <- lm(EM_12_PRI_por ~ EM_12_Por_Part + Por_Ingreso_Gobierno + 
      DLNominal17 + EM_12_PRI_por + Part_Mun_2015, data = EMENSAYO)
-
 stargazer(temp, type = "text")
-
-
-
 ######## meadias ponderadas por partido que controla el municipio
-
-
-
 #####modelo de regresión
-
 lm(log(subs) ~ log(price/citations), data = Journals) 
-
-
 #múltiples gráficas en una sola imagen
-
-
 #subset para 2017
 #por densidad de lista nominal
 #por densidad de viviendas
 #por clasificación de urbano y rural
 #correlación 2012 vs. 2017
-
-
 #Elegir las columnas pertinenetes
 ######      Primero 2012
-
 #colnames(Ganador2012)[max.col(Ganador2012, ties.method = "first")] %>% table() #No coincide con los resultados oficiales
 #utilizar actas de computo municipales, resultados municipales 2012, 2017
 rm(temp)
@@ -336,29 +322,16 @@ rm(temp)
 #el archivo ya está bajado, leerlo
 #http://www.ieem.org.mx/proceso_2012/re2012/ayuntamientos2012_TEEM.xlsx #resultados por municipio
 #http://www.ieem.org.mx/proceso_2012/planillas/ayunta2013_2015.pdf #integración de ayuntamientos
-
-
-colnames(EMENSAYO)
-
 EMENSAYO %>% ungroup() %>%
   select(EM_17_POR_PRI, EM_17_POR_MORENA) %>%
   chart.Correlation(histogram = TRUE)
-
 #Principales partidos de la elección 2012
 #Principales partidos de la elección 2017
-
-head(EMENSAYO)
-class(as.character(EMENSAYO$NOM_MUN))
-
 ################################################################
 #Partido que gana el municipio en el 2012
 #Partido que gana el municipio en le 2017
-
 summary(EMENSAYO$EM_12_Por_Part)
 hist(EMENSAYO$EM_12_Por_Part, breaks = 35)
-
-colnames(EMENSAYO)
-
 lm(EM_17_POR_PART ~ DLNominal17 + EM_12_PRI_)
 
 #económicas
@@ -366,8 +339,6 @@ EMENSAYO$Por_Ingreso_Gobierno
 EMENSAYO$Por_Ingreso_otro_Pais
 EMENSAYO$Por_Ingreso_del_Pais
 EMENSAYO$Por_Poca_Variedad_Alimentos
-
-
 #Por hacer
 #Participacion 2012, 2017, proxy de ingreso, urbano o rural
 #Partido que gobernaba
@@ -382,8 +353,3 @@ EMENSAYO$Por_Poca_Variedad_Alimentos
 #impuestos
 #correlaciones
 #modelo de regresión
-
-
-
-#ensayo
-#mapas
