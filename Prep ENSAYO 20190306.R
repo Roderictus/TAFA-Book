@@ -168,6 +168,7 @@ scale(x = EMENSAYO$Dif1712)
 colnames(EMENSAYO)[119] <- "Densidad_de_Lista_Nominal"
 colnames(EMENSAYO)[125] <- "Partido_Gobernante_2015"
 colnames(EMENSAYO)[30] <- "Ingreso_Gobierno"
+
 ####################################################################################
 ###################     Resultados de la elección 2011    ##########################
 ####################################################################################
@@ -184,15 +185,33 @@ EDOMEX2011$NOM_MUN_JOIN <- chartr('áéíóúñ','aeioun',tolower(EDOMEX2011$Mun
 #"coacalco de berriozabal"     "ecatepec de morelos"         "xalatlaco"                   "naucalpan de juarez"        
 # "tlalnepantla de baz"         "valle de chalco solidaridad"
 
+
 EDOMEX2011$NOM_MUN_JOIN[27]  <- "coacalco de berriozabal"
 EDOMEX2011$NOM_MUN_JOIN[34]  <- "ecatepec de morelos"
 EDOMEX2011$NOM_MUN_JOIN[45]  <- "xalatlaco"
 EDOMEX2011$NOM_MUN_JOIN[61]  <- "naucalpan de juarez"
 EDOMEX2011$NOM_MUN_JOIN[107] <- "tlalnepantla de baz"
-EDOMEX2011$NOM_MUN_JOIN[114] <- "valle de chalco solidaridad"
+EDOMEX2011$NOM_MUN_JOIN[114] <- "valle  de chalco solidaridad"
 
 EMENSAYO <- left_join(EMENSAYO, EDOMEX2011, by = "NOM_MUN_JOIN")
+EMENSAYO$Log_DLN <- log(EMENSAYO$Densidad_de_Lista_Nominal) # Variable relevante
+
+####################################################################################
+###################     Categorias de Partido Gobernante    ##########################
+####################################################################################
+
+EMENSAYO$Partido_Gobernante_2015 <- factor(EMENSAYO$Partido_Gobernante_2015, 
+                                           levels = c("PRI o PRI Alianza", "PAN o PAN Alianza", "PRD", "Otros"))
+
+#############################################################################################
+####################    Salvar Cambios    ###################################################
 #write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
+#############################################################################################
+
+
+
+
+
 EMENSAYO <- read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 ######################################## Aquí termina el trabajo adicional a bases de datos  ##################
 
@@ -255,7 +274,25 @@ EMENSAYO %>%
 #Municipios ordenados por densidad de lista nominal
 
 TablaLN <- arrange(EMENSAYO, desc(EM_17_LISTA_NOMINAL)) %>%  select(NOM_MUN, EM_17_LISTA_NOMINAL, Densidad_de_Lista_Nominal, EM_17_POR_PART) %>%
-  mutate( Porcentaje_Lista_Nominal = (EM_17_LISTA_NOMINAL/sum(EMENSAYO$EM_17_LISTA_NOMINAL)*100)) %>% mutate(Suma_Acumulada_PLN = cumsum(Porcentaje_Lista_Nominal))
+  mutate( Porcentaje_Lista_Nominal = (EM_17_LISTA_NOMINAL/sum(EMENSAYO$EM_17_LISTA_NOMINAL)*100)) %>% mutate(Suma_Acumulada_PLN = cumsum(Porcentaje_Lista_Nominal)) 
+
+EMENSAYO$Log_DLN <- log(EMENSAYO$Densidad_de_Lista_Nominal)
+
+
+arrange(EMENSAYO, desc(EM_17_LISTA_NOMINAL)) %>%  select(Log_DLN, EM_17_POR_PART) %>% 
+  chart.Correlation()
+
+log(EMENSAYO$Densidad_de_Lista_Nominal)
+
+
+EMENSAYO %>% chart.Correlation(Densidad_de_Lista_Nominal, 
+
+
+TablaLN$Acumulado_P_Lista_Nominal <-as.character(TablaLN$Suma_Acumulada_PLN)
+
+class(TablaLN$Suma_Acumulada_PLN)
+
+top_n(TablaLN, 33,Suma_Acumulada_PLN)
 
 ###################################################################
 ##########      Modelo de regresión     #######################
@@ -269,11 +306,20 @@ summary(Mod1)
 anova(Mod1)
 confint(Mod1, level = 0.95)
 plot(Mod1)
+colnames(EMENSAYO)
 
-Mod2 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + DLNominal17, data = EMENSAYO)
+Mod2 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno +  Por_Poca_Variedad_Alimentos, data = EMENSAYO)
+
+Mod2 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno  + Por_Poca_Variedad_Alimentos + Log_DLN + Partido_Gobernante_2015, 
+           data = EMENSAYO)
+
 summary(Mod2)
+colnames(EMENSAYO)
 
-Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + DLNominal17 + PG_Mun_2015_REC + Dif1712 + Dif1715, data = EMENSAYO)
+hist(EMENSAYO$Dif1712, breaks = 20)
+
+
+Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + Log_DLN + Partido_Gobernante_2015 , data = EMENSAYO)
 summary(Mod3)
 
 #sólo participaciones gubernamentales
@@ -291,31 +337,6 @@ stargazer(temp, type = "text")
 ######## meadias ponderadas por partido que controla el municipio
 #####modelo de regresión
 lm(log(subs) ~ log(price/citations), data = Journals) 
-#múltiples gráficas en una sola imagen
-#subset para 2017
-#por densidad de lista nominal
-#por densidad de viviendas
-#por clasificación de urbano y rural
-#correlación 2012 vs. 2017
-#Elegir las columnas pertinenetes
-######      Primero 2012
-#colnames(Ganador2012)[max.col(Ganador2012, ties.method = "first")] %>% table() #No coincide con los resultados oficiales
-#utilizar actas de computo municipales, resultados municipales 2012, 2017
-rm(temp)
-#2017
-#EMENSAYO %>% ungroup() %>% select(contains(match = "_POR")) %>% select(contains(match = "_17")) #también funciona
-#temp <- EMENSAYO[,c("EM_17_POR_PRI","EM_17_POR_Nueva.A", "EM_17_PRI_ALIANZA_POR", "EM_17_POR_PAN", "EM_17_POR_PRD", "EM_17_POR_PT",
-#            "EM_17_POR_PVEM", "EM_17_POR_MORENA", "EM_17_PRI_ALIANZA_POR")] 
-
-
-#colnames(temp)[max.col(temp, ties.method = "first")] %>% table()
-#renombrar columnas
-#revisar contra resultados oficiales
-#Salvar archivo, el documento puede empezar por cargar la base
-#modelo de regresión
-#Correlaciones con densidad de lista nominal en las elecciones del 2012
-#Correlaciones con densidad de lista nominal en elecciones 2017
-#Ejemplo mínimo para correlaciones
 #Ayuntamientos 2012
 
 #http://www.ieem.org.mx/proceso_2012/re2012/seccionAyuntamientos%202012.xlsx #resultados por sección
@@ -334,22 +355,3 @@ summary(EMENSAYO$EM_12_Por_Part)
 hist(EMENSAYO$EM_12_Por_Part, breaks = 35)
 lm(EM_17_POR_PART ~ DLNominal17 + EM_12_PRI_)
 
-#económicas
-EMENSAYO$Por_Ingreso_Gobierno
-EMENSAYO$Por_Ingreso_otro_Pais
-EMENSAYO$Por_Ingreso_del_Pais
-EMENSAYO$Por_Poca_Variedad_Alimentos
-#Por hacer
-#Participacion 2012, 2017, proxy de ingreso, urbano o rural
-#Partido que gobernaba
-#den
-#Regresión
-#Variables relevantes
-
-
-#elecciones competidas y no competidas
-#los niveles y lo que se disputa en la elección
-
-#impuestos
-#correlaciones
-#modelo de regresión
