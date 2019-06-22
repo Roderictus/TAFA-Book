@@ -17,7 +17,7 @@ output:
 ---
 
 ```{r setup , include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, cache = TRUE, echo = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = FALSE, cache = TRUE, message = FALSE, fig.path = "Figuras/", warning = FALSE)
 
 library(AER) #libro de econometria con R
 library(PerformanceAnalytics) #para correlaciones del voto 
@@ -27,11 +27,6 @@ library(stargazer) #tablas de regresión
 library(viridis)
 library(kableExtra)
 library(knitr)
-```
-
-
-
-```{r Knitr , include=FALSE}
 
  fn = local({
    i = 0
@@ -60,9 +55,6 @@ EMENSAYO<-read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 
 ```
 
-
-
-
 # Introducción
 La participación electoral es el elemento fundamental del ejercicio democrático. Es la manifestación revelada de las preferencias y deseos de la ciudadanía. También es una forma de manifestar castigo o premio al ejercicio de un partido en el poder.
 
@@ -79,33 +71,71 @@ Esto incluye una familia de comportamientos cuya principal característica en co
 
 En este sentido el resultado electoral depende de un proceso complejo que no es fácilmente reducible y que muchas variables no son directamente observables. Sin embargo es posible distinguir elementos específicos de una elección y buscar encontrar una narrativa que la caracterice. En este sentido es necesario aclarar una tipología electoral que clarifique los incentivos que se manifiestan en el proceso. 
 
-#Participación electoral y elecciones en el Estado de México
+##Contexto electoral en el Estado de México 2017
 
 La elección en el Estado de México 2017 es particularmente interesante por varias razones. Es la última elección antes del periodo electoral 2018 en un estado fuerte del PRI, en un momento de cambio electoral, de baja aprobación presidencial, de fortalecimiento de un nuevo partido. Es también la última elección, con la excepción de un proceso para la elección de 3 ayuntamientos en Veracruz,  antes del complejo proceso electoral 2018. 
 
 Finalmente es  un Estado cuya elección estatal anterior fue ganada por una enorme mayoria, 61,97%, por el PRI (en alianza PRI, PVEM, PANAL) elección con un lejano segundo lugar, el PRD con un 20.96%. 
 
-Las características de esta elección la establecen como un símbolo de la resistencia del régimen dominante Priista contra la oleada a favor de MORENA. Esto ocurre en el contexto de un descontento generalizado evidenciado en la historicamente baja aprobación del Ejecutivo Federal característica  de los últimos años de gobierno de Enrique Peña Nieto alcanzando un mínimo histórico de 12% (Nacion321) en Enero de 2017.
+Las características de esta elección la establecen como un símbolo de la resistencia del régimen dominante Priista contra la oleada a favor de MORENA. Esto ocurre en el contexto de un descontento generalizado evidenciado en la historicamente baja aprobación del Ejecutivo Federal característica  de los últimos años de gobierno de Enrique Peña Nieto, el cual alcanza un mínimo de aprobación de 12% (Nacion321) en Enero de 2017.
 
-Esto sentará la base para el fuerte contraste entre dos elecciones similares en términos de lo que está en juego e incentivos institucionales entre el 2011 y 2017. En el proceso electoral 2017 la elección se mostraba mucho más cerrada, tanto el proceso electoral 2011 como en 2012 el PRI obtuvo grandes mayorias, un control casí completo del Estado. En estos procesos no existía aún el Movimiento Regeneración Nacional (MORENA), previo a la jornada electoral del 4 de Junio de 2017 ninguna encuesta privilegiaba a MORENA sobre el PRI, sólo un par mostraban una ventaja para el PAN. Sin embargo el resultado final estaría a tres puntos de distancia entre los punteros PRI (33.56%) y MORENA (30.78%.)
+Esto sentará la base para el fuerte contraste entre dos elecciones similares en términos de lo que está en juego e incentivos institucionales entre el 2011 y 2017. En el proceso electoral 2017 la elección se mostraba mucho más cerrada, tanto el proceso electoral 2011 como en 2012 el PRI obtuvo grandes mayorias, un control casí completo del Estado. En estos procesos no existía aún el Movimiento Regeneración Nacional (MORENA), previo a la jornada electoral del 4 de Junio de 2017 ninguna encuesta privilegiaba a MORENA sobre el PRI, sólo un par mostraban una ventaja para el PAN. Sin embargo el resultado final estaría a tres puntos de distancia entre los punteros PRI (33.56%) y MORENA (30.78%.).
 
-```{r, "Tabla con estadísticos de tres elecciones", echo = FALSE, cache = TRUE, warning = FALSE, message = FALSE}
+#Incentivos a la participación electoral en el Estado de México 2011, 2012 y 2017
+
+En este ensayo estudiamos una elección no concurrente de gobernador, es decir que se espera que los incentivos se encuentren alineados a obtener una mayoría simple en el estado. Esto en contraste con múltiples elecciones concurrentes donde podría la cercania entre punteros generar incentivos diferenciados entre los que buscan la victoria del partido en el municipio contra los que esperan obtener la gobernatura. 
+
+En una elección donde se determine en el mismo proceso la gobernatura y alcaldias podríamos encontrar conflictos dentro de las estructuras partidistas por el control de recursos limitados. Presumiblemente aquellos que buscan la gobernatura buscan optimizar la cantidad de votos que se pueden obtener dado un presupuesto. Mientras que los que buscan ganar una alcaldía tienen que realizar cálculos adicionales, en una competencia con muy poca distancia entre punteros pueden estar dispuestos a obtener votos a un costo mayor al que está a dispuesto a pagar la estructura estatal. 
+
+En la tabla siguiente (XXXX) podemos observar la participación electoral 2011 y 2017. En ambas elecciones se observan porcentajes de participación promedio de 53.38% y 60.38%.
+
+#Incentivos teóricos a la participación electoral
+
+
+
+
+
+Esto se encuentra dentro de las expectativas teóricas en un par de elecciones donde la principal diferencia es que la elección 2017 es competitiva y la elección 2011 no lo es. Una de las primeras cosas que buscamos es entender en donde ocurre el aumento en la participación 
+
+
+
+
+
+
+
+
+
+```{r Tabla1}
 
 T1 <- EMENSAYO %>% select(EM11_Por_Part,EM_17_POR_PART,EM_12_Por_Part) %>% summary() 
 colnames(T1) <- c("Participación_2011", "Participación_2017", "Participación_2012")
-kable(T1)
+#kable(T1), caption = "Participación electoral (%) en tres elecciones EDOMEX")
+knitr::kable((T1), caption = "Participación electoral (porcentaje) en tres elecciones EDOMEX")
+
+EMENSAYO %>% select(EM11_Por_Part, EM_12_Por_Part, EM_17_POR_PART) %>%  
+  chart.Correlation(histogram = TRUE, title="Correlación Participación Electoral 2011, 2012, 2017")
+
 ```
-
-La elección del Estado de México es particularmente interesante en varias dimensiones; Importancia, "Sencillez", Cambio Político.
-
 
 Se muestra la correlación(Pearson) entre las tres elecciones, como es esperado la mayor similitud que existe es entre las dos elecciones más similares, elección simple de gobernador,elección 2011 y 2017 (0.89).  
 
-```{r, "Correlación Participación Electoral 2011, 2012, 2017"}
-EMENSAYO %>% select(EM11_Por_Part, EM_12_Por_Part, EM_17_POR_PART) %>%  chart.Correlation(histogram = TRUE)
+```{r Tabla2}
+
+EMENSAYO %>% select(EM11_Por_Part, EM_12_Por_Part, EM_17_POR_PART) %>%  
+  chart.Correlation(histogram = TRUE, title="Correlación Participación Electoral 2011, 2012, 2017")
 
 ```
-Es una elección extraordinariamente importante al ser un Estado fuerte del PRI, en un momento de cambio electorial, de baja aprobación presidencial, de fortalecimiento de un nuevo partido, y la última elección antes del complejo proceso electoral 2018. un Estado cuya elección estatal anterior fue ganada por una enorme mayoria, xx%, por este partido. 
+
+
+
+
+
+
+
+
+
+Estudiamos la elección como un problema de maximización de votos al que se enfrentan los partidos. Esta maximización se resuelve de acuerdo a un presupuesto para la obtención de votos que puede darse por medios que caben en un espectro de legalidad. Dependiendo de como se modele este puede ser un problema simple de compra de votos donde su costo es menor a un problema que incorpore la estructura y mecanismos de movilización de que disponen los partidos para obtener este voto. 
+
 
 ##Estructura y el problema de optimización
 Hasta ahora hemos escrito asumiendo el problema desde una perspectiva del PRI. Es el PRI el que está resolviendo un problema de minimización del costo de los votos para que, ante un presupuesto limitado, maximice la cantidad de estos a favor de su candidato. Pero es necesario aclarar, cuando menos para el segundo contendiente, el porqué no resuelve el mismo problema de forma similar. Es decir que teorícamente esperariamos que la promoción, adquisición, intensidad de campaña se diera en donde el costo de estos votos es menor. Para ambos partidos podríamos esperar que fuera, teorícamente, en los municipios de menores ingresos, y que al competir por estos votos su valor aumentara hasta alcanzar un valor que hiciera uso de todos los recursos disponibles en una elección competida. Sin embargo vemos una importante diferenciación en la votación, probablemente indicativo de una diferencia en estratégia o preferencias. 
@@ -115,15 +145,7 @@ En esta elección el Ejecutivo Federal, el gobierno del estado y el control del 
 ##Promoción sesgada
 
 #Incentivos Electorales
-En este ensayo se analiza una elección no concurrente de gobernador, es decir que se espera que los incentivos se encuentren alineados a obtener una mayoría simple en el estado. Esto en contraste con múltiples elecciones concurrentes donde podría la cercania entre punteros generar incentivos diferenciados entre los que buscan la victoria del partido en el municipio contra los que esperan obtener la gobernatura. En una elección donde se determine en el mismo proceso la gobernatura y alcaldias podríamos encontrar conflictos dentro de las estructuras partidistas por el control de recursos limitados. Presumiblemente aquellos que buscan obtener la gobernatura buscan optimizar la cantidad de votos que se pueden obtener dado un presupuesto. Mientras que los que buscan ganar una alcaldía tienen que realizar cálculos adicionales, en una competencia con muy poca distancia entre punteros pueden estar dispuestos a obtener votos a un costo mayor al que está a dispuesto a pagar la estructura estatal. 
-
-El proceso electoral 2011 y 2017 en el Estado de México 
-
-
-la competencia por la obtención de una alcaldía aquí la mayoría simple determina al ganador. En este sentido es una elección con incentivos relativamente sencillos.
-
-Estudiamos la elección como un problema de maximización de votos al que se enfrentan los partidos. Esta maximización se resuelve de acuerdo a un presupuesto para la obtención de votos que puede darse por medios que caben en un espectro de legalidad. Dependiendo de como se modele este puede ser un problema simple de compra de votos donde su costo es menor a un problema que incorpore la estructura y mecanismos de movilización de que disponen los partidos para obtener este voto. 
-
+E
 #Mecanismos de influencia
 Utilizamos información agregada a nivel municipal, esto implica una caracterización de los municipios como si estos fueran individuos, los valores arrojados por un modelo de regresión implican que un municipio más pobre o más rico, más o menos denso,gobernado por tal o cual partido puede tener distintas propensidades para una mayor o menor participación electoral. Sin embargo esta metodología no permite observar el mecanismo por el cual los partidos optimizan sus recursos para maximizar el voto lo que impide entender la eficacia, entender la logística, y entender el funcionamiento de la estructura intermediaria. Es, por ejemplo, relevante si la estructura que opera durante los periodos electorales es la una estructura que es parte permanente del partido, si es una estructura temporal del partido que es activada durante el periodo electoral, si utiliza una estructura que cumple una función de facilitadora de programas gubernamentales, si estos programas son federales o estatales y que cumple una función de motivación o acarreo o incluso de sabotaje durante la jornada electoral. Existe una literatura creciente sobre los mecanismos mediante los cuales un partido puede influir en un resultado electoral. Las teorías detrás de los mecanismos de operación tienen distintos grados de complejidad, desde lo relativamente lineal, basadas en una sóla dimensión que establece a los votantes de acuerdo a su grado de lealtad, votantes leales a votantes "oscilantes" (xxxxxx). Hasta teorías que incluyen diversos niveles de organización. Particularmente intersante para este trabajo son las teorías que distinguen entre la "compra"" de votos o la asignación no programática de beneficios a agentes, votantes o grupos específicos contra aquellas que analizan la influencia de la compra de participación, es decir la mobilización no dirigida o indistinta de los votantes. La mobilización de la participación resuelve problemas de agencia. Esta mobilización se realiza a través de "brokers"  Una explicación (Stokes, Dunning) el tipo de votantes es un sub producto de 
 
@@ -146,33 +168,6 @@ Existen diversas teorías que aportan al fenómeno observado, la promoción de l
 3. Donde no se supervise el cumplimiento de la ley electoral.
 
 La primera es la más frecuente explicación en la literatura revisada, lo que estamos revisando es una política no programática que logra identificar a sus recipientes a través de una maquinaria. La explicación es, esencialmente, que la compra, o promoción, de los votos se da en donde hay mayor pobreza. El mecanismo explicativo es la optimización de un presupuesto electoral maximizando el número de votos obtenidos. En el Estado de México logramos ver variación al respecto. Se utiliza la variable xxx, y xxx, como proxys de pobreza obtenidos en la encuesta Intercensal 2015. (Stokes, Dunning, Nazareno)
-
-#¿Fraude?
-
-
-#Elección
-
-La elección del 2017 en el Estado de México es una elección para un único cargo, la gobernatura estatal. Es una elección previa al periodo electoral 2018, donde se renueva el legislativo, ejecutivo federal y la mayor parte de los ejecutivos estatales. 
-
-```{r, "Tabla Elección 2017 Estado de México", cache = TRUE}
-T1 <- data.frame(columna1 = c("Lista Nominal","Votos Totales","Votos Validos", "Porcentaje de Participación"), 
-           columna2 = c(sum(EMENSAYO$EM_17_LISTA_NOMINAL), 
-                        sum(EMENSAYO$EM_17_TOTAL_VOTOS), 
-                        sum(EMENSAYO$EM_17_TOTAL_VALIDOS),
-                        (sum(EMENSAYO$EM_17_TOTAL_VOTOS)/sum(EMENSAYO$EM_17_LISTA_NOMINAL)*100) ))
-
-
-
-#T1$columna2[1:3] <- format(T1$columna2[1:3], digits = 0, scientific = FALSE)
-T1$columna2[4]   <- format(T1$columna2[4], digits = 1, nsmall = 1,)
-
-kable(T1, format.args = list(decimal.mark = ',', big.mark = "'")) %>%
-    kable_styling(bootstrap_options = "striped", full_width = F, position = "center")
-
-
-
-
-```
 
 
 #Variables
@@ -240,7 +235,6 @@ Plot_Map
 ```
 
 
-
 ##Ingresos por programas gubernamentales
 Está variable está expresada como el porcentaje de viviendas dentro del municipio que afirmaron recibir dinero de programas de gobierno respecto al total de viviendas dentro del municipio. Se generó con información de la Encuesta Iintercensal 2015 del INEGI significativa a nivel municipal. Se tomó la información directamente del microdato disponible para el estado de México, ponderando por el factor de expansión provisto en ella. En encuesta intercensal muestra resultados para esta pregunta a nivel vivienda. Se tomó el número de viviendas (ponderadas por el factor de expansión) que respondieron afirmativamente la pregunta: "¿Alguna persona que vive en esta vivienda recibe dinero: de programas de gobierno? (Prospera, Oportunidades, Adultos mayores, PROCAMPO, etcétera)."  
 
@@ -270,7 +264,6 @@ En la elección del 2012 podemos imaginar distintos tipos de incentivos por el t
 1. Mayor competencia en municipios punteros
 
 
-La elección 
 ##Modelo de regresión
 ```{r Tabla de Modelo de Regresión, results='asis', message = FALSE}
 EMENSAYO$Log_DLN <- log(EMENSAYO$Densidad_de_Lista_Nominal)
