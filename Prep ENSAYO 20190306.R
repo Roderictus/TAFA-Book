@@ -200,13 +200,27 @@ EMENSAYO$Log_DLN <- log(EMENSAYO$Densidad_de_Lista_Nominal) # Variable relevante
 ###################     Categorias de Partido Gobernante    ##########################
 ####################################################################################
 #queremos establecer al PRI como categoria base para el Modelo de Regresión
-
 EMENSAYO$Partido_Gobernante_2015 <- factor(EMENSAYO$Partido_Gobernante_2015, 
                                            levels = c("PRI o PRI Alianza", "PAN o PAN Alianza", "PRD", "Otros"))
+#Creando una variable dicotómica
+EMENSAYO$PRI_o_Otro_2015 <- EMENSAYO$Partido_Gobernante_2015
+levels<- c(PRI_o_PRI_Alianza ="PRI o PRI-Alianza", 
+         No_PRI = "PAN o PAN Alianza", 
+         No_PRI = "PRD", 
+         No_PRI = "Otros" )
+EMENSAYO$PRI_o_Otro_2015 <- fct_recode(EMENSAYO$PRI_o_Otro_2015, !!!levels)
 
-Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + Log_DLN + Partido_Gobernante_2015, data = EMENSAYO)
+factor(EMENSAYO$Partido_Gobernante_2015, 
+       levels = c("PRI_o_PRI_Alianza", "PAN o PAN Alianza", "PRD", "Otros"))
 
-Mod3
+#Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + Log_DLN + PRI_o_Otro_2015, data = EMENSAYO)
+
+####################################################################################
+###################     Índice de Marginación    ##########################
+####################################################################################
+
+
+
 
 
 
