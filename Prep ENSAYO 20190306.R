@@ -199,13 +199,21 @@ EMENSAYO$Log_DLN <- log(EMENSAYO$Densidad_de_Lista_Nominal) # Variable relevante
 ####################################################################################
 ###################     Categorias de Partido Gobernante    ##########################
 ####################################################################################
+#queremos establecer al PRI como categoria base para el Modelo de Regresión
 
 EMENSAYO$Partido_Gobernante_2015 <- factor(EMENSAYO$Partido_Gobernante_2015, 
                                            levels = c("PRI o PRI Alianza", "PAN o PAN Alianza", "PRD", "Otros"))
 
+Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + Log_DLN + Partido_Gobernante_2015, data = EMENSAYO)
+
+Mod3
+
+
+
+
 #############################################################################################
 ####################    Salvar Cambios    ###################################################
-#write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
+write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 #############################################################################################
 
 
