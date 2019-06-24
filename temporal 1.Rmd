@@ -127,13 +127,6 @@ EMENSAYO %>% select(EM11_Por_Part, EM_12_Por_Part, EM_17_POR_PART) %>%
 ```
 
 
-
-
-
-
-
-
-
 Estudiamos la elección como un problema de maximización de votos al que se enfrentan los partidos. Esta maximización se resuelve de acuerdo a un presupuesto para la obtención de votos que puede darse por medios que caben en un espectro de legalidad. Dependiendo de como se modele este puede ser un problema simple de compra de votos donde su costo es menor a un problema que incorpore la estructura y mecanismos de movilización de que disponen los partidos para obtener este voto. 
 
 
@@ -150,17 +143,7 @@ E
 Utilizamos información agregada a nivel municipal, esto implica una caracterización de los municipios como si estos fueran individuos, los valores arrojados por un modelo de regresión implican que un municipio más pobre o más rico, más o menos denso,gobernado por tal o cual partido puede tener distintas propensidades para una mayor o menor participación electoral. Sin embargo esta metodología no permite observar el mecanismo por el cual los partidos optimizan sus recursos para maximizar el voto lo que impide entender la eficacia, entender la logística, y entender el funcionamiento de la estructura intermediaria. Es, por ejemplo, relevante si la estructura que opera durante los periodos electorales es la una estructura que es parte permanente del partido, si es una estructura temporal del partido que es activada durante el periodo electoral, si utiliza una estructura que cumple una función de facilitadora de programas gubernamentales, si estos programas son federales o estatales y que cumple una función de motivación o acarreo o incluso de sabotaje durante la jornada electoral. Existe una literatura creciente sobre los mecanismos mediante los cuales un partido puede influir en un resultado electoral. Las teorías detrás de los mecanismos de operación tienen distintos grados de complejidad, desde lo relativamente lineal, basadas en una sóla dimensión que establece a los votantes de acuerdo a su grado de lealtad, votantes leales a votantes "oscilantes" (xxxxxx). Hasta teorías que incluyen diversos niveles de organización. Particularmente intersante para este trabajo son las teorías que distinguen entre la "compra"" de votos o la asignación no programática de beneficios a agentes, votantes o grupos específicos contra aquellas que analizan la influencia de la compra de participación, es decir la mobilización no dirigida o indistinta de los votantes. La mobilización de la participación resuelve problemas de agencia. Esta mobilización se realiza a través de "brokers"  Una explicación (Stokes, Dunning) el tipo de votantes es un sub producto de 
 
 
-
-
 En el caso de la presente investigación no es posible determinar cual es el mecanismo de operación de la promoción a favor de cierto partido o a favor del voto en general.
-
-##Hogares que reciben dinero del gobierno a través de programas gubernamentales
-
-El voto como mecanismo democrático
-
-Los programas gubernamentales pueden ser estatales o federales, los mayores, y que pueden cumplir un papel de "priming" al ser mencionados en las preguntas, son programas federales condicionados. Estos programas están blindados de diversas formas, su padrón no puede aumentar xx meses antes de las elecciones, los materiales y pruebas que se realizan deben de estar desprovistos de una identificación con un partido o gobierno específico. Los mecanismos de cumplimiento deben de ser transparentes. Sin embargo existe la posibilidad de que en algún momento del otorgamiento del apoyo este se busque identificar con algún grupo político, que su entrega sea condicionada al cumplimiento de ciertas metas electorales al menos discursivamente. También existe la posibilidad de que los programas gubernamentales federales en sí no afecten directamente la preferencia por cierto partido sino promuevan la participación en un grupo con ciertas preferencias electorales, con resultados similares pero manteniendo un discurso neutro. O lo que se observe sea producto de una variable no observada, podría coincidir la entrega de los programas ya establecidos con una red de promotores de programas sociales que se activen durante campañas electorales, y lo que veamos sea producto de la red de promoción del voto y no de un impacto de programas gubernamentales, ambas variables incidiendo en proporciones similares en la misma población. Los programas federales a los que puede estar sujeta la población son programáticos y no condicionales en su diseño, sin embargo el como se distribuyen, los mecanismos de conocimiento de su existencia el "último paso" puede que esté acompañado de una amenaza de condicionalidad o una identificación del partido en el gobierno como el administrador de estos. Esto se puede dar por facilitadores federales, estatales o municipales. En el caso de los promotores federales se espera que estos sean los que menos influyen en la promoción electoral dado que es donde existen mayores controles sin embargo esta es una variable que no es observable dado que no existe variación, todos los municipios observados se encuentran gobernados por el mismo gobierno federal. En el caso de la promoción municipal, que asumimos puede influir en los programas federales, el municipio suele tener un presupuesto de programas y de gasto discrecional con fines sociales en los DIFs 
-
-#Mecanismo explicativo
 
 Existen diversas teorías que aportan al fenómeno observado, la promoción de la participación, o del voto a favor del PRI, en municipios con baja densidad demográfica y bajos ingresos. Lo que observamos es comportamiento de municipios pero estos municipios se caracterízan por ser, potencialmente, recipientes de estratégias electorales diferenciadas. Si existe un mecanismo de promoción clientelar, o de maquinaria partidista esperariamos que operara en:
 1. Donde el costo del voto sea menor.
@@ -170,10 +153,11 @@ Existen diversas teorías que aportan al fenómeno observado, la promoción de l
 La primera es la más frecuente explicación en la literatura revisada, lo que estamos revisando es una política no programática que logra identificar a sus recipientes a través de una maquinaria. La explicación es, esencialmente, que la compra, o promoción, de los votos se da en donde hay mayor pobreza. El mecanismo explicativo es la optimización de un presupuesto electoral maximizando el número de votos obtenidos. En el Estado de México logramos ver variación al respecto. Se utiliza la variable xxx, y xxx, como proxys de pobreza obtenidos en la encuesta Intercensal 2015. (Stokes, Dunning, Nazareno)
 
 
+
 #Variables
 Aquí se expone el origen de la información utilizada en este documento junto con la relación esperada que se tiene con la participación electoral como variable dependiente. 
 
-Se utiliza información a nivel municipal 
+#Participación electoral, Variable dependiente
 
 ##Participación Electoral
 Se utiliza el resultado electoral 2012 y 2017 a nivel sección electoral y se agrega municipalmente. Es el resultado de la división entre el número de votos y la lista nominal del municipio, se expresa en términos de porcentaje. 
@@ -235,26 +219,51 @@ Plot_Map
 ```
 
 
-##Ingresos por programas gubernamentales
-Está variable está expresada como el porcentaje de viviendas dentro del municipio que afirmaron recibir dinero de programas de gobierno respecto al total de viviendas dentro del municipio. Se generó con información de la Encuesta Iintercensal 2015 del INEGI significativa a nivel municipal. Se tomó la información directamente del microdato disponible para el estado de México, ponderando por el factor de expansión provisto en ella. En encuesta intercensal muestra resultados para esta pregunta a nivel vivienda. Se tomó el número de viviendas (ponderadas por el factor de expansión) que respondieron afirmativamente la pregunta: "¿Alguna persona que vive en esta vivienda recibe dinero: de programas de gobierno? (Prospera, Oportunidades, Adultos mayores, PROCAMPO, etcétera)."  
+
+##Hogares que reciben dinero del gobierno a través de programas gubernamentales
+
+Está variable está expresada como el porcentaje de viviendas dentro del municipio que afirmaron recibir dinero de programas de gobierno respecto al total de viviendas dentro del municipio. Se generó con información de la Encuesta Iintercensal 2015 del INEGI significativa a nivel municipal. 
+Se tomó el número de viviendas (ponderadas por el factor de expansión) que respondieron afirmativamente la pregunta: "¿Alguna persona que vive en esta vivienda recibe dinero: de programas de gobierno? (Prospera, Oportunidades, Adultos mayores, PROCAMPO, etcétera)."  
+
+
+Los programas gubernamentales pueden ser estatales o federales, los mayores, y que pueden cumplir un papel de "priming" al ser mencionados en las preguntas, son programas federales condicionados. Estos programas están blindados de diversas formas, su padrón no puede aumentar xx meses antes de las elecciones, los materiales y pruebas que se realizan deben de estar desprovistos de una identificación con un partido o gobierno específico. Los mecanismos de cumplimiento deben de ser transparentes. Sin embargo existe la posibilidad de que en algún momento del otorgamiento del apoyo este se busque identificar con algún grupo político, que su entrega sea condicionada al cumplimiento de ciertas metas electorales al menos discursivamente. 
+También existe la posibilidad de que los programas gubernamentales federales en sí no afecten directamente la preferencia por cierto partido sino promuevan la participación en un grupo con ciertas preferencias electorales, con resultados similares pero manteniendo un discurso neutro. O lo que se observe sea producto de una variable no observada, podría coincidir la entrega de los programas ya establecidos con una red de promotores de programas sociales que se activen durante campañas electorales, y lo que veamos sea producto de la red de promoción del voto y no de un impacto de programas gubernamentales, ambas variables incidiendo en proporciones similares en la misma población. 
+
+Los programas federales a los que puede estar sujeta la población son programáticos y no condicionales en su diseño, sin embargo el como se distribuyen, los mecanismos de conocimiento de su existencia el "último paso" puede que esté acompañado de una amenaza de condicionalidad o una identificación del partido en el gobierno como el administrador de estos. Esto se puede dar por facilitadores federales, estatales o municipales. En el caso de los promotores federales se espera que estos sean los que menos influyen en la promoción electoral dado que es donde existen mayores controles sin embargo esta es una variable que no es observable dado que no existe variación, todos los municipios observados se encuentran gobernados por el mismo gobierno federal. En el caso de la promoción municipal, que asumimos puede influir en los programas federales, el municipio suele tener un presupuesto de programas y de gasto discrecional con fines sociales en los DIFs 
+
 
 ```{r Mapa de Ingresos por Programas Gubernamentales, Encuesta Intercensal 2015}
-EMENSAYO %>% select(EM11_Por_Part, EM_12_Por_Part, EM_17_POR_PART) %>%  chart.Correlation(histogram = TRUE)
-
 ```
 
 
 ##Partido que gobierna el municipio
-Se utilizan los resultados de la elección 2015 donde se eligen alcaldes municipales. De los 118 municipios (ahora alcaldias) 84 de ellos generaron una mayoría por el PRI (26), o por el PRI en alianza (58 alianza PRI-PVEM-NA), 18 por el PAN (con y sin alianzas), 16 PRD y 6 por otros partidos. Cabe resaltar que sólo un municipio obtiene mayoría por MORENA. Se recodificó la variable de partido que gobierna el municipio para disminuir el número de categorías.
+Se codifican los partidos ganadores de los municipios en las elecciones 2015, lo que determina el partido gobernante a nivel municipal. Se recodifican los ganadores para concentrar el número de categorías, de los 118 municipios (ahora alcaldias) 84 de ellos generaron una mayoría por el PRI (26), o por el PRI en alianza (58 alianza PRI-PVEM-NA), 18 por el PAN (con y sin alianzas), 16 PRD y 6 por otros partidos. Cabe resaltar que sólo un municipio obtiene mayoría por MORENA, enfatizando que este partido es fuertemente disruptivo lo que en parte nos permite mantener la afirmación teoríca de que no tiene una estructura montada que le permita ser identificado como proveedor de favores o de recursos de programas (salvo en un municipio). Tanto el ejecutivo Federal como el ejecutivo estatal son del PRI.
+
+Para el modelo de regresión se utiliza como categoría base aquellos municipios (84) en los cuales gobierna el PRI o se obtuvo una mayoría a favor de este partido en alianza con otro. Es decir que el peso del efecto observado es aquel observado cuando gobierna algún otro gobierno distinto del PRI distinguiendo por las distintas alianzas en la votación de 2015.
 
 ##Densidad de lista nominal 
-Se generó una variable de densidad de lista nominal dividiendo la Lista Nominal entre el área, en Kilómetros cuadrados, de los municipios. Esta variable se utiliza como alternativa continua a la variable dicotómica de municipio rural o urbano.
+
+Se generó una variable de densidad de lista nominal dividiendo la Lista Nominal entre el área, en Kilómetros cuadrados, de los municipios y calculando su logaritmo natural. Esta variable cumple varios papeles.
+1. Genera una alternativa continua a la distinción urbano-rural. 
+2. Captura ingreso y marginación al generar una distinción entre municipios urbanos y rurales. 
+
+El segundo efecto, ingreso, es deseado como una de las principales explicaciones detrás de la teoría de compra del voto. En un entorno donde se busca optimizar un presupuesto y todos los votos tienen el mismo valor, dado que es una elección solamente para gobernador, se compran los votos más baratos, que tienden a ser de las personas que asignan mayor valor marginal al dinero, o beneficios en especie, es decir aquellos más pobres. 
 
 El Estado de México presenta una alta concentración de Lista Nominal, y población, en municipios conurbados pertenecientes a la ciudad de México
 
 ```{r Tabla Densidad de Lista Nominal, results='asis'}
-TablaLN <- arrange(EMENSAYO, desc(EM_17_LISTA_NOMINAL)) %>%  select(NOM_MUN, EM_17_LISTA_NOMINAL, Densidad_de_Lista_Nominal, EM_17_POR_PART) %>%
-  mutate( Porcentaje_Lista_Nominal = (EM_17_LISTA_NOMINAL/sum(EMENSAYO$EM_17_LISTA_NOMINAL)*100)) %>% mutate(Suma_Acumulada_PLN = cumsum(Porcentaje_Lista_Nominal))
+
+TablaLN <- arrange(EMENSAYO, desc(EM_17_LISTA_NOMINAL)) %>%  
+  select(NOM_MUN, EM_17_LISTA_NOMINAL, Densidad_de_Lista_Nominal, EM_17_POR_PART) %>%
+  mutate( Porcentaje_Lista_Nominal = (EM_17_LISTA_NOMINAL/sum(EMENSAYO$EM_17_LISTA_NOMINAL)*100)) %>% 
+  mutate(Suma_Acumulada_PLN = cumsum(Porcentaje_Lista_Nominal))
+
+TablaLN <- TablaLN %>% 
+  select(NOM_MUN, EM_17_LISTA_NOMINAL, Densidad_de_Lista_Nominal, Porcentaje_Lista_Nominal, Suma_Acumulada_PLN) 
+
+colnames(TablaLN) <-  c("Municipio", "Lista N_2017", "Densidad LN", "Porcentaje_LN", "Acum_LN")
+kable(TablaLN[1:10,], format.args =list(big.mark = ",", digits = 3))
+
 ```
 
 ##Medidas de atipicidad
