@@ -214,17 +214,25 @@ factor(EMENSAYO$Partido_Gobernante_2015,
        levels = c("PRI_o_PRI_Alianza", "PAN o PAN Alianza", "PRD", "Otros"))
 
 #Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + Log_DLN + PRI_o_Otro_2015, data = EMENSAYO)
-
 ####################################################################################
 ###################     Índice de Marginación    ##########################
 ####################################################################################
+Margo <- read.csv(file = "D:/Proyectos R/TAFA-Book/Datos/2015/Marginación 90-15.csv")
+MargoEM <- Margo %>% select(ENT, MUN, IM, AÑO) %>% filter(AÑO == "2015", ENT == "México")
+temp <- MargoEM %>% select(MUN, IM) #listo para el Merge
+temp$NOM_MUN_JOIN <-temp$MUN
 
+#merge del IM
+temp$NOM_MUN_JOIN <- chartr('áéíóúñ','aeioun',tolower(temp$MUN)) #para tener nombres homogeneos
+temp[temp$NOM_MUN_JOIN == "acambay de ruiz castaneda",]$NOM_MUN_JOIN <- "acambay"
+temp<-temp[,-1]
+EMENSAYO <-left_join(EMENSAYO, temp, by = "NOM_MUN_JOIN")
+#temp2[is.na(temp2$IM),]# falta acambay
 
-
-
-
-
-
+#####################################
+## Un poco de limpieza    ###########
+#####################################
+#EMENSAYO <-EMENSAYO[-c(1,2,3,4,5)]
 #############################################################################################
 ####################    Salvar Cambios    ###################################################
 write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
