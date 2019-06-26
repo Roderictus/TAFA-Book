@@ -213,7 +213,9 @@ EMENSAYO$PRI_o_Otro_2015 <- fct_recode(EMENSAYO$PRI_o_Otro_2015, !!!levels)
 factor(EMENSAYO$Partido_Gobernante_2015, 
        levels = c("PRI_o_PRI_Alianza", "PAN o PAN Alianza", "PRD", "Otros"))
 
-#Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + Log_DLN + PRI_o_Otro_2015, data = EMENSAYO)
+Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + Log_DLN + PRI_o_Otro_2015 + IM, data = EMENSAYO)
+summary(Mod3)
+colnames(EMENSAYO)
 ####################################################################################
 ###################     Índice de Marginación    ##########################
 ####################################################################################
@@ -228,23 +230,26 @@ temp[temp$NOM_MUN_JOIN == "acambay de ruiz castaneda",]$NOM_MUN_JOIN <- "acambay
 temp<-temp[,-1]
 EMENSAYO <-left_join(EMENSAYO, temp, by = "NOM_MUN_JOIN")
 #temp2[is.na(temp2$IM),]# falta acambay
+EMENSAYO$IM <- as.numeric(as.character(EMENSAYO$IM))
 
 #####################################
 ## Un poco de limpieza    ###########
 #####################################
 #EMENSAYO <-EMENSAYO[-c(1,2,3,4,5)]
 #############################################################################################
+
 ####################    Salvar Cambios    ###################################################
-write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
+#write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 #############################################################################################
 
 
+#############################################################################################
+#############################################################################################
+####################     Aquí acaba la parte de datos    ####################################
+#############################################################################################
 
-
-
-EMENSAYO <- read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
-######################################## Aquí termina el trabajo adicional a bases de datos  ##################
-
+#############################################################################################
+#EMENSAYO <- read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 ###################################################################
 ##########      Gráficas de correlación     #######################
 ###################################################################

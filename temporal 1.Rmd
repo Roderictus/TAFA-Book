@@ -75,7 +75,7 @@ En este sentido el resultado electoral depende de un proceso complejo que no es 
 
 La elección en el Estado de México 2017 es particularmente interesante por varias razones. Es la última elección antes del periodo electoral 2018 en un estado fuerte del PRI, en un momento de cambio electoral, de baja aprobación presidencial, de fortalecimiento de un nuevo partido. Es también la última elección, con la excepción de un proceso para la elección de 3 ayuntamientos en Veracruz,  antes del complejo proceso electoral 2018. 
 
-Finalmente es  un Estado cuya elección estatal anterior fue ganada por una enorme mayoria, 61,97%, por el PRI (en alianza PRI, PVEM, PANAL) elección con un lejano segundo lugar, el PRD con un 20.96%. 
+Finalmente es  un Estado cuya elección estatal anterior, 6 años antes, fue ganada por una enorme mayoria, 61,97%, por el PRI (en alianza PRI, PVEM, PANAL) elección con un lejano segundo lugar, el PRD con un 20.96%. 
 
 Las características de esta elección la establecen como un símbolo de la resistencia del régimen dominante Priista contra la oleada a favor de MORENA. Esto ocurre en el contexto de un descontento generalizado evidenciado en la historicamente baja aprobación del Ejecutivo Federal característica  de los últimos años de gobierno de Enrique Peña Nieto, el cual alcanza un mínimo de aprobación de 12% (Nacion321) en Enero de 2017.
 
@@ -87,50 +87,38 @@ En este ensayo estudiamos una elección no concurrente de gobernador, es decir q
 
 En una elección donde se determine en el mismo proceso la gobernatura y alcaldias podríamos encontrar conflictos dentro de las estructuras partidistas por el control de recursos limitados. Presumiblemente aquellos que buscan la gobernatura buscan optimizar la cantidad de votos que se pueden obtener dado un presupuesto. Mientras que los que buscan ganar una alcaldía tienen que realizar cálculos adicionales, en una competencia con muy poca distancia entre punteros pueden estar dispuestos a obtener votos a un costo mayor al que está a dispuesto a pagar la estructura estatal. 
 
-En la tabla siguiente (XXXX) podemos observar la participación electoral 2011 y 2017. En ambas elecciones se observan porcentajes de participación promedio de 53.38% y 60.38%.
+En la tabla siguiente (XXXX) podemos observar la participación electoral 2011, 2017 y 2012. En ambas elecciones se observan porcentajes de participación promedio de 53.38% (2011), 60.38% (2017), 71.33%(2012). Estos niveles de participación se encuentran alineados con nuestras expectativas.
 
-#Incentivos teóricos a la participación electoral
+La elección 2011 es una elección poco competitiva, se espera, y obtiene, una amplia mayoría para el PRI, al igual que la elección 2017 el único cargo electo es el de gobernador estatal. La elección 2012 es similar a 2011 la diferencia más importante es que es una elección competitiva por lo que esperamos que distintas fuerzas políticas inviertan más recursos en promover el voto mediante diversas estratégias lo que se ve reflejado en una participación electoral 7% mayor. La elección 2012 en varios ordenes de gobierno, es una elección extremadamente competitiva a nivel ejecutivo federal, se elige al congreso y es competitiva en diversos municipios, dada la naturaleza concuerrente de la elección de estos cargos esperamos ver efectos de importancia y competencia en estas elecciones por lo que la relativamente alta participación electoral es esperada.
 
-
-
-
-
-Esto se encuentra dentro de las expectativas teóricas en un par de elecciones donde la principal diferencia es que la elección 2017 es competitiva y la elección 2011 no lo es. Una de las primeras cosas que buscamos es entender en donde ocurre el aumento en la participación 
-
-
-
-
-
-
-
-
-
-```{r Tabla1}
+```{r "Participación electoral en tres elecciones EDOMEX"}
 
 T1 <- EMENSAYO %>% select(EM11_Por_Part,EM_17_POR_PART,EM_12_Por_Part) %>% summary() 
 colnames(T1) <- c("Participación_2011", "Participación_2017", "Participación_2012")
 #kable(T1), caption = "Participación electoral (%) en tres elecciones EDOMEX")
 knitr::kable((T1), caption = "Participación electoral (porcentaje) en tres elecciones EDOMEX")
 
-EMENSAYO %>% select(EM11_Por_Part, EM_12_Por_Part, EM_17_POR_PART) %>%  
-  chart.Correlation(histogram = TRUE, title="Correlación Participación Electoral 2011, 2012, 2017")
-
 ```
+
+Un primer efecto a observar en la participación electoral entre estos periodos es cambios importantes en la participación electoral entre elecciones similares. En la siguiente tabla se muestra la correlación entre la participación electoral para estos tres periodos en los 125 municipios del Estado de México.
+
+
 
 Se muestra la correlación(Pearson) entre las tres elecciones, como es esperado la mayor similitud que existe es entre las dos elecciones más similares, elección simple de gobernador,elección 2011 y 2017 (0.89).  
 
-```{r Tabla2}
 
+```{r "Gráficas de correlación en tres elecciones EDOMEX"}
 EMENSAYO %>% select(EM11_Por_Part, EM_12_Por_Part, EM_17_POR_PART) %>%  
   chart.Correlation(histogram = TRUE, title="Correlación Participación Electoral 2011, 2012, 2017")
-
 ```
+
+
+##Estructura y el problema de optimización
 
 
 Estudiamos la elección como un problema de maximización de votos al que se enfrentan los partidos. Esta maximización se resuelve de acuerdo a un presupuesto para la obtención de votos que puede darse por medios que caben en un espectro de legalidad. Dependiendo de como se modele este puede ser un problema simple de compra de votos donde su costo es menor a un problema que incorpore la estructura y mecanismos de movilización de que disponen los partidos para obtener este voto. 
 
 
-##Estructura y el problema de optimización
 Hasta ahora hemos escrito asumiendo el problema desde una perspectiva del PRI. Es el PRI el que está resolviendo un problema de minimización del costo de los votos para que, ante un presupuesto limitado, maximice la cantidad de estos a favor de su candidato. Pero es necesario aclarar, cuando menos para el segundo contendiente, el porqué no resuelve el mismo problema de forma similar. Es decir que teorícamente esperariamos que la promoción, adquisición, intensidad de campaña se diera en donde el costo de estos votos es menor. Para ambos partidos podríamos esperar que fuera, teorícamente, en los municipios de menores ingresos, y que al competir por estos votos su valor aumentara hasta alcanzar un valor que hiciera uso de todos los recursos disponibles en una elección competida. Sin embargo vemos una importante diferenciación en la votación, probablemente indicativo de una diferencia en estratégia o preferencias. 
 
 En esta elección el Ejecutivo Federal, el gobierno del estado y el control del xx% de las alcaldias, está bajo el control del PRI. Esto le permite disponer de una mayor cantidad de herramientas de promoción del voto. 
@@ -247,7 +235,9 @@ Se generó una variable de densidad de lista nominal dividiendo la Lista Nominal
 1. Genera una alternativa continua a la distinción urbano-rural. 
 2. Captura ingreso y marginación al generar una distinción entre municipios urbanos y rurales. 
 
-El segundo efecto, ingreso, es deseado como una de las principales explicaciones detrás de la teoría de compra del voto. En un entorno donde se busca optimizar un presupuesto y todos los votos tienen el mismo valor, dado que es una elección solamente para gobernador, se compran los votos más baratos, que tienden a ser de las personas que asignan mayor valor marginal al dinero, o beneficios en especie, es decir aquellos más pobres. 
+El segundo efecto, ingreso, es deseado como una de las principales explicaciones detrás de la teoría de compra del voto. En un entorno donde se busca optimizar un presupuesto y todos los votos tienen el mismo valor, dado que es una elección solamente para gobernador, se compran los votos más baratos, que tienden a ser de las personas que asignan mayor valor marginal al dinero, o beneficios en especie, es decir aquellos más pobres.
+
+Esta variable es la que mejor efecta estos efectos dada la información disponible. Idealmente deseariamos tener una medida clara de ingreso
 
 El Estado de México presenta una alta concentración de Lista Nominal, y población, en municipios conurbados pertenecientes a la ciudad de México
 
@@ -262,26 +252,39 @@ TablaLN <- TablaLN %>%
   select(NOM_MUN, EM_17_LISTA_NOMINAL, Densidad_de_Lista_Nominal, Porcentaje_Lista_Nominal, Suma_Acumulada_PLN) 
 
 colnames(TablaLN) <-  c("Municipio", "Lista N_2017", "Densidad LN", "Porcentaje_LN", "Acum_LN")
-kable(TablaLN[1:10,], format.args =list(big.mark = ",", digits = 3))
-
+kable(TablaLN[1:10,], format.args =list(big.mark = ",", digits = 3), caption = "Densidad de Lista Nominal, 10 principales Municipios, Estado de México")
 ```
 
-##Medidas de atipicidad
-Anteriormente se ha expuesto que esta es una elección "sencilla" en el sentido de se propone que existe un incentivo principal para los partidos punteros, el maximizar el número total de votos. Para exponer porqué podemos compararla con la elección de 2012 proceso en el que se eligió al Presidente (ejecutivo federal), ayuntamientos y 75 diputados del Congreso del Estado. 
+#Índice de Marginación
 
-En la elección del 2012 podemos imaginar distintos tipos de incentivos por el tipo de elección, entre ellos. 
-1. Mayor competencia en municipios punteros
+
+#Hipótesis
+
+##H1. Promoción del voto en municipios Pobres
+Índice de Marginación
+Logaritmo de densidad de Lista Nominal
+
+##H2. Promoción del voto en municipios donde el PRI controla el gobierno municipal
+Municipios controlados por el PRI o el PRI en alianza. 
+
+##H3. Promoción del voto en municipios donde el PRI tiene mayor voto 
+Municipios donde en la elección 2011 el PRI obtiene mayor ventaja
 
 
 ##Modelo de regresión
 ```{r Tabla de Modelo de Regresión, results='asis', message = FALSE}
-EMENSAYO$Log_DLN <- log(EMENSAYO$Densidad_de_Lista_Nominal)
+
 Mod1 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno, data = EMENSAYO)
 Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + Log_DLN + Partido_Gobernante_2015, data = EMENSAYO)
 
 EMENSAYO %>% select(Por_Ingreso_Gobierno) %>% stargazer(header=FALSE, type='latex')
 stargazer(Mod1, Mod3)
 ```
+
+Como funciona el modelo para otros años
+
+Como funciona el modelo para predecir el voto por el PRI
+
 
 #Bibliografía
 
