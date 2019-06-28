@@ -232,6 +232,18 @@ EMENSAYO <-left_join(EMENSAYO, temp, by = "NOM_MUN_JOIN")
 #temp2[is.na(temp2$IM),]# falta acambay
 EMENSAYO$IM <- as.numeric(as.character(EMENSAYO$IM))
 
+####################################################################################
+###################     Votos con Mayoría PRI    ##########################
+####################################################################################
+#mayor distancia, optimización promoviendo el voto en municipios donde se espera un mayor diferencial entre
+#PRI y el segundo lugar.
+#Unidos por tí - PRI, PVEM, PANAL
+#Unidos podemos más, PRD, PT, Convergencia
+
+EMENSAYO$POR_PRI_UPT_2011 <-(EMENSAYO$EM11_UPT/EMENSAYO$EM11_Lista_Nominal)*100 #Porcentaje UPT y UPM
+EMENSAYO$POR_UPM_2011     <-(EMENSAYO$EM11_UPM/EMENSAYO$EM11_Lista_Nominal)*100
+EMENSAYO$DIF_VPRI_2011    <- EMENSAYO$POR_PRI_UPT_2011 - EMENSAYO$POR_UPM_2011  #Diferencia
+
 #####################################
 ## Un poco de limpieza    ###########
 #####################################
@@ -239,7 +251,7 @@ EMENSAYO$IM <- as.numeric(as.character(EMENSAYO$IM))
 #############################################################################################
 
 ####################    Salvar Cambios    ###################################################
-#write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
+write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 #############################################################################################
 
 
@@ -267,13 +279,19 @@ EMENSAYO %>% select(Por_Ingreso_Gobierno, Por_Ingreso_otro_Pais, Por_Poca_Varied
        EM_12_PT_MC_por, EM_17_POR_PART, EM_17_POR_PRI, EM_17_PRI_ALIANZA_POR, EM_17_POR_PAN, EM_17_POR_PRD, 
        EM_17_POR_PRI, EM_17_POR_MORENA) %>% chart.Correlation(histogram = TRUE)
 
+colnames(EMENSAYO)
 
 EMENSAYO %>% 
-  select(Por_Ingreso_Gobierno, Por_Ingreso_otro_Pais, Por_Poca_Variedad_Alimentos,
-         EM_12_Por_Part, EM11_Por_Part, EM_17_POR_PART,EM_12_PAN_por, EM_12_PRI_por, 
+  select(Por_Ingreso_Gobierno, EM_12_Por_Part, EM11_Por_Part, EM_17_POR_PART,EM_12_PAN_por, EM_12_PRI_por, 
          EM_17_POR_PART, EM_17_POR_PRI, EM_17_PRI_ALIANZA_POR, EM_17_POR_PAN, 
          EM_17_POR_PRD,EM_17_POR_PRI, EM_17_POR_MORENA) %>% 
   chart.Correlation(histogram = TRUE)
+
+EMENSAYO %>% 
+  select(Por_Ingreso_Gobierno, EM_12_Por_Part, EM11_Por_Part, EM_17_POR_PART, DIF_VPRI_2011, Log_DLN) %>% 
+  chart.Correlation(histogram = TRUE)
+
+
 
 
 
