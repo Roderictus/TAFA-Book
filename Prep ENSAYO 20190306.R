@@ -234,6 +234,8 @@ temp<-temp[,-1]
 
 EMENSAYO <-left_join(EMENSAYO, temp, by = "NOM_MUN_JOIN")
 #temp2[is.na(temp2$IM),]# falta acambay
+EMENSAYO$IM <- EMENSAYO$IM.y
+EMENSAYO <- EMENSAYO %>% select(-IM.y, -IM.x)
 EMENSAYO$IM <- as.numeric(as.character(EMENSAYO$IM))
 
 ########    Lo mismo pero sólo añadiendo porcentaje de población con menos de dos salarios mínimos
@@ -246,7 +248,7 @@ temp$NOM_MUN_JOIN <- chartr('áéíóúñ','aeioun',tolower(temp$MUN)) #para ten
 temp[temp$NOM_MUN_JOIN == "acambay de ruiz castaneda",]$NOM_MUN_JOIN <- "acambay"
 temp<-temp[,-1]
 EMENSAYO <-left_join(EMENSAYO, temp, by = "NOM_MUN_JOIN")
-EMENSAYO$IM <- as.numeric(as.character(EMENSAYO$PO2SM))
+EMENSAYO$PO2SM <- as.numeric(as.character(EMENSAYO$PO2SM))
 
 ####################################################################################
 ###################     Votos con Mayoría PRI    ##########################
@@ -384,8 +386,12 @@ colnames(EMENSAYO)
 
 Mod2 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno +  Por_Poca_Variedad_Alimentos, data = EMENSAYO)
 
-Mod2 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno  + Por_Poca_Variedad_Alimentos + Log_DLN + Partido_Gobernante_2015, 
-           data = EMENSAYO)
+colnames(EMENSAYO)
+
+head(EMENSAYO$PRI_o_Otro_2015)
+
+Mod2 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno  + PO2SM + Log_DLN + Partido_Gobernante_2015 +
+             PRI_o_Otro_2015 + DIF_VPRI_2011, data = EMENSAYO)
 
 summary(Mod2)
 colnames(EMENSAYO)
