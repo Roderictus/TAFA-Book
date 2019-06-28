@@ -56,35 +56,53 @@ EMENSAYO<-read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 ```
 
 # Introducción
-La participación electoral es el elemento fundamental del ejercicio democrático. Es la manifestación revelada de las preferencias y deseos de la ciudadanía. También es una forma de manifestar castigo o premio al ejercicio de un partido en el poder.
+La participación electoral es el elemento fundamental del ejercicio democrático. Es la manifestación revelada de las preferencias y deseos de la ciudadanía. También es una forma de manifestar castigo o premio al ejercicio de un partido en el poder, identificación con las propuestas de un partido, confianza en el proceso electoral y en las instituciones del Estado y otras señales de información deseables en el ejercicio democráctico. 
 
-Su intensidad es una señal con múltiples significados que no son fácilmente separables. La participación electoral es una señal de:
+Este trabajo se concentra en aquellas variables institucionales y agregadas, en contraste con características individuales del votante, que afectan la participación electoral. Enfatizamos aquellas que pueden ser manipuladas por el sistema de partidos, por los promotres electorales, por un sistema de incentivos paralelo al Estado y a la características reguladas del ejercicio electoral.
+
+La intensidad de la participación electoral es una señal con múltiples significados que no son fácilmente separables. La participación electoral es una señal de:
 
 1. La importancia de la elección ante el electorado. 
 2. Competencia electoral como cercanía entre los partidos, o candidatos, punteros. 
-3. Promoción del voto por parte de partidos o grupos organizados. 
+3. Promoción del voto por parte de partidos o grupos organizados.
 
-La participación electoral no está limitada a estas dimensiones, también es función del sistema institucional, valores culturales, costos como desplazamiento y tiempo invertido, beneficios percibidos y otros. 
+
+La participación electoral no está limitada a estas dimensiones, también es función del sistema institucional, valores culturales, costos como desplazamiento y tiempo invertido, beneficios percibidos y otros.
+
 Generalmente es representada como algo positivo, su promoción es un lugar de coincidencia entre las campañas gubernamentales, de órganos electorales independientes, partidistas y de la sociedad civil. Sin embargo, es también un lugar donde se manifiestan distintos elementos de la práctica electoral que suelen ser contrarios a los ideales democráticos, en particular la promoción del voto fuera de los mecanismos electoralmente regulados.
 
 Esto incluye una familia de comportamientos cuya principal característica en común es que se practican fueran de lo aceptado legalmente. Esta definición incluye muchos elementos de difícil observación, entre ellos la utilización de medios legales pero en una cantidad cuyo costo supere las asignaciones previstas para campaña, otorgamiento de programas financiados por el gobierno federal pero provistos bajo la pretensión de que provienen de un partido o que el programa depende de un resultado electoral específico para seguir existiendo. También existen mecanismos más directamente involucrados que pueden incluir compra del voto, coacción, movilización bajo presión.
 
 En este sentido el resultado electoral depende de un proceso complejo que no es fácilmente reducible y que muchas variables no son directamente observables. Sin embargo es posible distinguir elementos específicos de una elección y buscar encontrar una narrativa que la caracterice. En este sentido es necesario aclarar una tipología electoral que clarifique los incentivos que se manifiestan en el proceso. 
 
-##Contexto electoral en el Estado de México 2017
+# Literatura sobre Participación Electoral
 
-La elección en el Estado de México 2017 es particularmente interesante por varias razones. Es la última elección antes del periodo electoral 2018 en un estado fuerte del PRI, en un momento de cambio electoral, de baja aprobación presidencial, de fortalecimiento de un nuevo partido. Es también la última elección, con la excepción de un proceso para la elección de 3 ayuntamientos en Veracruz,  antes del complejo proceso electoral 2018. 
+Encontramos esencialmente dos grandes fuentes de literatura que divido en cuanto a enfoque, datos y tipo de conclusiones en estudios con información individual, estudios de información agregada y aquellos sobre mecanismos de influencia o maquinaria electoral. 
 
+El primer tipo de estudios se enfoca en características individuales como determinantes de la participación electoral, el segundo tipo se concentra, de forma no excluyente entre los dos subtipos, en características intitucionales o en análisis comparativos.
+
+Los análisis con información individual tienden a enfocarse en características personales como etnicidad(), escolaridad(), ingresos(), etc. 
+
+Los análisis agregados tienden a enfocarse en características institucionales como distribución programática y no programática de bienes (), maquinarias partidistas y promotores electorales(), desarrollo de clientelas, efectos de del voto obligatorio(Gallego). Algunas de las conclusiones más relevantes al presente estudio es la relación entre participación electoral y percepción de fraude (McCann-Dominguez), el incremento en la participación electoral producto de la promoción del voto por medio de maquinarias partidistas(Nichter 2008), moilización sesgada a favor de "unmobilized strong supporters" (Stokes 2005) o simplemente más proclives a apoyar al partido (Hansen).
+
+Política Distributiva por medio de clientelismo, maquinaria política y patronazgo (Stokes 2012) en donde establece una importante distinción entre *compra de votos* donde "la maquinaria política puede brindar apoyos, sobornar o intentar persuadir a la gente para votar por ellos" (p.15) y la *compra de participación* o puede "brindar apoyos o sobornar para llevar a los votantes a las urnas" (idem). 
+
+Tanto la compra de participació como la compra de abstención, o "fraude delacionario" (Cox Kousser)
+
+
+# Contexto electoral en el Estado de México 2017
+
+La elección en el Estado de México 2017 es particularmente interesante por varias razones. Es la última elección antes del periodo electoral 2018 en un estado tradicionalmente gobernado por el PRI. Se realiza en un momento de cambio electoral, las elecciones del año siguiente 2018 se inclinarian sólidamente a favor de MORENA. Aquí nos encontramos en un momento de baja aprobación presidencial, de fortalecimiento de un nuevo partido. 
+Es también la última elección, con la excepción de un proceso para la elección de 3 ayuntamientos en Veracruz,  antes del complejo proceso electoral 2018. 
 Finalmente es  un Estado cuya elección estatal anterior, 6 años antes, fue ganada por una enorme mayoria, 61,97%, por el PRI (en alianza PRI, PVEM, PANAL) elección con un lejano segundo lugar, el PRD con un 20.96%. 
 
-Las características de esta elección la establecen como un símbolo de la resistencia del régimen dominante Priista contra la oleada a favor de MORENA. Esto ocurre en el contexto de un descontento generalizado evidenciado en la historicamente baja aprobación del Ejecutivo Federal característica  de los últimos años de gobierno de Enrique Peña Nieto, el cual alcanza un mínimo de aprobación de 12% (Nacion321) en Enero de 2017.
+Las características de esta elección la establecen como un símbolo de la resistencia del régimen dominante Priista contra la oleada a favor de MORENA. Esto ocurre en el contexto de un descontento generalizado evidenciado en la historicamente por la baja aprobación del Ejecutivo Federal característica  de los últimos años de gobierno de Enrique Peña Nieto, el cual alcanza un mínimo de aprobación de 12% (Nacion321) en Enero de 2017.
 
 Esto sentará la base para el fuerte contraste entre dos elecciones similares en términos de lo que está en juego e incentivos institucionales entre el 2011 y 2017. En el proceso electoral 2017 la elección se mostraba mucho más cerrada, tanto el proceso electoral 2011 como en 2012 el PRI obtuvo grandes mayorias, un control casí completo del Estado. En estos procesos no existía aún el Movimiento Regeneración Nacional (MORENA), previo a la jornada electoral del 4 de Junio de 2017 ninguna encuesta privilegiaba a MORENA sobre el PRI, sólo un par mostraban una ventaja para el PAN. Sin embargo el resultado final estaría a tres puntos de distancia entre los punteros PRI (33.56%) y MORENA (30.78%.).
 
-#Incentivos a la participación electoral en el Estado de México 2011, 2012 y 2017
+##Incentivos a la participación electoral en el Estado de México 2011, 2012 y 2017
 
-En este ensayo estudiamos una elección no concurrente de gobernador, es decir que se espera que los incentivos se encuentren alineados a obtener una mayoría simple en el estado. Esto en contraste con múltiples elecciones concurrentes donde podría la cercania entre punteros generar incentivos diferenciados entre los que buscan la victoria del partido en el municipio contra los que esperan obtener la gobernatura. 
-
+En este ensayo estudiamos una elección no concurrente de gobernador, es decir que se espera que los incentivos se encuentren alineados a procurar una mayoría simple en el estado. Esto en contraste con múltiples elecciones concurrentes donde podría la cercania entre punteros generar incentivos diferenciados entre los que buscan la victoria del partido en el municipio contra los que esperan obtener la gobernatura. 
 En una elección donde se determine en el mismo proceso la gobernatura y alcaldias podríamos encontrar conflictos dentro de las estructuras partidistas por el control de recursos limitados. Presumiblemente aquellos que buscan la gobernatura buscan optimizar la cantidad de votos que se pueden obtener dado un presupuesto. Mientras que los que buscan ganar una alcaldía tienen que realizar cálculos adicionales, en una competencia con muy poca distancia entre punteros pueden estar dispuestos a obtener votos a un costo mayor al que está a dispuesto a pagar la estructura estatal. 
 
 En la tabla siguiente (XXXX) podemos observar la participación electoral 2011, 2017 y 2012. En ambas elecciones se observan porcentajes de participación promedio de 53.38% (2011), 60.38% (2017), 71.33%(2012). Estos niveles de participación se encuentran alineados con nuestras expectativas.
@@ -102,32 +120,26 @@ knitr::kable((T1), caption = "Participación electoral (porcentaje) en tres elec
 
 Un primer efecto a observar en la participación electoral entre estos periodos es cambios importantes en la participación electoral entre elecciones similares. En la siguiente tabla se muestra la correlación entre la participación electoral para estos tres periodos en los 125 municipios del Estado de México.
 
-
-
-Se muestra la correlación(Pearson) entre las tres elecciones, como es esperado la mayor similitud que existe es entre las dos elecciones más similares, elección simple de gobernador,elección 2011 y 2017 (0.89).  
-
+Se muestra la correlación(Pearson) entre las tres elecciones, como es esperado la mayor correlación  es entre las dos elecciones más similares, ambas elecciones simples de gobernador,elección 2011 y 2017 (0.89).  
 
 ```{r "Gráficas de correlación en tres elecciones EDOMEX"}
 EMENSAYO %>% select(EM11_Por_Part, EM_12_Por_Part, EM_17_POR_PART) %>%  
   chart.Correlation(histogram = TRUE, title="Correlación Participación Electoral 2011, 2012, 2017")
 ```
 
-
 ##Estructura y el problema de optimización
 
+Estudiamos la elección como un problema de maximización de votos al que se enfrentan los partidos. Esta maximización se resuelve de acuerdo a un presupuesto para la obtención de votos. 
 
-Estudiamos la elección como un problema de maximización de votos al que se enfrentan los partidos. Esta maximización se resuelve de acuerdo a un presupuesto para la obtención de votos que puede darse por medios que caben en un espectro de legalidad. Dependiendo de como se modele este puede ser un problema simple de compra de votos donde su costo es menor a un problema que incorpore la estructura y mecanismos de movilización de que disponen los partidos para obtener este voto. 
+Hasta ahora hemosaumido el problema desde una perspectiva del PRI. Es el PRI el que está resolviendo un problema de minimización del costo de los votos para que, ante un presupuesto limitado, maximice la cantidad de estos a favor de su candidato. Pero es necesario aclarar, cuando menos para el segundo contendiente, el porqué no resuelve el mismo problema de forma similar. 
 
-
-Hasta ahora hemos escrito asumiendo el problema desde una perspectiva del PRI. Es el PRI el que está resolviendo un problema de minimización del costo de los votos para que, ante un presupuesto limitado, maximice la cantidad de estos a favor de su candidato. Pero es necesario aclarar, cuando menos para el segundo contendiente, el porqué no resuelve el mismo problema de forma similar. Es decir que teorícamente esperariamos que la promoción, adquisición, intensidad de campaña se diera en donde el costo de estos votos es menor. Para ambos partidos podríamos esperar que fuera, teorícamente, en los municipios de menores ingresos, y que al competir por estos votos su valor aumentara hasta alcanzar un valor que hiciera uso de todos los recursos disponibles en una elección competida. Sin embargo vemos una importante diferenciación en la votación, probablemente indicativo de una diferencia en estratégia o preferencias. 
+Es decir que teorícamente esperariamos que la promoción, adquisición, intensidad de campaña se diera en donde el costo de estos votos es menor. Para ambos partidos podríamos esperar que fuera, teorícamente, en los municipios de menores ingresos, y que al competir por estos votos su valor aumentara hasta agotar los recursos disponibles . 
+Sin embargo vemos una importante diferenciación en la votación, probablemente indicativo de una diferencia en estratégia o preferencias. 
 
 En esta elección el Ejecutivo Federal, el gobierno del estado y el control del xx% de las alcaldias, está bajo el control del PRI. Esto le permite disponer de una mayor cantidad de herramientas de promoción del voto. 
 
-##Promoción sesgada
+##Mecanismos de influencia
 
-#Incentivos Electorales
-E
-#Mecanismos de influencia
 Utilizamos información agregada a nivel municipal, esto implica una caracterización de los municipios como si estos fueran individuos, los valores arrojados por un modelo de regresión implican que un municipio más pobre o más rico, más o menos denso,gobernado por tal o cual partido puede tener distintas propensidades para una mayor o menor participación electoral. Sin embargo esta metodología no permite observar el mecanismo por el cual los partidos optimizan sus recursos para maximizar el voto lo que impide entender la eficacia, entender la logística, y entender el funcionamiento de la estructura intermediaria. Es, por ejemplo, relevante si la estructura que opera durante los periodos electorales es la una estructura que es parte permanente del partido, si es una estructura temporal del partido que es activada durante el periodo electoral, si utiliza una estructura que cumple una función de facilitadora de programas gubernamentales, si estos programas son federales o estatales y que cumple una función de motivación o acarreo o incluso de sabotaje durante la jornada electoral. Existe una literatura creciente sobre los mecanismos mediante los cuales un partido puede influir en un resultado electoral. Las teorías detrás de los mecanismos de operación tienen distintos grados de complejidad, desde lo relativamente lineal, basadas en una sóla dimensión que establece a los votantes de acuerdo a su grado de lealtad, votantes leales a votantes "oscilantes" (xxxxxx). Hasta teorías que incluyen diversos niveles de organización. Particularmente intersante para este trabajo son las teorías que distinguen entre la "compra"" de votos o la asignación no programática de beneficios a agentes, votantes o grupos específicos contra aquellas que analizan la influencia de la compra de participación, es decir la mobilización no dirigida o indistinta de los votantes. La mobilización de la participación resuelve problemas de agencia. Esta mobilización se realiza a través de "brokers"  Una explicación (Stokes, Dunning) el tipo de votantes es un sub producto de 
 
 
@@ -144,8 +156,6 @@ La primera es la más frecuente explicación en la literatura revisada, lo que e
 
 #Variables
 Aquí se expone el origen de la información utilizada en este documento junto con la relación esperada que se tiene con la participación electoral como variable dependiente. 
-
-#Participación electoral, Variable dependiente
 
 ##Participación Electoral
 Se utiliza el resultado electoral 2012 y 2017 a nivel sección electoral y se agrega municipalmente. Es el resultado de la división entre el número de votos y la lista nominal del municipio, se expresa en términos de porcentaje. 
@@ -207,7 +217,6 @@ Plot_Map
 ```
 
 
-
 ##Hogares que reciben dinero del gobierno a través de programas gubernamentales
 
 Está variable está expresada como el porcentaje de viviendas dentro del municipio que afirmaron recibir dinero de programas de gobierno respecto al total de viviendas dentro del municipio. Se generó con información de la Encuesta Iintercensal 2015 del INEGI significativa a nivel municipal. 
@@ -255,7 +264,11 @@ colnames(TablaLN) <-  c("Municipio", "Lista N_2017", "Densidad LN", "Porcentaje_
 kable(TablaLN[1:10,], format.args =list(big.mark = ",", digits = 3), caption = "Densidad de Lista Nominal, 10 principales Municipios, Estado de México")
 ```
 
-#Índice de Marginación
+## Índice de Marginación
+
+## Municipio que favorece al PRI
+
+
 
 
 #Hipótesis
@@ -285,6 +298,14 @@ Como funciona el modelo para otros años
 
 Como funciona el modelo para predecir el voto por el PRI
 
+
+#Investigación Futura
+
+En general encontramos interesante el utilizar las herramientas y bena parte de la información presente en este trabajo para analizar efectos de promoción del voto utilizando información y comparación entre estados y elecciones. 
+
+Encontramos efectos significativos que apuntan a la promoción del voto en municipios donde hay mayor proporción de gasto en programas gubernamentales. En este estudio no es posible determinar si existe una mayor proporción de gasto en Estados competidos por parte de programas Federales, para lo que podría existir información si se incorporará información de otros estados y otras elecciones para hacer comparativos. 
+
+Otra veta de investigación es determinar el tamaño de diversos efectos institucionales en la participación, a decir la concurrencia electoral, la competencia, o no, en un municipio. También de interés es determinar 
 
 #Bibliografía
 
