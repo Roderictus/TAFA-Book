@@ -14,6 +14,9 @@ library(stargazer)
 #####           Trabajo de bases de Intercensal sólo para el EDOMEX   ################
 #####                             VIVIENDA                            ################
 ######################################################################################
+#read.csv(file = "")
+
+
 ViviendaIC$JEFE_SEXO<-factor(ViviendaIC$JEFE_SEXO, labels = c("Hombre", "Mujer"))
 ViviendaIC[ViviendaIC$JEFE_EDAD == "999", ]$JEFE_EDAD <- NA#clasificar correctamente los NAs de edad del jefe del hogar
 
@@ -220,7 +223,7 @@ colnames(EMENSAYO)
 ###################     Índice de Marginación    ##########################
 ####################################################################################
 Margo <- read.csv(file = "D:/Proyectos R/TAFA-Book/Datos/2015/Marginación 90-15.csv")
-MargoEM <- Margo %>% select(ENT, MUN, IM, AÑO) %>% filter(AÑO == "2015", ENT == "México")
+MargoEM <- Margo %>% select(ENT, MUN, PO2SM, IM, AÑO) %>% filter(AÑO == "2015", ENT == "México")
 temp <- MargoEM %>% select(MUN, IM) #listo para el Merge
 temp$NOM_MUN_JOIN <-temp$MUN
 
@@ -228,9 +231,22 @@ temp$NOM_MUN_JOIN <-temp$MUN
 temp$NOM_MUN_JOIN <- chartr('áéíóúñ','aeioun',tolower(temp$MUN)) #para tener nombres homogeneos
 temp[temp$NOM_MUN_JOIN == "acambay de ruiz castaneda",]$NOM_MUN_JOIN <- "acambay"
 temp<-temp[,-1]
+
 EMENSAYO <-left_join(EMENSAYO, temp, by = "NOM_MUN_JOIN")
 #temp2[is.na(temp2$IM),]# falta acambay
 EMENSAYO$IM <- as.numeric(as.character(EMENSAYO$IM))
+
+########    Lo mismo pero sólo añadiendo porcentaje de población con menos de dos salarios mínimos
+
+temp <- MargoEM %>% select(MUN, PO2SM) #listo para el Merge
+temp$NOM_MUN_JOIN <-temp$MUN
+
+#merge del IM
+temp$NOM_MUN_JOIN <- chartr('áéíóúñ','aeioun',tolower(temp$MUN)) #para tener nombres homogeneos
+temp[temp$NOM_MUN_JOIN == "acambay de ruiz castaneda",]$NOM_MUN_JOIN <- "acambay"
+temp<-temp[,-1]
+EMENSAYO <-left_join(EMENSAYO, temp, by = "NOM_MUN_JOIN")
+EMENSAYO$IM <- as.numeric(as.character(EMENSAYO$PO2SM))
 
 ####################################################################################
 ###################     Votos con Mayoría PRI    ##########################
@@ -251,7 +267,7 @@ EMENSAYO$DIF_VPRI_2011    <- EMENSAYO$POR_PRI_UPT_2011 - EMENSAYO$POR_UPM_2011  
 #############################################################################################
 
 ####################    Salvar Cambios    ###################################################
-write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
+#write.csv(x = EMENSAYO, file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 #############################################################################################
 
 
