@@ -83,6 +83,10 @@ El primer tipo de estudios se enfoca en características individuales como deter
 
 Los análisis con información individual tienden a enfocarse en características personales como etnicidad(), escolaridad(), ingresos(), etc. 
 
+En cuanto a paises con diferentes características institucionales se mencionan como características determinantes de la participación "distritos competitivos nacionalmente", "fuertes clivajes entre partidos y grupos" (Powell 1986), abundando y ajustando ese estudio "esproporción electoral, miltipartidismo, unicameralismo y votación obligatoria. (Jackman 1987)
+
+Socieconómicos, sistema de partido, institucionales
+
 Los análisis agregados tienden a enfocarse en características institucionales como distribución programática y no programática de bienes (), maquinarias partidistas y promotores electorales(), desarrollo de clientelas, efectos de del voto obligatorio(Gallego). Algunas de las conclusiones más relevantes al presente estudio es la relación entre participación electoral y percepción de fraude (McCann-Dominguez), el incremento en la participación electoral producto de la promoción del voto por medio de maquinarias partidistas(Nichter 2008), moilización sesgada a favor de "unmobilized strong supporters" (Stokes 2005) o simplemente más proclives a apoyar al partido (Hansen).
 
 Política Distributiva por medio de clientelismo, maquinaria política y patronazgo (Stokes 2012) en donde establece una importante distinción entre *compra de votos* donde "la maquinaria política puede brindar apoyos, sobornar o intentar persuadir a la gente para votar por ellos" (p.15) y la *compra de participación* o puede "brindar apoyos o sobornar para llevar a los votantes a las urnas" (idem). 
@@ -121,7 +125,7 @@ Un primer efecto a observar en la participación electoral entre estos periodos 
 
 Se muestra la correlación(Pearson) entre las tres elecciones, como es esperado la mayor correlación  es entre las dos elecciones más similares, ambas elecciones simples de gobernador,elección 2011 y 2017 (0.89).  
 
-```{r Gráficas de correlación participación en tres elecciones EDOMEX, fig.cap="Gráficas de correlación participación a nivel municipal en tres elecciones EDOMEX",  out.extra=''}
+```{r Gráficas de correlación participación en tres elecciones EDOMEX, fig.cap="Gráficas de correlación participación a nivel municipal en tres elecciones EDOMEX",  out.extra='', fig.width=6 , fig.height=4}
 
 EMENSAYO %>% select(EM11_Por_Part, EM_12_Por_Part, EM_17_POR_PART) %>%  
   chart.Correlation(histogram = TRUE, title="Correlación Participación Electoral 2011, 2012, 2017")
@@ -317,6 +321,10 @@ TablaLN <- TablaLN %>%
 
 colnames(TablaLN) <-  c("Municipio", "Lista N_2017", "Densidad LN", "Porcentaje_LN", "Acum_LN")
 kable(TablaLN[1:10,], format.args =list(big.mark = ",", digits = 3), caption = "Densidad de Lista Nominal, 10 principales Municipios, Estado de México")
+
+
+
+
 ```
 
 ## Índice de Marginación
@@ -352,6 +360,13 @@ A pesar de que esperamos que el efecto sea positivo existen varias razones por l
 #Hipótesis
 
 ##H1. Promoción del voto en municipios Pobres
+Esperamos que la riqueza afecte la capacidad de manipular el voto, es decir que aquellos votantes más pobres, con mayor utilidad marginal hacia el ingreso voten hacia el partido gobernante, en este caso el incumbente. El efecto puede entenderse como que los pobres se encuentran "más dispuestos a comprometer sus preferencias políticas a cambio de consumo privado adicional"
+
+
+
+
+
+
 Índice de Marginación
 Logaritmo de densidad de Lista Nominal
 
@@ -365,35 +380,65 @@ Particiáción en municipios donde en la elección 2011 el PRI obtiene mayor ven
 
 
 ##Modelo de regresión
+
+OLS con tamaño del padrón electoral como peso. 
+
+
+El sentido de las variables y su importancia es la correcta el tamaño del efecto posiblemente no es el correcto.
+
+
+
 ```{r Tabla de Modelo de Regresión 2017, results='asis', message = FALSE }
 
-Mod1 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno , data = EMENSAYO)
+EMENSAYO$PRI_o_Otro_2015 <- relevel(EMENSAYO$PRI_o_Otro_2015, ref = "PRI o PRI Alianza")
 
-Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + PRI_o_Otro_2015, data = EMENSAYO)
+#renivelación del factor de coeficiente 
 
-EMENSAYO %>% select(Por_Ingreso_Gobierno) %>% stargazer(header=FALSE, type='latex')
-stargazer(Mod1, Mod3, title = "Modelo para participaci[on electoral 2017") 
+Mod1 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno , 
+           data = EMENSAYO,
+           weights = EM_17_LISTA_NOMINAL)
+
+Mod2 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + PRI_o_Otro_2015 + PO2SM + DIF_VPRI_2011 , 
+           data = EMENSAYO,
+           weights = EM_17_LISTA_NOMINAL)
+
+Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + PRI_o_Otro_2015 + Log_DLN + PO2SM + DIF_VPRI_2011, 
+           data = EMENSAYO, 
+           weights = EM_17_LISTA_NOMINAL)
+
+
+stargazer(Mod1, Mod2, Mod3, title = "Modelo para participación electoral 2017", header = FALSE) 
 #stargazer(Mod1, Mod3, title = "Modelos de Regresión Lineal", table.placement = "H") #para forzar el float
+
 ```
-
-##Como funciona el modelo para otros años, diferencia entre elecciones 2011-2017
-
-```{r Tabla de Modelo de Regresión 2011, results='asis', message = FALSE }
-
-Mod1 <- lm(EM11_Por_Part ~ Por_Ingreso_Gobierno, data = EMENSAYO)
-
-Mod3 <- lm(EM11_Por_Part ~ Por_Ingreso_Gobierno + Log_DLN + Partido_Gobernante_2015, data = EMENSAYO)
-
-EMENSAYO %>% select(Por_Ingreso_Gobierno) %>% stargazer(header=FALSE, type='latex')
-stargazer(Mod1, Mod3, title = "Modelo para participaci[on electoral 2011") 
-#stargazer(Mod1, Mod3, title = "Modelos de Regresión Lineal", table.placement = "H") #para forzar el float
-```
-
 
 
 ##Como funciona el modelo para predecir el voto por el PRI, Morena
 
+Este trabajo se ha centrado en el papel de diversas variables en la determinación de la participación electoral a nivel municipal en la elección del Estado de México en el 2017. Hemos planteado una explicación consistente con los datos que se basa en la promoción sesgada del voto en aquellos municipios que son más proclives a votar por el PRI. Asumimos que el PRI al controlar la gobernatura del Estado, el Ejecutivo Federal y la mayor parte de los municipios tiene ventajas únicas de incumbente que le permiten apropiarse de la atribución percibida de programas públicos y/o de maquinaria que le permite la mobilización de aquellos grupos que se percibe que tienen mayor proclividad electoral por el este partido.
 
+Bajo esta perspectiva esperamos que las variables que hemos encontrado explican parte de las diferencias en la participación electoral en los municipios del Estado de México en 2017 sean significativas para la predición del voto por el PRI y que no sean relevantes, o tengan el sentido contrario, para la votación por sus oponentes, particularmente MORENA. 
+
+Para ello utilizamos algunas de las variables expuestas y cambiamos la variable dependiente al voto, a nivel municipal, obtenido como porcentaje del total de votos efectivos por PRI y por MORENA y comparamos el efecto de las variables en estos dos modelos. 
+
+
+```{r Regresión Comparativa entre Partidos, results='asis', message = FALSE }
+
+Mod5 <- lm(EM_17_POR_PRI ~ Por_Ingreso_Gobierno + PRI_o_Otro_2015 + PO2SM + DIF_VPRI_2011, 
+           data = EMENSAYO, 
+           weights = EM_17_LISTA_NOMINAL)
+Mod6 <- lm(EM_17_POR_MORENA ~ Por_Ingreso_Gobierno + PRI_o_Otro_2015 + PO2SM + DIF_VPRI_2011, 
+           data = EMENSAYO, 
+           weights = EM_17_LISTA_NOMINAL)
+Mod7 <- lm(EM_17_POR_PAN ~ Por_Ingreso_Gobierno + PRI_o_Otro_2015 + PO2SM + DIF_VPRI_2011, 
+           data = EMENSAYO, 
+           weights = EM_17_LISTA_NOMINAL)
+
+
+stargazer( Mod5, Mod6, Mod7, title = "Modelos de Regresión Lineal Partidos ", table.placement = "H", header = FALSE) #para forzar el float
+```
+
+Encontramos que el modelo es altamente predictivo en el caso del voto por el PRI
 
 #Investigación Futura
 
