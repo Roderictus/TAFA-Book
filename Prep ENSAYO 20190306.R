@@ -212,9 +212,13 @@ levels<- c(PRI_o_PRI_Alianza ="PRI o PRI-Alianza",
          No_PRI = "PRD", 
          No_PRI = "Otros" )
 EMENSAYO$PRI_o_Otro_2015 <- fct_recode(EMENSAYO$PRI_o_Otro_2015, !!!levels)
+factor(EMENSAYO$PRI_o_Otro_2015, 
+       levels = c("PRI o PRI Alianza", "No_PRI"))
 
 factor(EMENSAYO$Partido_Gobernante_2015, 
        levels = c("PRI_o_PRI_Alianza", "PAN o PAN Alianza", "PRD", "Otros"))
+
+
 
 Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + Log_DLN + PRI_o_Otro_2015 + IM, data = EMENSAYO)
 summary(Mod3)
@@ -265,6 +269,8 @@ EMENSAYO$DIF_VPRI_2011    <- EMENSAYO$POR_PRI_UPT_2011 - EMENSAYO$POR_UPM_2011  
 #####################################
 ## Un poco de limpieza    ###########
 #####################################
+
+#####################################
 #EMENSAYO <-EMENSAYO[-c(1,2,3,4,5)]
 #############################################################################################
 
@@ -273,7 +279,6 @@ EMENSAYO$DIF_VPRI_2011    <- EMENSAYO$POR_PRI_UPT_2011 - EMENSAYO$POR_UPM_2011  
 #############################################################################################
 
 
-#############################################################################################
 #############################################################################################
 ####################     Aquí acaba la parte de datos    ####################################
 #############################################################################################
@@ -309,26 +314,6 @@ EMENSAYO %>%
   select(Por_Ingreso_Gobierno, EM_12_Por_Part, EM11_Por_Part, EM_17_POR_PART, DIF_VPRI_2011, Log_DLN) %>% 
   chart.Correlation(histogram = TRUE)
 
-
-
-
-
-EMENSAYO %>% ungroup() %>%
-  select(EM_12_PRI_por, EM_12_PAN_por, EM_12_PRD_por, EM_12_Por_Part, DLNominal12, Por_Ingreso_Gobierno) %>%
-  chart.Correlation(histogram = TRUE)
-
-
-EMENSAYO %>% ungroup() %>%
-  select(EM_12_PRI_por, EM_12_PAN_por, EM_12_PRD_por, EM_12_Por_Part, DLNominal12, Por_Ingreso_Gobierno, Part_Mun_2015) %>%
-  chart.Correlation(histogram = TRUE)
-
-
-colnames(EMENSAYO)
-
-EMENSAYO %>% 
-  group_by(PG_Mun_2015) %>% 
-  summarise(Avg = mean(EM_17_POR_PART))
-
 ###################################################################
 ##########      Gráficas de Densidad     ##########################
 ###################################################################
@@ -349,89 +334,20 @@ EMENSAYO %>%
 ###################################################################
 #Municipios ordenados por densidad de lista nominal
 
-TablaLN <- arrange(EMENSAYO, desc(EM_17_LISTA_NOMINAL)) %>%  select(NOM_MUN, EM_17_LISTA_NOMINAL, Densidad_de_Lista_Nominal, EM_17_POR_PART) %>%
-  mutate( Porcentaje_Lista_Nominal = (EM_17_LISTA_NOMINAL/sum(EMENSAYO$EM_17_LISTA_NOMINAL)*100)) %>% mutate(Suma_Acumulada_PLN = cumsum(Porcentaje_Lista_Nominal)) 
-
-EMENSAYO$Log_DLN <- log(EMENSAYO$Densidad_de_Lista_Nominal)
-
-
-arrange(EMENSAYO, desc(EM_17_LISTA_NOMINAL)) %>%  select(Log_DLN, EM_17_POR_PART) %>% 
-  chart.Correlation()
-
-log(EMENSAYO$Densidad_de_Lista_Nominal)
-
-
-EMENSAYO %>% chart.Correlation(Densidad_de_Lista_Nominal, 
-
-
-TablaLN$Acumulado_P_Lista_Nominal <-as.character(TablaLN$Suma_Acumulada_PLN)
-
-class(TablaLN$Suma_Acumulada_PLN)
-
-top_n(TablaLN, 33,Suma_Acumulada_PLN)
-
 ###################################################################
 ##########      Modelo de regresión     #######################
 ###################################################################
 
-colnames(EMENSAYO)
-table(EMENSAYO$PG_Mun_2015)
-
-Mod1 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno, data = EMENSAYO)
-summary(Mod1)
-anova(Mod1)
-confint(Mod1, level = 0.95)
-plot(Mod1)
-colnames(EMENSAYO)
-
-Mod2 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno +  Por_Poca_Variedad_Alimentos, data = EMENSAYO)
-
-colnames(EMENSAYO)
-
-head(EMENSAYO$PRI_o_Otro_2015)
-
-Mod2 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno  + PO2SM + Log_DLN + Partido_Gobernante_2015 +
+Mod2 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno  + PO2SM   +
              PRI_o_Otro_2015 + DIF_VPRI_2011, data = EMENSAYO)
 
 summary(Mod2)
-colnames(EMENSAYO)
 
-hist(EMENSAYO$Dif1712, breaks = 20)
-
-
-Mod3 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno + Log_DLN + Partido_Gobernante_2015 , data = EMENSAYO)
-summary(Mod3)
-
-#sólo participaciones gubernamentales
-contrasts(EMENSAYO$PG_Mun_2015)
-table(EMENSAYO$PG_Mun_2015)
-summary(Mod1)
-anova(Mod1)
-confint(Mod1, level = 0.95)
-plot(Mod1)
-#variable dependiente voto por el PRI en el 2017
-colnames(EMENSAYO)
-temp <- lm(EM_12_PRI_por ~ EM_12_Por_Part + Por_Ingreso_Gobierno + 
-     DLNominal17 + EM_12_PRI_por + Part_Mun_2015, data = EMENSAYO)
-stargazer(temp, type = "text")
-######## meadias ponderadas por partido que controla el municipio
-#####modelo de regresión
-lm(log(subs) ~ log(price/citations), data = Journals) 
-#Ayuntamientos 2012
+Mod2 <- lm(EM_17_POR_PART ~ Por_Ingreso_Gobierno  + PO2SM + Log_DLN  +
+             PRI_o_Otro_2015 + DIF_VPRI_2011 + IM, data = EMENSAYO)
 
 #http://www.ieem.org.mx/proceso_2012/re2012/seccionAyuntamientos%202012.xlsx #resultados por sección
 #el archivo ya está bajado, leerlo
 #http://www.ieem.org.mx/proceso_2012/re2012/ayuntamientos2012_TEEM.xlsx #resultados por municipio
 #http://www.ieem.org.mx/proceso_2012/planillas/ayunta2013_2015.pdf #integración de ayuntamientos
-EMENSAYO %>% ungroup() %>%
-  select(EM_17_POR_PRI, EM_17_POR_MORENA) %>%
-  chart.Correlation(histogram = TRUE)
-#Principales partidos de la elección 2012
-#Principales partidos de la elección 2017
-################################################################
-#Partido que gana el municipio en el 2012
-#Partido que gana el municipio en le 2017
-summary(EMENSAYO$EM_12_Por_Part)
-hist(EMENSAYO$EM_12_Por_Part, breaks = 35)
-lm(EM_17_POR_PART ~ DLNominal17 + EM_12_PRI_)
 
