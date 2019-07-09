@@ -57,7 +57,7 @@ EMENSAYO<-read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 
 # Introducción
 
-La elección 2017 objeto de este estudio tuvo una participación del xxx% de la población, dos años después una elección en Puebla 33.41%. Ambas elecciones son similares, fueron procesos no concurrentes ^[ Con la excepción de 5 municipios en Puebla donde se repitió el proceso por anulación.], se eligió un gobernador, ocurrieron a menos de dos años una de otra. A pesar de sus similitudes arrojan una participación muy diferente. Este trabajo analiza la elección por gobernador 2017 en el Estado de México, las características que la definen y que influyen en su participación. Encontramos evidencia que apunta a una promoción sesgada de la participación electoral a favor del PRI.
+La elección 2017 objeto de este estudio tuvo una participación del `r round((sum(EMENSAYO$EM_17_TOTAL_VOTOS)/sum(EMENSAYO$EM_17_LISTA_NOMINAL))*100, digits = 1)`%  de la población, dos años después una elección en Puebla 33.4%. Ambas elecciones fueron procesos no concurrentes ^[ Con la excepción de 5 municipios en Puebla donde se repitió el proceso por anulación.], se eligió un gobernador, ocurrieron a menos de dos años una de otra. A pesar de sus similitudes arrojan una participación muy diferente. Este trabajo analiza la elección por gobernador 2017 en el Estado de México, las características que la definen y que influyen en su participación. Finalmente utilizamos estos datos como variables independientes de un modelo que analiza la votación a favor de los distintos partidos en la contienda. Planteamos que la capacidad predictiva de estos modelos es mayor cuando se alinean las variables contenidas en ellos a la estrategia electoral de estos partidos. De acuerdo a estos resultados se concluye que encontramos evidencia que apunta a una promoción sesgada de la participación electoral a favor del PRI.
 
 # La participación electoral y su literatura. 
 
@@ -77,29 +77,18 @@ Generalmente es representada como algo positivo, su promoción es un lugar de co
 
 Esto incluye una familia de comportamientos cuya principal característica en común es que se practican fueran de lo aceptado legalmente. Esta definición incluye muchos elementos de difícil observación, entre ellos la utilización de medios legales pero en una cantidad cuyo costo supere las asignaciones previstas para campaña, otorgamiento de programas financiados por el gobierno federal pero provistos bajo la pretensión de que provienen de un partido o que el programa depende de un resultado electoral específico para seguir existiendo. También existen mecanismos más directamente involucrados que pueden incluir compra del voto, coacción o movilización bajo presión.
 
-En este sentido el resultado electoral depende de un proceso complejo que no es fácilmente reducible y que muchas variables no son directamente observables. Sin embargo es posible distinguir elementos específicos de una elección y buscar encontrar una narrativa que la caracterice. En este sentido es necesario aclarar una tipología electoral que clarifique los incentivos que se manifiestan en el proceso. 
-
+En este sentido el resultado electoral depende de un proceso complejo que no es fácilmente reducible y que muchas variables no son directamente observables. Sin embargo es posible distinguir elementos específicos de una elección y buscar encontrar una narrativa que la caracterice
 
 La literatura sobre participación electoral suele dividirse, y encontrar conclusiones, de acuerdo al diseño de investigación que se realice, o el aspecto teórico en el que se enfoque pero no existe una visión uniforme y a menudo conclusiones sobre el relación entre una variable a nivel individual pueden tener una relación inversa a niveles más agregados.
 
-La cuestión electoral actúa en distintos niveles, variables individuales interactuan con otras institucionales y logísticas a menudo revirtiendo el sentido encontrado de los efectos. Sin embargo es posible encontrar sentido a las contradicciones entendiendo el contexto donde se da la elección, este es un ejercicio que puede ser relativamente sencillo, como en el caso de la presente investigación, o enormemente complejo para estudios agregados que buscan encontrar efectos a través de diversos países con heterogéneos contextos.  
+La cuestión electoral actúa en distintos niveles, variables individuales interactuan con otras institucionales y logísticas a menudo revirtiendo el sentido encontrado de los efectos. Sin embargo es posible encontrar sentido a las contradicciones entendiendo el contexto donde se da la elección, este es un ejercicio que puede ser relativamente sencillo, como en el caso de la presente investigación, o enormemente complejo para estudios agregados que buscan encontrar efectos a través de diversos países con contextos heterogéneos.  
 
-
-En este sentido planteo que se puede hablar de teorías sobre efectos micro y efectos macro.
-
-Los estudios "microeconómicos" suelen enfocarse en teorías sobre el carácter ciudadano y de perfil del votante, suelen usar variables como etnicidad(), escolaridad(), ingresos()
-
-
-
-Encontramos esencialmente dos grandes fuentes de literatura que divido en cuanto a enfoque, datos y tipo de conclusiones en estudios con información individual, estudios de información agregada y aquellos sobre mecanismos de influencia o maquinaria electoral. 
-
-El primer tipo de estudios se enfoca en características individuales como determinantes de la participación electoral, el segundo tipo se concentra, de forma no excluyente entre los dos subtipos, en características institucionales o en análisis comparativos.
-
-Los análisis con información individual tienden a enfocarse en características personales como etnicidad(), escolaridad(), ingresos(), etc. 
+En este sentido planteo que se puede hablar de teorías sobre efectos micro y efectos macro. Los estudios "microeconómicos" suelen enfocarse en teorías sobre el carácter ciudadano y de perfil del votante, suelen usar variables como etnicidad(), escolaridad(), ingresos(). 
 
 En cuanto a países con diferentes características institucionales se mencionan como características determinantes de la participación "distritos competitivos nacionalmente", "fuertes clivajes entre partidos y grupos" (Powell 1986), abundando y ajustando ese estudio "esproporción electoral, miltipartidismo, unicameralismo y votación obligatoria. (Jackman 1987)
 
-Socieconómicos, sistema de partido, institucionales
+Ingresos, analfabetismo, clivajes entre partidos e instituciones, n[umero de partidos, cercania de la contienda (Blais 2000), unicameralismo, 
+
 
 Los análisis agregados tienden a enfocarse en características institucionales como distribución programática y no programática de bienes (), maquinarias partidistas y promotores electorales(), desarrollo de clientelas, efectos de del voto obligatorio(Gallego). Algunas de las conclusiones más relevantes al presente estudio es la relación entre participación electoral y percepción de fraude (McCann-Dominguez), el incremento en la participación electoral producto de la promoción del voto por medio de maquinarias partidistas(Nichter 2008), moilización sesgada a favor de "unmobilized strong supporters" (Stokes 2005) o simplemente más proclives a apoyar al partido (Hansen).
 
@@ -108,18 +97,19 @@ Política Distributiva por medio de clientelismo, maquinaria política y patrona
 Tanto la compra de participació como la compra de abstención, o "fraude deflacionario" (Cox Kousser)
 
 
-Ingresos, analfabetismo, clivajes entre partidos e instituciones, n[umero de partidos, cercania de la contienda (Blais 2000), unicameralismo, 
-
 Las grandes variables institucionales sólo se ven , voto obligatorio
 
 
 # Contexto electoral en el Estado de México 2017
 
-La elección en el Estado de México 2017 es particularmente interesante por varias razones. Es la última elección antes del periodo electoral 2018 en un estado tradicionalmente gobernado por el PRI. Se realiza en un momento de cambio electoral, las elecciones del año siguiente 2018 se inclinarian sólidamente a favor de MORENA. Aquí nos encontramos en un momento de baja aprobación presidencial, de fortalecimiento de un nuevo partido. 
-Es también la última elección, con la excepción de un proceso para la elección de 3 ayuntamientos en Veracruz,  antes del complejo proceso electoral 2018. 
-Finalmente es  un Estado cuya elección estatal anterior, 6 años antes, fue ganada por una enorme mayoria, 61,97%, por el PRI (en alianza PRI, PVEM, PANAL) elección con un lejano segundo lugar, el PRD con un 20.96%. 
+La elección en el Estado de México 2017 tiene diversos elementos que la caracterizan. Primero es un un estado tradicionalmente gobernado por el partido incumbente, PRI. Segundo es la última elección ^[Con la excepción de un proceso para la elección de 3 ayuntamientos en Veracruz] antes del período electoral 2018. Tercero, es un estado donde el PRI suele obtener amplia ventaja, en la elección anterior de gobernador de 2011  obtiene 61,97% del voto (en alianza PRI, PVEM, PANAL) con un lejano segundo lugar, el PRD que logra 20.96%. Cuarto, el presidente tiene una aprobación históricamente baja, que toca fondo con un 12%  en Enero de 2017.
 
-Las características de esta elección la establecen como un símbolo de la resistencia del régimen dominante Priista contra la oleada a favor de MORENA. Esto ocurre en el contexto de un descontento generalizado evidenciado en la historicamente por la baja aprobación del Ejecutivo Federal característica  de los últimos años de gobierno de Enrique Peña Nieto, el cual alcanza un mínimo de aprobación de 12% (Nacion321) en Enero de 2017.
+
+e realiza en un momento de cambio electoral, las elecciones del año siguiente 2018 se inclinarian sólidamente a favor de MORENA. Aquí nos encontramos en un momento de baja aprobación presidencial, de fortalecimiento de un nuevo partido. 
+Es también la última elección, ,  antes del complejo proceso electoral 2018. 
+Finalmente es  un Estado cuya elección estatal anterior, 6 años antes, fue ganada por una enorme mayoria, 
+
+Las características de esta elección la establecen como un símbolo de la resistencia del régimen dominante Priista contra la oleada a favor de MORENA. Esto ocurre en el contexto de un descontento generalizado evidenciado en la historicamente por la baja aprobación del Ejecutivo Federal característica  de los últimos años de gobierno de Enrique Peña Nieto, el cual alcanza un mínimo de aprobación de 
 
 Esto sentará la base para el fuerte contraste entre dos elecciones similares en términos de lo que está en juego e incentivos institucionales entre el 2011 y 2017. En el proceso electoral 2017 la elección se mostraba mucho más cerrada, tanto el proceso electoral 2011 como en 2012 el PRI obtuvo grandes mayorias, un control casí completo del Estado. En estos procesos no existía aún el Movimiento Regeneración Nacional (MORENA), previo a la jornada electoral del 4 de Junio de 2017 ninguna encuesta privilegiaba a MORENA sobre el PRI, sólo un par mostraban una ventaja para el PAN. Sin embargo el resultado final estaría a tres puntos de distancia entre los punteros PRI (33.56%) y MORENA (30.78%.).
 
@@ -189,11 +179,11 @@ Se tienen xx variables continuas y una categórica, gobierno del ayuntamiento po
 
 
 
-```{r "Estadística descriptiva de las variables del Estudio" , fig.cap="Estadística descriptiva de las variables del Estudio",  out.extra=''}
-
-EMENSAYO %>% 
-  select(EM_17_POR_PART, Por_Ingreso_Gobierno, Log_DLN, IM, PO2SM, DIF_VPRI_2011, PRI_o_Otro_2015 ) %>% summary() 
-
+```{r "Estadística descriptiva de las variables del Estudio" , results='asis', message = FALSE, fig.cap="Estadística descriptiva de las variables del Estudio",  out.extra=''}
+temp <- EMENSAYO %>% 
+  select(EM_17_POR_PART, Por_Ingreso_Gobierno, Log_DLN, PO2SM, DIF_VPRI_2011 ) %>% summary()
+colnames(temp) <- c("% Participación","% Ingreso Gobierno"," Log DLN","% Menos 2 Sal Min","Dif. a favor PRI")
+kable(temp, caption = "Estadística descriptiva de las variables")
 ```
 
 
@@ -268,9 +258,9 @@ Plot_Map
 
 ##Hogares que reciben dinero del gobierno a través de programas gubernamentales
 
-Se tomó el número de viviendas (ponderadas por el factor de expansión) que respondieron afirmativamente la pregunta: "¿Alguna persona que vive en esta vivienda recibe dinero: de programas de gobierno? (Prospera, Oportunidades, Adultos mayores, PROCAMPO, etcétera)."  Está variable está expresada como el porcentaje de viviendas dentro del municipio que afirmaron recibir dinero de programas de gobierno respecto al total de viviendas dentro del municipio. Se generó con información de la Encuesta Iintercensal 2015 del INEGI significativa a nivel municipal. 
+Se tomó el número de viviendas (ponderadas por el factor de expansión) que respondieron afirmativamente la pregunta: *"¿Alguna persona que vive en esta vivienda recibe dinero: de programas de gobierno? (Prospera, Oportunidades, Adultos mayores, PROCAMPO, etcétera)."*  Está variable está expresada como el porcentaje de viviendas dentro del municipio que afirmaron recibir dinero de programas de gobierno respecto al total de viviendas dentro del municipio. Se generó con información de la Encuesta Iintercensal 2015 del INEGI, la cual es significativa a nivel municipal. 
+La pregunta no distingue entre programas gubernamentales estatales, federales o municipales. Los principales programas y que pueden tener  un efecto de "priming" al ser mencionados en las preguntas, son programas federales condicionados. Estos programas están blindados de diversas formas, su padrón no puede aumentar xx meses antes de las elecciones, los materiales y pruebas que se realizan deben de estar desprovistos de una identificación con un partido o gobierno específico. Los mecanismos de cumplimiento deben de ser transparentes. Sin embargo existe la posibilidad de que en algún momento del otorgamiento del apoyo este se busque identificar con algún grupo político, que su entrega sea condicionada al cumplimiento de ciertas metas electorales al menos discursivamente. 
 
-La pregunta no distingue entre programas gubernamentales estatales, federales o municipales.Los principales programas y que pueden tener  un efecto de "priming" al ser mencionados en las preguntas, son programas federales condicionados. Estos programas están blindados de diversas formas, su padrón no puede aumentar xx meses antes de las elecciones, los materiales y pruebas que se realizan deben de estar desprovistos de una identificación con un partido o gobierno específico. Los mecanismos de cumplimiento deben de ser transparentes. Sin embargo existe la posibilidad de que en algún momento del otorgamiento del apoyo este se busque identificar con algún grupo político, que su entrega sea condicionada al cumplimiento de ciertas metas electorales al menos discursivamente. 
 También existe la posibilidad de que los programas gubernamentales federales en sí no afecten directamente la preferencia por cierto partido sino promuevan la participación en un grupo con ciertas preferencias electorales, con resultados similares pero manteniendo un discurso neutro. O lo que se observe sea producto de una variable no observada, podría coincidir la entrega de los programas ya establecidos con una red de promotores de programas sociales que se activen durante campañas electorales, y lo que veamos sea producto de la red de promoción del voto y no de un impacto de programas gubernamentales, ambas variables incidiendo en proporciones similares en la misma población. 
 
 Los programas federales a los que puede estar sujeta la población son programáticos y no condicionales en su diseño, sin embargo el como se distribuyen, los mecanismos de conocimiento de su existencia el "último paso" puede que esté acompañado de una amenaza de condicionalidad o una identificación del partido en el gobierno como el administrador de estos. Esto se puede dar por facilitadores federales, estatales o municipales. En el caso de los promotores federales se espera que estos sean los que menos influyen en la promoción electoral dado que es donde existen mayores controles sin embargo esta es una variable que no es observable dado que no existe variación, todos los municipios observados se encuentran gobernados por el mismo gobierno federal. En el caso de la promoción municipal, que asumimos puede influir en los programas federales, el municipio suele tener un presupuesto de programas y de gasto discrecional con fines sociales en los DIFs 
@@ -310,9 +300,9 @@ Plot_Map2
 
 
 ##Partido que gobierna el municipio
-Se codifican los partidos ganadores de los municipios en las elecciones 2015, lo que determina el partido gobernante a nivel municipal. Se recodifican los ganadores para concentrar el número de categorías, de los 118 municipios (ahora alcaldias) 84 de ellos generaron una mayoría por el PRI (26), o por el PRI en alianza (58 alianza PRI-PVEM-NA), 18 por el PAN (con y sin alianzas), 16 PRD y 6 por otros partidos. Cabe resaltar que sólo un municipio obtiene mayoría por MORENA, enfatizando que este partido es fuertemente disruptivo lo que en parte nos permite mantener la afirmación teoríca de que no tiene una estructura montada que le permita ser identificado como proveedor de favores o de recursos de programas (salvo en un municipio). Tanto el ejecutivo Federal como el ejecutivo estatal son del PRI.
+Se codifican los partidos ganadores de los municipios en las elecciones 2015, lo que determina el partido gobernante a nivel municipal. Se recodifican los ganadores para concentrar el número de categorías, de los 125 municipios (ahora alcaldias) 84 de ellos generaron una mayoría por el PRI (26), o por el PRI en alianza (58 alianza PRI-PVEM-NA), 18 por el PAN (con y sin alianzas), 16 PRD y 7 por otros partidos. Cabe resaltar que sólo un municipio obtiene mayoría por MORENA, enfatizando que este partido es fuertemente disruptivo lo que en parte nos permite mantener la afirmación teórica de que no tiene una estructura que le permita ser identificado como proveedor de favores o de recursos de programas (salvo en un municipio). Tanto el ejecutivo Federal como el ejecutivo estatal son del PRI.
 
-Para el modelo de regresión se utiliza como categoría base aquellos municipios (84) en los cuales gobierna el PRI o se obtuvo una mayoría a favor de este partido en alianza con otro. Es decir que el peso del efecto es el de un gobierno distinto del PRI, se decició utilizar una variable binaria que determina si gobierna o no el PRI, o un partido que haya obtenido el gbierno en alianza con el PRI en el 2015.
+Para el modelo de regresión se utiliza como categoría base aquellos municipios (84) en los cuales gobierna el PRI o se obtuvo una mayoría a favor de este partido en alianza con otro. Es decir que el peso del efecto es el de un gobierno distinto del PRI, se decidió utilizar una variable binaria que determina si gobierna o no el PRI, o un partido que haya obtenido el gbierno en alianza con el PRI en el 2015.
 
 ##Densidad de lista nominal 
 
@@ -367,10 +357,8 @@ Está elaborada a partir de las siguientes variables:
 A pesar de que esperamos que el efecto sea positivo existen varias razones por las cuales podría no serlo: 
 1. La marginación se encuentra relacionada con la baja densidad El costo de la mobilización 
 
-
-
 ## Municipio que favorece al PRI
-
+  El planteamiento teórico es que el PRI utilice su estructura para promover el voto en aquellos municipios donde sabe que existe una mayor proporción de votos a favor de ellos, es decir que el diferencial de votos entre el PRI y el segundo lugar es mayor. Utilizamos la elección a gobernador 2011, y construimos la variable como una resta entre el voto a favor del PRI y del PAN ^[Utilizando sus respectivas alianzas].
 
 
 
