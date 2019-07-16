@@ -6,7 +6,7 @@ date: "May 21, 2019"
 header-includes:
     - \usepackage{setspace}\doublespacing
     
-bibliography: ["LibPrueba.bib"]
+bibliography: ["LibPrueba2.bib"]
 
 output: 
   pdf_document:
@@ -57,9 +57,20 @@ EMENSAYO<-read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 
 # Introducción
 
-La elección 2017 objeto de este estudio tuvo una participación del `r round((sum(EMENSAYO$EM_17_TOTAL_VOTOS)/sum(EMENSAYO$EM_17_LISTA_NOMINAL))*100, digits = 1)`%  de la población, dos años después una elección en Puebla 33.4%. Ambas elecciones fueron procesos no concurrentes ^[ Con la excepción de 5 municipios en Puebla donde se repitió el proceso por anulación.], se eligió un gobernador, ocurrieron a menos de dos años una de otra. A pesar de sus similitudes arrojan una participación muy diferente. Este trabajo analiza la elección por gobernador 2017 en el Estado de México, las características que la definen y que influyen en su participación. Finalmente utilizamos estos datos como variables independientes de un modelo que analiza la votación a favor de los distintos partidos en la contienda. Planteamos que la capacidad predictiva de estos modelos es mayor cuando se alinean las variables contenidas en ellos a la estrategia electoral de estos partidos. De acuerdo a estos resultados se concluye que encontramos evidencia que apunta a una promoción sesgada de la participación electoral a favor del PRI.
+La elección 2017 en el Estado de México objeto de este estudio tuvo una participación del `r round((sum(EMENSAYO$EM_17_TOTAL_VOTOS)/sum(EMENSAYO$EM_17_LISTA_NOMINAL))*100, digits = 1)`%  de la población, dos años después una elección en Puebla 33.4%. Ambas elecciones fueron procesos no concurrentes ^[ Con la excepción de 5 municipios en Puebla donde se repitió el proceso por anulación.], se eligió un gobernador, ocurrieron a menos de dos años una de otra. A pesar de sus similitudes arrojan una participación muy diferente. Este trabajo analiza la elección por gobernador 2017 en el Estado de México, las características que la definen y que influyen en su participación. Finalmente utilizamos estos datos como variables independientes de un modelo que analiza la votación a favor de los distintos partidos en la contienda. Planteamos que la capacidad predictiva de estos modelos es mayor cuando se alinean las variables contenidas en ellos a la estrategia electoral de estos partidos. De acuerdo a estos resultados se concluye que encontramos evidencia que apunta a una promoción sesgada de la participación electoral a favor del PRI.
 
-# La participación electoral y su literatura. 
+# Literatura en participación electoral 
+
+La literatura sobre participación electoral suele plantearse a través del análisis de dicotomias como; los votantes de base (core voters) contra indecisos (swing voters), de distribución de política pública utilizando gasto programático(programatic) contra enfocado(targeted), sobre la relación entre patrones(principal) y agentes(agent), o  sobre mobilización contra persuasión. 
+
+Estas perspectivas, que acomodan gran parte de la literatura de estratégia racional se sobrelapan y pueden entenderse como formas de enfocarse en alguno de los procesos relacionados con la participación electoral. La discusión sobre votantes base contra indecisos trata sobre los incentivos a la mobilización y la pregunta sobre si se mobiliza a aquellas personas que que ya se sabe que votaran a favor del partido o sí los partidos, o gobierno se enfocan en votantes indecisos cuyo voto podría ser por la oposición. Relevante a esta pregunta es la naturaleza de la distribución de los bienes que provee el gobierno y los partidos, en general se considera que los bienes programáticos suelen ser más dificiles de asociar a un partido, que son "de mayor calidad" en el sentido de que tienden a ser bienes públicos y menos enfocados en clientelismo o gasto. En cambio los bienes enfocados requieren la capacidad del partido, promotores electorales, gobierno, o alguna forma de la maquinaria electoral para identificar aquellos votantes que brindaran un voto a favor del partido. En este lugar es donde suele plantearse los mecanimos de fraude electoral de acuerdo en el momento donde ocurre una "transferencia no programática" este es un ejemplo útil de esta categorización:
+
+*"(1). Beneficios que son entregados ante la verificación de el voto de un individuo; (2)beneficios que son entregados a un votante antes de que él/ella vote (3)beneficios prometidos ante la victoria de el candidato o partido relevante."*[@cox_political_2009]
+
+
+
+Particularmente relevamente a este trabajo es la relación entre mobilización contra persuación, argumentaremos que dado el relativo blindaje del voto esperamos encontrar mobilización principalmente donde ya existe un mayor apoyo por el partido que tiene las capacidades logísticas para llevarlo a cabo
+
 
 La participación electoral es el elemento fundamental del ejercicio democrático. Es la manifestación revelada de las preferencias y deseos de la ciudadanía. También es una forma de manifestar castigo o premio al ejercicio de un partido en el poder, identificación con las propuestas de un partido, confianza en el proceso electoral y en las instituciones del Estado y otras señales de información deseables en el ejercicio democrático. 
 
@@ -469,13 +480,17 @@ Otra veta de investigación es determinar el tamaño de diversos efectos institu
 
 Nuevo contexto electoral y viejas prácticas, menos controles programáticos. Mayor concentración, nuevas formas de gastar y distribuir programas sociales impactos que van a tener en la distribución de recursos, ahora que es menos programático es más importante. 
 
-#Bibliografía
+
+Bla por bla en el bla del bla  [@nichter_vote_2008]
 
 
-blabla
 
 
 \begin{appendix}
   \listoffigures
   \listoftables
 \end{appendix}
+
+#Bibliografía
+
+
