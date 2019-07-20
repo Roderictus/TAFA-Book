@@ -130,16 +130,10 @@ Las grandes variables institucionales sólo se ven , voto obligatorio
 
 # Contexto electoral en el Estado de México 2017
 
-La elección en el Estado de México 2017 tiene diversos elementos que la caracterizan. Primero es un un estado tradicionalmente gobernado por el partido incumbente, PRI. Segundo es la última elección ^[Con la excepción de un proceso para la elección de 3 ayuntamientos en Veracruz] antes del período electoral 2018. Tercero, es un estado donde el PRI suele obtener amplia ventaja, en la elección anterior de gobernador de 2011  obtiene 61,97% del voto (en alianza PRI, PVEM, PANAL) con un lejano segundo lugar, el PRD que logra 20.96%. Cuarto, el presidente tiene una aprobación históricamente baja, que toca fondo con un 12%  en Enero de 2017.
+La elección en el Estado de México 2017 tiene diversos elementos que la caracterizan. Primero es un un estado tradicionalmente gobernado por el partido incumbente, PRI. Segundo es la última elección ^[Con la excepción de un proceso para la elección de 3 ayuntamientos en Veracruz] antes del período electoral 2018. Tercero, es un estado donde el PRI suele obtener una amplia ventaja, en la elección anterior de gobernador de 2011  obtiene 61,97% del voto (en alianza PRI, PVEM, PANAL) con un lejano segundo lugar, el PRD que logra 20.96%. Cuarto, el presidente tiene una aprobación históricamente baja, que toca fondo con un 12%  en Enero de 2017. Quinto, se realiza en un momento de cambio electoral, las elecciones del año siguiente 2018 se inclinarian sólidamente a favor de MORENA. Las características de esta elección la establecen como un símbolo de la resistencia del régimen dominante Priista contra la, futura, oleada a favor de MORENA. 
 
-
-e realiza en un momento de cambio electoral, las elecciones del año siguiente 2018 se inclinarian sólidamente a favor de MORENA. Aquí nos encontramos en un momento de baja aprobación presidencial, de fortalecimiento de un nuevo partido. 
-Es también la última elección, ,  antes del complejo proceso electoral 2018. 
-Finalmente es  un Estado cuya elección estatal anterior, 6 años antes, fue ganada por una enorme mayoria, 
-
-Las características de esta elección la establecen como un símbolo de la resistencia del régimen dominante Priista contra la oleada a favor de MORENA. Esto ocurre en el contexto de un descontento generalizado evidenciado en la historicamente por la baja aprobación del Ejecutivo Federal característica  de los últimos años de gobierno de Enrique Peña Nieto, el cual alcanza un mínimo de aprobación de 
-
-Esto sentará la base para el fuerte contraste entre dos elecciones similares en términos de lo que está en juego e incentivos institucionales entre el 2011 y 2017. En el proceso electoral 2017 la elección se mostraba mucho más cerrada, tanto el proceso electoral 2011 como en 2012 el PRI obtuvo grandes mayorias, un control casí completo del Estado. En estos procesos no existía aún el Movimiento Regeneración Nacional (MORENA), previo a la jornada electoral del 4 de Junio de 2017 ninguna encuesta privilegiaba a MORENA sobre el PRI, sólo un par mostraban una ventaja para el PAN. Sin embargo el resultado final estaría a tres puntos de distancia entre los punteros PRI (33.56%) y MORENA (30.78%.).
+Esto sentará la base para el fuerte contraste entre dos elecciones similares en términos de lo que está en juego e incentivos institucionales entre el 2011 y 2017. 
+En el proceso electoral 2017 la elección se mostraba mucho más cerrada aunque previo a la jornada electoral del 4 de Junio de 2017 ninguna encuesta privilegiaba a MORENA sobre el PRI. Sin embargo el resultado final estaría a tres puntos de distancia entre los punteros PRI (33.56%) y MORENA (30.78%.).
 
 ##Incentivos a la participación electoral en el Estado de México 2011, 2012 y 2017
 
@@ -162,7 +156,7 @@ Un primer efecto a observar en la participación electoral entre estos periodos 
 
 Se muestra la correlación(Pearson) entre las tres elecciones, como es esperado la mayor correlación  es entre las dos elecciones más similares, ambas elecciones simples de gobernador,elección 2011 y 2017 (0.89).  
 
-```{r Gráficas de correlación participación en tres elecciones EDOMEX, fig.cap="Gráficas de correlación participación a nivel municipal en tres elecciones EDOMEX",  out.extra='', fig.width=6 , fig.height=4}
+```{r Gráficas de correlación participación en tres elecciones EDOMEX, fig.cap="Gráficas de correlación participación a nivel municipal en tres elecciones EDOMEX",  out.extra='', fig.width=5 , fig.height=3.5}
 
 EMENSAYO %>% select(EM11_Por_Part, EM_12_Por_Part, EM_17_POR_PART) %>%  
   chart.Correlation(histogram = TRUE, title="Correlación Participación Electoral 2011, 2012, 2017")
@@ -196,32 +190,41 @@ Existen diversas teorías que aportan al fenómeno observado, la promoción de l
 3. Donde exista menos supervisión del cumplimiento de la ley electoral.
 4. Donde se reciban mayores participaciones del gobierno. 
 
-La primera es la más frecuente explicación en la literatura revisada, lo que estamos revisando es una política no programática que logra identificar a sus recipientes a través de una maquinaria. La explicación es, esencialmente, que la compra, o promoción, de los votos se da en donde hay mayor pobreza. El mecanismo explicativo es la optimización de un presupuesto electoral maximizando el número de votos obtenidos. En el Estado de México logramos ver variación al respecto. Se utiliza la variable xxx, y xxx, como proxys de pobreza obtenidos en la encuesta Intercensal 2015. (Stokes, Dunning, Nazareno)
+La primera es la más frecuente explicación en la literatura revisada, lo que estamos revisando es una política no programática que logra identificar a sus recipientes a través de una maquinaria. La explicación es, esencialmente, que la compra, o promoción, de los votos se da en donde hay mayor pobreza. El mecanismo explicativo es la optimización de un presupuesto electoral maximizando el número de votos obtenidos. En el Estado de México logramos ver variación al respecto. Se utiliza la variable xxx, y xxx, como proxys de pobreza obtenidos en la encuesta Intercensal 2015.    (Stokes, Dunning, Nazareno)
 
 
 
-#Variables
-Aquí se expone el origen de la información utilizada en este documento junto con la relación esperada que se tiene con la participación electoral como variable dependiente. 
+#Hipótesis y variables
 
-Se tienen xx variables continuas y una categórica, gobierno del ayuntamiento por parte del PRI.
-
-
+Exponemos el origen de la información utilizada en esta investigación junto con la relación esperada que se tiene con la participación electoral como variable dependiente.  
+Se utilizaron xx variables asociadas a las hipótesis planteadas y una variable adicional, tamaño de la lista nominal, como peso para el modelo de regresión. Se probó, y descartó, el uso del índice de marginación por su alta correlación con el la variable de porcentaje de población que obtiene menos de dos salários mínimos en el municipio.
 
 ```{r "Estadística descriptiva de las variables del Estudio" , results='asis', message = FALSE, fig.cap="Estadística descriptiva de las variables del Estudio",  out.extra=''}
+#temp <- EMENSAYO %>% 
+#  select(EM_17_POR_PART, Por_Ingreso_Gobierno, Log_DLN, PO2SM, DIF_VPRI_2011 ) %>% summary() 
+#colnames(temp) <- c("% Participación","% Ingreso Gobierno"," Log DLN","% Menos 2 Sal Min","Dif. a favor PRI")
+#kable(temp, caption = "Estadística descriptiva de las variables")
+```
+
+
+
+##H1. Promoción del voto en municipios Pobres. Porcentaje de población que recibe menos de dos salarios mínimos.
+
+```{r "Porcentaje de viviendas en el municipio que recibe menos de dos salarios mínimos" , results='asis', message = FALSE, fig.cap="Estadística descriptiva de las variables del Estudio",  out.extra=''}
 temp <- EMENSAYO %>% 
-  select(EM_17_POR_PART, Por_Ingreso_Gobierno, Log_DLN, PO2SM, DIF_VPRI_2011 ) %>% summary()
-colnames(temp) <- c("% Participación","% Ingreso Gobierno"," Log DLN","% Menos 2 Sal Min","Dif. a favor PRI")
-kable(temp, caption = "Estadística descriptiva de las variables")
+  select(PO2SM) %>% 
+  summary()
+colnames(temp) <- c("Porcentaje con menos de dos Salarios  Mínimos")
+kable(temp, caption = "Porcentaje de viviendas en el municipio que recibe menos de dos salarios mínimos")
 ```
 
 
-```{r "Tabla de Correlaciones entre las variables del Estudio" , fig.cap="Correlaciones entre variables Independientes",  out.extra=''}
-EMENSAYO %>% 
-  select(EM_17_POR_PART, Por_Ingreso_Gobierno, Log_DLN, IM, PO2SM, DIF_VPRI_2011) %>%
-  chart.Correlation(histogram = TRUE, 
-                    title="Correlación Participación Electoral 2011, 2012, 2017")
 
-```
+En la literatura suele reconocerse dos tipos de efectos relacionados con el ingreso y la participación electoral. El ingreso puede estar asociado a mayor calidad de vida, conexión con las instituciones sociales y una mayor percepción de importancia de los procesos electorales. En este sentido esperariamos un incremento en la propensión a la participación electoral a mayor ingreso. Sin embargo es más frecuente encontrar que se asocie a una mayor pobreza con la capacidad de adquirir, o promover, votos a menor costo. El mecanismo es que aquellos votantes más pobres, con mayor utilidad marginal hacia el ingreso, puedan ser más fácilmente manipulados para participar, para votar por algún resultado en particular, o ser movilizados en apoyo de un partido del que perciban obtienen algún apoyo directo. El efecto puede entenderse como que a menor ingreso los potenciales votantes se encuentran "más dispuestos a comprometer sus preferencias políticas a cambio de consumo privado adicional".
+
+
+
+
 
 
 ##Participación Electoral
@@ -390,10 +393,6 @@ A pesar de que esperamos que el efecto sea positivo existen varias razones por l
 
 
 
-#Hipótesis
-
-##H1. Promoción del voto en municipios Pobres
-En la literatura suele reconocerse dos tipos de efectos relacionados con el ingreso y la participación electoral. El ingreso puede estar asociado a mayor calidad de vida, conexión con las instituciones sociales y una mayor percepción de importancia de los procesos electorales. En este sentido esperariamos un incremento en la propensión a la participación electoral a mayor ingreso. Sin embargo es más frecuente encontrar que se asocie a una mayor pobreza con la capacidad de adquirir, o promover, votos a menor costo. El mecanismo es que aquellos votantes más pobres, con mayor utilidad marginal hacia el ingreso, puedan ser más fácilmente manipulados para participar, para votar por algún resultado en particular, o ser movilizados en apoyo de un partido del que perciban obtienen algún apoyo directo. El efecto puede entenderse como que a menor ingreso los potenciales votantes se encuentran "más dispuestos a comprometer sus preferencias políticas a cambio de consumo privado adicional".
 
 
 
@@ -424,6 +423,16 @@ Particiáción en municipios donde en la elección 2011 el PRI obtiene mayor ven
 
 ##Modelo de regresión
 Aplicamos una regresión de Weighted Least Squares utilizando como peso el tamaño de la lista nominal de cada municipio. Este modelo arroja los resultados en el sentido que esperamos y nos brinda una buena idea del tamaño de los efectos sin embargo los coeficientes, a diferencia de un modelo de mínimos cuadrados ordinario, no son interpretables linealmente. 
+
+
+```{r "Tabla de Correlaciones entre las variables del Estudio" , fig.cap="Correlaciones entre variables Independientes",  out.extra=''}
+EMENSAYO %>% 
+  select(EM_17_POR_PART, Por_Ingreso_Gobierno, Log_DLN, PO2SM, DIF_VPRI_2011) %>%
+  chart.Correlation(histogram = TRUE, 
+                    title="Correlación Participación Electoral 2011, 2012, 2017")
+
+```
+
 
 
 
