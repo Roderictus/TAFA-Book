@@ -57,43 +57,35 @@ EMENSAYO<-read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 
 # Introducción
 
-La elección 2017 en el Estado de México objeto de este estudio tuvo una participación del `r round((sum(EMENSAYO$EM_17_TOTAL_VOTOS)/sum(EMENSAYO$EM_17_LISTA_NOMINAL))*100, digits = 1)`%  de la población ^[Porcentaje estatal de votos totales respecto a lista nominal.], dos años después una elección estatal en Puebla 33.4%. Ambas elecciones fueron procesos no concurrentes ^[ Con la excepción de 5 municipios en Puebla donde se repitió el proceso por anulación.], se eligió un gobernador, ocurrieron a menos de dos años una de otra. 
+La elección 2017 en el Estado de México objeto de este estudio tuvo una participación del `r round((sum(EMENSAYO$EM_17_TOTAL_VOTOS)/sum(EMENSAYO$EM_17_LISTA_NOMINAL))*100, digits = 1)`%^[Porcentaje estatal de votos totales respecto a lista nominal.], en contraste, dos años después, una elección estatal en Puebla 33.4%. Ambas elecciones fueron procesos no concurrentes ^[ Con la excepción de 5 municipios en Puebla donde se repitió el proceso por anulación.], se eligió un gobernador y ocurrieron a menos de dos años una de otra. A pesar de ser ambas elecciones para gobernador estos dos procesos arrojaron una participación con una fuerte diferencia. 
 
-A pesar de ser ambas elecciones para gobernador estos dos procesos arrojaron una participación diferente. Este trabajo analiza la elección por gobernador 2017 en el Estado de México, las características que la definen y que influyen en su participación. 
+En este trabajo analizamos la elección por gobernador 2017 en el Estado de México, las características que la definen y que influyen en su participación. Definimos hipótesis por medio de las cuales podría ocurrir una promoción sesgada del voto a favor del PRI como partido mobilizador y asociamos variables con información de diversas fuentes públicas a los 128 municipios del Estado de México. 
 
-Finalmente utilizamos estos datos como variables independientes de un modelo que analiza la votación a favor de los distintos partidos en la contienda. Planteamos que la capacidad predictiva de estos modelos es mayor cuando se alinean las variables contenidas en ellos a la estrategia electoral de estos partidos. De acuerdo a estos resultados se encuentra evidencia que apunta a una promoción sesgada de la participación electoral a favor del PRI.
+Después utilizamos estos datos como variables independientes de un modelo que analiza la participación en la contienda 2017 a nivel municipal como variable dependiente. Así establecemos que la participación electoral podría depender en buena medida a estratégias de promoción del voto en aquellos municipios con población más proclíve a votar por el PRI. 
 
-# Literatura sobre participación electoral, enfoque racional
+Finalmente damos la vuelta al modelo y planteamos que la capacidad predictiva de estos modelos es mayor cuando se alinean las variables contenidas en ellos a la estrategia electoral de estos partidos. Así que utilizamos las variables dependientes como predictoras del voto por cada partido como variable dependiente con un modelo para cada partido. Interpretamos la varianza explicada por estos modelos como una señal de la alineación de este partido con la estrategía planteada de movilización electoral. De acuerdo a los resultados obtenidos se encuentra evidencia que apunta a una promoción sesgada de la participación electoral a favor del PRI.
+
+No se plantea un estudio de la elección en Puebla, que arroja una participación mucho menor, pero si encontramos características de la elección en el Estado de México que apuntan a una estratégia electoral, por parte de los partidos, diferente. En este trabajo señalamos elementos que apuntan a la excepcionalidad de la elección del Estado de México y que apuntan a una potencialmente rica agenda de investigación en materia del estudio de la heteregoneidad de los incentivos electorales en México.
+
+# Literatura sobre participación electoral
 
 La participación electoral es el elemento fundamental del ejercicio democrático. Es la manifestación revelada de las preferencias y deseos de la ciudadanía. También es una forma de establecer castigo o premio al ejercicio de un partido en el poder, identificación con las propuestas de un partido, confianza en el proceso electoral y en las instituciones del Estado y otras señales de información deseables en el ejercicio democrático. 
 
-La intensidad de la participación electoral es una señal con múltiples significados que no son fácilmente separables. La participación electoral es una señal de:
-
-1. La importancia de la elección ante el electorado. 
-2. Competencia electoral como cercanía entre los partidos, o candidatos, punteros. 
-3. Promoción del voto por parte de partidos o grupos organizados.
-4. Sistema Institucional
-5. Valores culturales
-6. Costos de votar (costo de oportunidad, desplazamiento, etc.)
-7. Otros
-
-Generalmente es representada como algo positivo, su promoción es un espacio de coincidencia entre las campañas gubernamentales, de órganos electorales independientes, partidistas y de la sociedad civil. Sin embargo, es también un lugar donde se manifiestan distintos elementos de la práctica electoral que suelen ser contrarios a los ideales democráticos, en particular la promoción del voto fuera de los mecanismos electoralmente regulados, la asociación de programas federales con, generalmente, el partido en el poder, el uso de promotores electorales, coerción en el ejercicio del voto y fraude.
+Generalmente es representada como algo positivo, su promoción es un espacio de coincidencia entre las campañas gubernamentales, de órganos electorales independientes, partidistas y de la sociedad civil. Sin embargo, es también un lugar donde se manifiestan distintos elementos de la práctica electoral que suelen ser contrarios a los ideales democráticos. Particularmente la promoción del voto fuera de los mecanismos electoralmente regulados, la asociación de programas federales con, generalmente, el partido que controla el ejecutivo federal, el uso de promotores electorales, coerción en el ejercicio del voto y fraude.
 
 Esto incluye una familia de comportamientos cuya principal característica en común es que se practican fueran de lo aceptado legalmente. Esta definición incluye muchos elementos de difícil observación, entre ellos la utilización de medios legales pero en una cantidad cuyo costo supere las asignaciones previstas para campaña, otorgamiento de programas financiados por el gobierno federal pero provistos bajo la pretensión de que provienen de un partido o que el programa depende de un resultado electoral específico para seguir existiendo. También existen mecanismos más directamente involucrados que pueden incluir compra del voto, coacción o movilización bajo presión.
 
 En este sentido el resultado electoral depende de un proceso complejo que no es fácilmente reducible y para el que  muchas variables no son directamente observables. Sin embargo es posible distinguir elementos específicos de una elección y buscar encontrar una narrativa que la caracterice
 
-La literatura sobre participación electoral suele dividirse, y encontrar conclusiones, de acuerdo al diseño de investigación que se realice, o el aspecto teórico en el que se enfoque pero no existe una visión uniforme y a menudo conclusiones sobre el relación entre una variable a nivel individual pueden tener una relación inversa a niveles más agregados.
-
-La cuestión electoral actúa en distintos niveles, variables individuales interactuan con otras institucionales y logísticas a menudo revirtiendo el sentido encontrado de los efectos. Sin embargo es posible encontrar sentido a las contradicciones entendiendo el contexto donde se da la elección, este es un ejercicio que puede ser relativamente sencillo, como en el caso de la presente investigación, o enormemente complejo para estudios agregados que buscan encontrar efectos a través de diversos países con contextos heterogéneos.  
+La literatura sobre participación electoral suele dividirse, y encontrar conclusiones, de acuerdo al diseño de investigación que se realice, o el aspecto teórico en el que se enfoque pero no existe una visión uniforme y a menudo conclusiones sobre el relación entre una variable a nivel individual pueden tener una relación inversa a niveles más agregados. Sin embargo es posible encontrar sentido a las contradicciones entendiendo el contexto donde se da la elección, este es un ejercicio que puede ser relativamente sencillo, como en el caso de la presente investigación, o enormemente complejo para estudios agregados que buscan encontrar efectos a través de diversos países con contextos heterogéneos.  
 
 ## Dicotomias en la literatura, tipos de votantes, gasto, principales y agentes, mobilización y persuación. 
 
 Una forma de entender la literatura sobre participación electoral es a través del planteamiento de dicotomias como; los votantes de base (core voters), contra indecisos (swing voters), de distribución de política pública utilizando gasto programático (programatic) contra enfocado (targeted), sobre la relación entre patrones (principal) y agentes (agent), o sobre mobilización contra persuasión del electorado. 
 
-Estas perspectivas, que acomodan gran parte de la literatura de estratégia racional, se sobrelapan y pueden entenderse como formas de enfocarse en diversos procesos relacionados con la participación electoral. Por ejemplo, la discusión sobre votantes base contra indecisos trata, frecuentemente, sobre si se mobiliza a aquellas personas que que ya se sabe que votarán a favor del partido o sí los partidos, o gobierno se enfocan en votantes cuyo voto aún no está determinado o es para un partido opositor. 
+Estas perspectivas, que acomodan gran parte de la literatura de estratégia racional, se sobrelapan y pueden entenderse como formas de enfocarse en diversas perspectivas sobre el mismo proceso. Por ejemplo, la discusión sobre votantes base contra indecisos trata, frecuentemente, sobre si se mobiliza a aquellas personas que que ya se sabe que votarán a favor del partido o sí los partidos, o gobierno se enfocan en votantes cuyo voto aún no está determinado o es para un partido opositor. 
 
-Otro tipo de planteamiento, también relevante a esta pregunta, es sobre la naturaleza de la distribución de los bienes que provee el gobierno y los partidos. El argumento es, que en general, se considera que los bienes programáticos suelen ser más difíciles de asociar a un partido, que son "de mayor calidad" en el sentido de que tienden a ser bienes públicos y menos enfocados en clientelismo o gasto. En cambio los bienes enfocados requieren la capacidad del partido, promotores electorales, gobierno, o alguna forma de la maquinaria electoral para identificar aquellos votantes que brindarán un voto a favor del partido. En este lugar es donde suele plantearse los mecanimos de fraude electoral de acuerdo en el momento donde ocurre una "transferencia no programática". Aquí mostramos un ejemplo útil de esta categorización:
+Otro tipo de planteamiento, también relevante a esta pregunta, es sobre la naturaleza de la distribución de los bienes que provee el gobierno y los partidos. El argumento es, que en general, se considera que los bienes programáticos suelen ser más difíciles de asociar a un partido, que son "de mayor calidad" en el sentido de que tienden a ser bienes públicos y menos enfocados en clientelismo o gasto. En cambio los bienes enfocados requieren la capacidad del partido, promotores electorales, gobierno, o alguna forma de la maquinaria electoral para identificar aquellos votantes que brindarán un voto a favor del partido. En este lugar es donde suele plantearse los mecanismos de fraude electoral de acuerdo en el momento donde ocurre. Aquí mostramos un ejemplo útil de esta categorización:
 
 *"(1). Beneficios que son entregados ante la verificación de el voto de un individuo; (2)beneficios que son entregados a un votante antes de que él/ella vote (3)beneficios prometidos ante la victoria de el candidato o partido relevante."*[@cox_political_2009]
 
@@ -107,14 +99,9 @@ Una dimensión adicional, relevante tanto en las conclusiones como en el tipo de
 
 En los estudios macro solemos encontrar análisis comparativo de características institucionales. Entre estos estudios se encuentra el análisis de características institucionales determinantes de la participación como la competitividad de distritos, clivajes entre partidos [@powell_american_1986], y una continuación relevante donde se analiza además multipartidismo, unicameralismo y votación obligatoria [@jackman_political_1987].
 
+Los estudios "microeconómicos" suelen enfocarse en teorías sobre el carácter ciudadano y de perfil del votante, suelen usar variables como etnicidad(), escolaridad(), ingresos(), ingresos, analfabetismo, clivajes entre partidos e instituciones, número de partidos, cercania de la contienda [@blais_what_2006], unicameralismo, 
 
-Los estudios "microeconómicos" suelen enfocarse en teorías sobre el carácter ciudadano y de perfil del votante, suelen usar variables como etnicidad(), escolaridad(), ingresos(). 
-
-
-Ingresos, analfabetismo, clivajes entre partidos e instituciones, n[umero de partidos, cercania de la contienda (Blais 2000), unicameralismo, 
-
-
-Los análisis agregados tienden a enfocarse en características institucionales como distribución programática y no programática de bienes (), maquinarias partidistas y promotores electorales(), desarrollo de clientelas, efectos de del voto obligatorio(Gallego). Algunas de las conclusiones más relevantes al presente estudio es la relación entre participación electoral y percepción de fraude (McCann-Dominguez), el incremento en la participación electoral producto de la promoción del voto por medio de maquinarias partidistas(Nichter 2008), moilización sesgada a favor de "unmobilized strong supporters" (Stokes 2005) o simplemente más proclives a apoyar al partido (Hansen).
+Los análisis agregados tienden a enfocarse en características institucionales como distribución programática y no programática de bienes (), maquinarias partidistas y promotores electorales(), desarrollo de clientelas, efectos de del voto obligatorio(Gallego). Algunas de las conclusiones más relevantes al presente estudio es la relación entre participación electoral y percepción de fraude (McCann-Dominguez), el incremento en la participación electoral producto de la promoción del voto por medio de maquinarias partidistas[@nichter_vote_2008], moilización sesgada a favor de "partidarios no mobilizados" ^["unmobilized strong supporters"] [@stokes_perverse_2005] o simplemente más proclives a apoyar al partido (Hansen).
 
 Política Distributiva por medio de clientelismo, maquinaria política y patronazgo (Stokes 2012) en donde establece una importante distinción entre *compra de votos* donde "la maquinaria política puede brindar apoyos, sobornar o intentar persuadir a la gente para votar por ellos" (p.15) y la *compra de participación* o puede "brindar apoyos o sobornar para llevar a los votantes a las urnas" (idem). 
 
@@ -510,6 +497,14 @@ Otra veta de investigación es determinar el tamaño de diversos efectos institu
 
 
 Nuevo contexto electoral y viejas prácticas, menos controles programáticos. Mayor concentración, nuevas formas de gastar y distribuir programas sociales impactos que van a tener en la distribución de recursos, ahora que es menos programático es más importante. 
+
+De forma menos directa pero temáticamente directamente relacionada se puede plantear el análisis de programas, privados o públicos y su efecto en la promoción del voto. Ejemplificando podemos pensar en la amplia campaña hecha desde la sociedad civil "Si no votas callate" si se encontrara que esa campaña influye en algún segmento homogéneo de la población, digamos población de entre 25 y 35 años que no es políticamente activa, y encontraramos que este mismo segmento se decanta particularmente por alguna fuerza política encontraríamos que esta campaña a favor del voto no es neutral. Es decir que tanto la promoción electoral desde la sociedad civil como desde el estado puede, en la medida cuyos efectos afecten a una población homogénea, tener un efecto predecible y específico en los resultados electorales. Hasta donde el autor conoce no existe aún un estudio de este tipo que sea público.
+
+#Nota 
+
+Este documento se elaboró en R y el editor de textos en Latex knitr. Para manejar la bibliografía se utilizó Zotero y Bibtex. 
+
+Una versión del documento se encuentra en la página del autor en github. Junto los archivos de código de preparación de datos realizados por mí.
 
 
 Bla por bla en el bla del bla  [@nichter_vote_2008]
