@@ -1,5 +1,5 @@
 ---
-title: "Determinantes de participación electoral en elección para gobernador en el Estado de México 2017"
+title: "Promoción sesgada de la participación electoral en elección para gobernador en el Estado de México 2017"
 author: "Rodrigo Arturo Franco Fuentes"
 date: "May 21, 2019"
 
@@ -57,31 +57,34 @@ EMENSAYO<-read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 
 # Introducción
 
-En este trabajo analizamos la elección por gobernador 2017 en el Estado de México, las características que la definen y que influyen en su participación. Definimos hipótesis por medio de las cuales podría ocurrir una promoción sesgada del voto a favor del PRI como partido mobilizador, nuestra hipótesis, y asociamos variables con información de diversas fuentes públicas a los 128 municipios del Estado de México en busca de evidencia, a favor o en contra, de estas. 
+En este trabajo buscamos definir un concepto de promoción sesgada del voto y establecer un método para medir la existencia de este efecto. Proponemos que las condiciones de competencia entre partidos es asimétrica y que de acuerdo a condiciones de los partidos durante la contienda, como si gobiernan o no un municipio, si tienen una mayoría de la preferencia electoral o no en cierta región, escogerán un determinado tipo de movilización electoral. 
+Utilizamos información electoral de, principalmente, dos elecciones donde el único cargo en juego es la gobernatura; elección a gobernador del Estado de México de 2011 y 2017. Dado que no existen contiendas para cargos federales ni municipales concurrentes podemos analizar contiendas con incentivos simples. Al establecer comparaciones entre elecciones en el mismo estado podemos analizar el cambio de la participación y preferencia electoral a nivel municipal.  
 
-Después utilizamos estos datos como variables independientes de un modelo que analiza la participación en la contienda 2017 a nivel municipal como variable dependiente. Así establecemos que la participación electoral podría depender en buena medida a estratégias de promoción del voto en aquellos municipios con población más proclíve a votar por el PRI, encontramos el tamaño de estos efectos y la certidumbre estadística de su existencia. 
+Definimos hipótesis relacionadas con mecanismos por medio de los cuales podría ocurrir una promoción sesgada del voto a favor del PRI como partido mobilizador. Para ello asociamos variables con información de diversas fuentes públicas a los 128 municipios del Estado de México en busca de evidencia. 
 
-Finalmente damos la vuelta al modelo y planteamos que la capacidad predictiva de estos modelos es mayor cuando se alinean las variables contenidas en ellos a la estrategia electoral de estos partidos. Así que utilizamos las variables dependientes como predictoras del voto por cada partido. Interpretamos la varianza explicada por estos modelos como una señal de la alineación de este partido con la estrategía planteada de movilización electoral. De acuerdo a los resultados obtenidos se encuentra evidencia que apunta a una promoción sesgada de la participación electoral a favor del PRI.
+Después utilizamos estos datos como variables independientes de un modelo que analiza la participación en la contienda 2017 a nivel municipal como variable dependiente. Así establecemos que la participación electoral podría depender en buena medida de estratégias de promoción del voto en aquellos municipios con población más proclíve a votar por el PRI. 
+
+Finalmente damos la vuelta al modelo y planteamos que la capacidad predictiva de estos modelos es mayor cuando se alinean las variables contenidas en ellos a la estrategia electoral de cada partido. Así que utilizamos las variables dependientes como predictoras del voto por cada partido. Interpretamos la varianza explicada por estos modelos como una señal de la alineación de este partido con la estrategía planteada de movilización electoral. De acuerdo a los resultados obtenidos se encuentra evidencia que apunta a una que durante la elección 2017 el PRI ejerció una estratégia de promoción electoral sesgada.
 
 # Literatura sobre participación electoral
 
 La participación electoral es el elemento fundamental del ejercicio democrático. Es la manifestación revelada de las preferencias y deseos de la ciudadanía. También es una forma de establecer castigo o premio al ejercicio de un partido en el poder, identificación con las propuestas de un partido, confianza en el proceso electoral y en las instituciones del Estado y otras señales de información deseables en el ejercicio democrático. 
 
-Generalmente es representada como algo positivo, su promoción es un espacio de coincidencia entre las campañas gubernamentales, de órganos electorales independientes, partidistas y de la sociedad civil. Sin embargo, es también un lugar donde se manifiestan distintos elementos de la práctica electoral que suelen ser contrarios a los ideales democráticos y a las reglas legales establecidas para la contienda electoral. Algunos de estos comportamientos son; la utilización de medios legales pero en una cantidad cuyo costo supere las asignaciones previstas para campaña, otorgamiento de programas financiados por el gobierno federal pero provistos bajo la pretensión de que provienen de un partido o que el programa depende de un resultado electoral específico para seguir existiendo, compra directa del voto, coacción o mobilización bajo presión, sustitución de papeletas y de resultados electorales. 
+Generalmente es representada como algo positivo, su promoción es un espacio de coincidencia entre las campañas gubernamentales, de órganos electorales independientes, partidistas y de la sociedad civil. Sin embargo, es también un lugar donde se manifiestan distintos elementos de la práctica electoral que suelen ser contrarios a los ideales democráticos y a las reglas legales establecidas para la contienda electoral. 
 
-En este sentido el resultado electoral depende de un proceso complejo que no es fácilmente reducible y para el que  muchas variables no son directamente observables, las que son observables pueden no ser consistentes en diversos niveles de agregación. No obstante afirmamos que es posible distinguir elementos específicos de una elección y buscar encontrar una narrativa que la caracterice, enfatizando que son a menudo características particulares, de estado de derecho, de coyuntura, las que pueden determinar que una variable independiente afecte en un sentido u otro el resultado de la participación electoral.
+Algunos de estos comportamientos son; la utilización de medios legales pero en una cantidad cuyo costo supere las asignaciones previstas para campaña, otorgamiento de programas financiados por el gobierno federal pero provistos bajo la pretensión de que provienen de un partido o que el programa depende de un resultado electoral específico para seguir existiendo, compra directa del voto, coacción o mobilización bajo presión, sustitución de papeletas y de resultados electorales. 
+
+Estos comportamientos no son sistemáticamente registrados y suelen incurrir en ellos, en menor o mayor medida, todos los partidos que son competitivos en la contienda. En este sentido el resultado electoral depende de un proceso complejo que no es fácilmente reducible y para el que muchas variables no son directamente observables. No obstante afirmamos que es posible distinguir elementos específicos de una elección y buscar encontrar una narrativa que la caracterice, enfatizando que son a menudo características particulares, de estado de derecho, de coyuntura, las que pueden determinar que una variable independiente afecte en un sentido u otro el resultado de la participación electoral.
 
 ## Dicotomias en la literatura, tipos de votantes, gasto, principales y agentes, mobilización y persuación. 
 
-Una forma de entender la literatura sobre participación electoral es a través del planteamiento de dicotomias como; los votantes de base (core voters), contra indecisos (swing voters), de distribución de política pública utilizando gasto programático (programatic) contra enfocado (targeted), sobre la relación entre patrones (principal) y agentes (agent), o sobre mobilización logística contra persuasión del electorado. 
+La literatura que analiza la participación electoral desde la perspectiva de elección racional suele plantear dicotomías como; los votantes de base (core voters), contra indecisos (swing voters), de distribución de política pública utilizando gasto programático (programatic) contra enfocado (targeted), sobre la relación entre patrones (principal) y agentes (agent), o sobre mobilización logística(acarreo) contra persuasión del electorado. Por ejemplo, la discusión sobre votantes base contra indecisos trata, frecuentemente, sobre si se mobiliza a aquellas personas que ya se sabe que votarán a favor del partido o sí los partidos, o partido en el gobierno, se enfocan en votantes cuyo voto aún no está determinado. 
 
-Estas perspectivas, que acomodan gran parte de la literatura de estratégia racional, se sobrelapan y pueden entenderse como formas de enfocarse en perspectivas específicas del mismo proceso. Por ejemplo, la discusión sobre votantes base contra indecisos trata, frecuentemente, sobre si se mobiliza a aquellas personas que que ya se sabe que votarán a favor del partido o sí los partidos, o gobierno se enfocan en votantes cuyo voto aún no está determinado o es para un partido opositor. 
-
-Otro tipo de planteamiento, también relevante a esta pregunta, es sobre la naturaleza de la distribución de los bienes que provee el gobierno y los partidos. El argumento es, que en general, se considera que los bienes programáticos suelen ser más difíciles de asociar a un partido, que son "de mayor calidad" en el sentido de que tienden a ser bienes públicos y menos enfocados en clientelismo o gasto. En cambio los bienes enfocados requieren la capacidad del partido, promotores electorales, gobierno, o alguna forma de la maquinaria electoral para identificar aquellos votantes que brindarán un voto a favor del partido sólo si reciben algo a cambio. En este lugar es donde suele plantearse los mecanismos de fraude electoral de acuerdo en el momento donde ocurre. Aquí mostramos un ejemplo útil de esta categorización:
+Otro tipo de planteamiento, también relevante a esta pregunta, es sobre la naturaleza de la distribución de los bienes que provee el gobierno y los partidos. El argumento es, que en general, se considera que los bienes programáticos suelen ser más difíciles de asociar a un partido, que son "de mayor calidad" en el sentido de que tienden a ser bienes públicos y menos enfocados en clientelismo o gasto. En cambio los bienes enfocados requieren la capacidad del partido, promotores electorales, gobierno, o alguna forma de la maquinaria electoral para identificar aquellos votantes que brindarán un voto a favor del partido sólo si reciben algo a cambio. En este lugar es donde suele plantearse los mecanismos de manipulación electoral de acuerdo en el momento donde ocurre.
 
 *"(1). Beneficios que son entregados ante la verificación de el voto de un individuo; (2)beneficios que son entregados a un votante antes de que él/ella vote (3)beneficios prometidos ante la victoria de el candidato o partido relevante."*[@cox_political_2009]
 
-Es en la primera de estás categorías donde ocurre la instancia que más comunmente se identifica como fraude electoral, la compra del voto. La segunda categoría puede ser violatoria de las reglas electorales y, para ser eficiente, requiere estar enfocada a un grupo que ya se sabe va a apoyar al partido o a uno que cambia su opinión por el beneficio entregado. La tercera categoría puede ser, o no legal, dependiendo del mecanismo empleado, de la discriminación entre grupos y del tipo de bien entregado. 
+Es en la primera de estás categorías donde ocurre la instancia que más comunmente se identifica como fraude electoral, la compra del voto. La segunda categoría puede ser violatoria de las reglas electorales y, para ser eficiente, requiere estar enfocada a un grupo que ya se sabe va a apoyar al partido o a uno que cambia su opinión por el beneficio entregado. La tercera categoría puede ser, o no legal, dependiendo  del mecanismo empleado, de la discriminación entre grupos y del tipo de bien entregado. 
 
 ##Información y planteamientos Micro y Macro
 
@@ -107,7 +110,7 @@ En el proceso electoral 2017 la elección se mostró mucho más cerrada aunque p
 Estudiamos una elección no concurrente de gobernador, es decir que se espera que los incentivos se encuentren alineados a procurar una mayoría simple en el estado. Esto en contraste con múltiples elecciones concurrentes donde podría la cercanía entre punteros generar incentivos diferenciados entre los que buscan la victoria del partido en el municipio contra los que esperan obtener la gobernatura. 
 En una elección donde se determine en el mismo proceso la gobernatura y alcaldías podríamos encontrar conflictos dentro de las estructuras partidistas por el control de recursos limitados. Presumiblemente aquellos que buscan la gobernatura buscan optimizar la cantidad de votos que se pueden obtener dado un presupuesto, minimizando así el costo por voto individual. Mientras que los que buscan ganar una alcaldía tienen que realizar cálculos adicionales, en una competencia con muy poca distancia entre punteros pueden estar dispuestos a obtener votos a un costo mayor al que está a dispuesto a pagar la estructura estatal. 
 
-En la tabla siguiente (Tabla 1) podemos observar la participación electoral 2011, 2017 y 2012. En ambas elecciones se observan porcentajes de participación promedio de 53.38% (2011), 60.38% (2017), 71.33%(2012). Estos niveles de participación se encuentran alineados con nuestras expectativas.
+En la tabla siguiente se muestran los resultados y descriptivos básicos de la participación electoral 2011, 2017 y 2012. En las elecciones a 2011 y 2017, ambas sólo para gobernador, se observan porcentajes de participación promedio de 53.38% (2011), 60.38% (2017), 71.33%(2012). Estos niveles de participación se encuentran alineados con nuestras expectativas.
 
 La elección 2011 es una elección poco competitiva, se espera, y obtiene, una amplia mayoría para el PRI, al igual que la elección 2017 el único cargo electo es el de gobernador estatal. La elección 2012 es similar a 2011 la diferencia más importante es que es una elección competitiva por lo que esperamos que distintas fuerzas políticas inviertan más recursos en promover el voto mediante diversas estratégias lo que se ve reflejado en una participación electoral 7% mayor. La elección 2012 en varios ordenes de gobierno, es una elección extremadamente competitiva a nivel ejecutivo federal, se elige al congreso y es competitiva en diversos municipios, dada la naturaleza concuerrente de la elección de estos cargos esperamos ver efectos de importancia y competencia en estas elecciones por lo que la relativamente alta participación electoral es esperada.
 
@@ -119,7 +122,7 @@ colnames(T1) <- c("Participación_2011", "Participación_2017", "Participación_
 knitr::kable((T1), caption = "Participación electoral (porcentaje) en tres elecciones EDOMEX")
 ```
 
-Un primer efecto a observar en la participación electoral entre estos periodos es cambios importantes en la participación electoral entre elecciones similares. En la siguiente tabla se muestra la correlación entre la participación electoral para estos tres periodos en los 125 municipios del Estado de México.
+Un primer elemento  a observar en la participación electoral entre estos periodos es el importante cambio en la participación electoral entre dos elecciones similares; 2011, 2017. En la siguiente tabla se muestra la correlación entre la participación electoral para estos tres periodos en los 125 municipios del Estado de México.
 
 Se muestra la correlación(Pearson) entre las tres elecciones, como es esperado la mayor correlación  es entre las dos elecciones más similares, ambas elecciones simples de gobernador,elección 2011 y 2017 (0.89).  
 
@@ -130,23 +133,24 @@ EMENSAYO %>% select(EM11_Por_Part, EM_12_Por_Part, EM_17_POR_PART) %>%
 
 ```
 
-##Estructura y el problema de optimización
+##Incentivos para la participación
 
-Estudiamos la elección como un problema de maximización de votos al que se enfrentan los partidos. Esta maximización se resuelve de acuerdo a un presupuesto para la obtención de votos. 
+Estudiamos la elección como un problema de maximización de votos al que se enfrentan los partidos. Esta maximización se resuelve de acuerdo a un presupuesto para la obtención de votos, cada voto es idéntico por lo que se optimiza al "comprar" votos al menor precio . 
 
-Hasta ahora hemosaumido el problema desde una perspectiva del PRI. Es el PRI el que está resolviendo un problema de minimización del costo de los votos para que, ante un presupuesto limitado, maximice la cantidad de estos a favor de su candidato. Pero es necesario aclarar, cuando menos para el segundo contendiente, el porqué no resuelve el mismo problema de forma similar. 
+Hasta ahora hemos asumido el problema desde una perspectiva del PRI. Es el PRI el que está resolviendo un problema de minimización del costo de los votos para que, ante un presupuesto limitado, maximice la cantidad de estos a favor de su candidato. Pero es necesario aclarar, cuando menos para el segundo contendiente, el porqué no resuelve el mismo problema de forma similar. 
 
 Es decir que teorícamente esperariamos que la promoción, adquisición, intensidad de campaña se diera en donde el costo de estos votos es menor. Para ambos partidos podríamos esperar que fuera, teorícamente, en los municipios de menores ingresos, y que al competir por estos votos su valor aumentara hasta agotar los recursos disponibles . 
 Sin embargo vemos una importante diferenciación en la votación, probablemente indicativo de una diferencia en estratégia o preferencias. 
 
-En esta elección el Ejecutivo Federal, el gobierno del estado y el control del xx% de las alcaldias, está bajo el control del PRI. Esto le permite disponer de una mayor cantidad de herramientas de promoción del voto. 
+En la elección 2017 el Ejecutivo Federal, el gobierno del estado y el control de 84 de 125 de las alcaldias (67% de los municipios y 69% del padron electoral del 2017) , está bajo el control del PRI. Esto le permite disponer de una mayor cantidad de herramientas de promoción del voto. 
 
 ##Mecanismos de influencia
 
 Utilizamos información agregada a nivel municipal, esto implica una caracterización de los municipios como si estos fueran individuos, los valores arrojados por un modelo de regresión implican que un municipio más pobre o más rico, más o menos denso,gobernado por tal o cual partido puede tener distintas propensidades para una mayor o menor participación electoral. 
-Sin embargo esta metodología no permite observar el mecanismo por el cual los partidos optimizan sus recursos para maximizar el voto lo que impide entender la eficacia, logística, y funcionamiento de la estructura intermediaria. Es, por ejemplo, relevante si la estructura que opera durante los periodos electorales es parte permanente del partido, si es una estructura temporal del partido que es activada durante el periodo electoral, si utiliza una estructura que cumple una función de facilitadora de programas gubernamentales, si estos programas son federales o estatales y que cumple una función de motivación o acarreo o incluso de sabotaje durante la jornada electoral. 
 
-Existe una literatura creciente sobre los mecanismos mediante los cuales un partido puede influir en un resultado electoral. Las teorías detrás de los mecanismos de operación tienen distintos grados de complejidad, desde lo relativamente lineal, basadas en una sóla dimensión que establece a los votantes de acuerdo a su grado de lealtad, votantes leales a votantes "oscilantes" (xxxxxx). Hasta teorías que incluyen diversos niveles de organización. 
+Sin embargo esta metodología no permite observar el mecanismo por el cual los partidos optimizan sus recursos para maximizar el voto lo que impide entender la eficacia, logística, y funcionamiento de la estructura intermedia. Es, por ejemplo, relevante si la estructura que opera durante los periodos electorales es parte permanente del partido, si es una estructura temporal del partido que es activada durante el periodo electoral, si utiliza una estructura que cumple una función de facilitadora de programas gubernamentales, si estos programas son federales o estatales y que cumple una función de motivación o acarreo o incluso de sabotaje durante la jornada electoral. 
+
+Existe una literatura creciente sobre los mecanismos mediante los cuales un partido puede influir en un resultado electoral. Las teorías detrás de los mecanismos de operación tienen distintos grados de complejidad, desde lo relativamente lineal, basadas en una sóla dimensión que establece a los votantes de acuerdo a su grado de lealtad, votantes leales a votantes "oscilantes".
 
 Particularmente interesante para este trabajo son las teorías que distinguen entre beneficios particulares como la "compra" de votos o la asignación no programática de beneficios a agentes, votantes o grupos específicos, contra aquellas que analizan la influencia de la compra de participación, es decir la mobilización no dirigida o indistinta de los votantes. 
 
@@ -157,9 +161,7 @@ Existen diversas teorías que aportan al fenómeno observado, la promoción de l
 3. Donde exista menos supervisión del cumplimiento de la ley electoral.
 4. Donde se reciban mayores participaciones del gobierno. 
 
-La primera es la más frecuente explicación en la literatura revisada, lo que estamos revisando es una política no programática que logra identificar a sus recipientes a través de una maquinaria. La explicación es, esencialmente, que la compra, o promoción, de los votos se da en donde hay mayor pobreza. El mecanismo explicativo es la optimización de un presupuesto electoral maximizando el número de votos obtenidos. En el Estado de México logramos ver variación al respecto. Se utiliza la variable xxx, y xxx, como proxys de pobreza obtenidos en la encuesta Intercensal 2015.    (Stokes, Dunning, Nazareno)
-
-
+La primera es la más frecuente explicación en la literatura revisada, lo que proponemos como mecanismo causal es una política no programática que logra identificar a sus recipientes a través de una maquinaria. La explicación es, esencialmente, que la compra, o promoción, de los votos se da en donde hay mayor pobreza. El mecanismo explicativo es la optimización de un presupuesto electoral maximizando el número de votos obtenidos. En el Estado de México logramos ver variación al respecto. Se utiliza la variable xxx, y xxx, como proxys de pobreza obtenidos en la encuesta Intercensal 2015.    (Stokes, Dunning, Nazareno)
 
 #Hipótesis y variables
 
@@ -171,9 +173,8 @@ Se utilizaron xx variables asociadas a las hipótesis planteadas y una variable 
 #  select(EM_17_POR_PART, Por_Ingreso_Gobierno, Log_DLN, PO2SM, DIF_VPRI_2011 ) %>% summary() 
 #colnames(temp) <- c("% Participación","% Ingreso Gobierno"," Log DLN","% Menos 2 Sal Min","Dif. a favor PRI")
 #kable(temp, caption = "Estadística descriptiva de las variables")
+#sum(EMENSAYO[EMENSAYO$PRI_o_Otro_2015 == "PRI o PRI Alianza",]$EM_17_LISTA_NOMINAL)/sum(EMENSAYO$EM_17_LISTA_NOMINAL) 
 ```
-
-
 
 ##H1. Promoción del voto en municipios Pobres. Porcentaje de población que recibe menos de dos salarios mínimos.
 
@@ -184,10 +185,8 @@ temp <- EMENSAYO %>%
 colnames(temp) <- c("Porcentaje con menos de dos Salarios  Mínimos")
 kable(temp, caption = "Porcentaje de viviendas en el municipio que recibe menos de dos salarios mínimos")
 ```
-
-
-
-En la literatura suele reconocerse dos tipos de efectos relacionados con el ingreso y la participación electoral. El ingreso puede estar asociado a mayor calidad de vida, conexión con las instituciones sociales y una mayor percepción de importancia de los procesos electorales. En este sentido esperariamos un incremento en la propensión a la participación electoral a mayor ingreso. Sin embargo es más frecuente encontrar que se asocie a una mayor pobreza con la capacidad de adquirir, o promover, votos a menor costo. El mecanismo es que aquellos votantes más pobres, con mayor utilidad marginal hacia el ingreso, puedan ser más fácilmente manipulados para participar, para votar por algún resultado en particular, o ser movilizados en apoyo de un partido del que perciban obtienen algún apoyo directo. El efecto puede entenderse como que a menor ingreso los potenciales votantes se encuentran "más dispuestos a comprometer sus preferencias políticas a cambio de consumo privado adicional".
+En la literatura suele reconocerse dos tipos de efectos relacionados con el ingreso y la participación electoral. El ingreso puede estar asociado a mayor calidad de vida, conexión con las instituciones sociales y una mayor percepción de importancia de los procesos electorales. En este sentido esperariamos un incremento en la propensión a la participación electoral a mayor ingreso. Sin embargo es más frecuente encontrar que se asocie a una mayor pobreza con la capacidad de adquirir, o promover, votos a menor costo. 
+0El mecanismo es que aquellos votantes más pobres, con mayor utilidad marginal hacia el ingreso, puedan ser más fácilmente manipulados para participar, para votar por algún resultado en particular, o ser movilizados en apoyo de un partido del que perciban obtienen algún apoyo directo. El efecto puede entenderse como que a menor ingreso los potenciales votantes se encuentran "más dispuestos a comprometer sus preferencias políticas a cambio de consumo privado adicional".
 
 
 
