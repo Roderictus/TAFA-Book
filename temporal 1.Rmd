@@ -75,9 +75,12 @@ Finalmente utilizamos el modelo para predecir el voto del resto de las fuerzas e
 
 # Literatura sobre participación electoral
 
-La participación electoral es el elemento fundamental del ejercicio democrático. Es la manifestación revelada de las preferencias y deseos de la ciudadanía. También es una forma de establecer castigo o premio al ejercicio de un partido en el poder, identificación con las propuestas de un partido, confianza en el proceso electoral y en las instituciones del Estado y otras señales de información deseables en el ejercicio democrático. 
+La participación electoral es el elemento fundamental del ejercicio democrático. Es la manifestación revelada de las preferencias y deseos de la ciudadanía, también es una forma de establecer castigo o premio al ejercicio de un partido en el poder. Permite manifestar la identificación con las propuestas de un partido, es necesaria para manifestar confianza en el proceso electoral y en las instituciones del Estado. 
 
-Generalmente es representada como algo positivo, su promoción es un espacio de coincidencia entre las campañas gubernamentales, de órganos electorales independientes, partidistas y de la sociedad civil. Sin embargo, es también un lugar donde se manifiestan distintos elementos de la práctica electoral que suelen ser contrarios a los ideales democráticos y a las reglas legales establecidas para la contienda electoral. 
+Generalmente es representada como algo positivo, su promoción es un espacio de coincidencia entre las campañas gubernamentales, de órganos electorales independientes, partidistas y de la sociedad civil. 
+
+
+Sin embargo, es también un lugar donde se manifiestan distintos elementos de la práctica electoral que suelen ser contrarios a los ideales democráticos y a las reglas legales establecidas para la contienda electoral. 
 
 Algunos de estos comportamientos son; la utilización de medios legales pero en una cantidad cuyo costo supere las asignaciones previstas para campaña, otorgamiento de programas financiados por el gobierno federal pero provistos bajo la pretensión de que provienen de un partido o que el programa depende de un resultado electoral específico para seguir existiendo, compra directa del voto, coacción o mobilización bajo presión, sustitución de papeletas y de resultados electorales. 
 
