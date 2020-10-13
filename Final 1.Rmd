@@ -26,7 +26,7 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, fig.path = "Figuras/", warn
 library(AER) #libro de econometría con R
 library(PerformanceAnalytics) #para correlaciones del voto 
 library(tidyverse)
-library(citr)
+#library(citr)
 library(stargazer) #tablas de regresión
 library(viridis)
 library(kableExtra)
@@ -205,7 +205,8 @@ EMENSAYO %>% select(EM11_Por_Part, EM_12_Por_Part, EM_17_POR_PART) %>%
 
 ##Incentivos para la participación
 
-Estudiamos la elección como un problema de maximización de votos al que se enfrentan los partidos. Esta maximización se resuelve de acuerdo a un presupuesto para la obtención de votos, cada voto es idéntico por lo que se optimiza al "comprar" votos al menor precio . 
+Estudiamos la elección como un problema de optimización al que se enfrentan los partidos. Estos buscan maximizar el número de votos de acuerdo a una cantidad de recursos fija. Estos recursos no son sencillamente monetarios, la presencia partidista, por el control del gobierno en el estado y en el municipio, presumiblemente disminuye el presupuesto discrecional de obtención de los votos. Podemos hablar de un segundo presupuesto municipal o, con resultados idénticos, de una disminución de los costos para obtener los votos en municipios donde exista una presencia del partido. Es notable que no todos los partidos se enfrentan a la elección con el mismo presupuesto ni con los mismos recursos a nivel municipal. Por ello es útil hacer la distinción entre el incumbente, que en este caso tiene el control del estado y de la mayoría de los municipios, contra el principal competidor. 
+
 
 Hasta ahora hemos asumido el problema desde una perspectiva del PRI. Es el PRI el que está resolviendo un problema de minimización del costo de los votos para que, ante un presupuesto limitado, maximice la cantidad de estos a favor de su candidato. Pero es necesario aclarar, cuando menos para el segundo contendiente, el porqué no resuelve el mismo problema de forma similar. 
 
@@ -241,13 +242,6 @@ La primera es la más frecuente explicación en la literatura revisada, lo que p
 
 #Hipótesis y variables
 
-
-
-
-
-
-
-
 Exponemos el origen de la información utilizada en esta investigación junto con la relación esperada que se tiene con la participación electoral como variable dependiente.  
 Se utilizaron xx variables asociadas a las hipótesis planteadas y una variable adicional, tamaño de la lista nominal, como peso para el modelo de regresión. Se probó, y descartó, el uso del índice de marginación por su alta correlación con el la variable de porcentaje de población que obtiene menos de dos salários mínimos en el municipio.
 
@@ -260,7 +254,69 @@ Es decir que buscariamos, en esta primera clasificación, cuatro tipos de compor
 3. Población urbana y municipio del PRI o alianzas
 4. Población urbana y municipio no del PRI 
 
-```{r "Estadística descriptiva de las variables del Estudio" , results='asis', message = FALSE, fig.cap="Estadística descriptiva de las variables del Estudio",  out.extra=''}
+Para ello necesitamos analizar el comportamiento de dos variables; densidad de población, que utilizamos como proxy continuo para la dimensión rural - urbana y el partido que gobierna el municipio. 
+
+##Densidad de lista nominal, consideraciones sobre la dimensión rural-urbana. 
+
+La distinción rural-urbano es una atribución que se hace a nivel de localidad, el punto de corte se hace en los 2,500 habitantes, en el orden municipal se suele hablar de municipios predominantemente rurales o predominantemente urbanos. Encontramos que para este estudio no es práctico hablar de una distinción tajante entre lo urbano y lo rural, porqué la distinción no se hace a nivel municipio y porqué buscamos un tratamiento que brinde las ventajas de una categoria continua. La principal desventaja, que además afecta al resto de las variables, es que al ser el tratamiento a nivel municipal no consideramos la posibilidad, ni la proporción, en la que comparte población rural y urbana un mismo municipio. 
+
+Por ello se generó una variable de densidad de los potenciales votantes dividiendo la lista nominal entre el área, en kilómetros cuadrados, de los municipios y calculando su logaritmo natural. Esta variable cumple varios papeles.
+
+1. Genera una alternativa continua a la distinción urbano-rural. 
+2. Captura ingreso y marginación al generar una distinción entre municipios urbanos y rurales. 
+
+El segundo papel es en gran parte un efecto no deseado que analizaremos en los modelos de regresión, utilizamos una variable distinta para el ingreso (porcentaje de población con menos de dos salarios mínimos) pero encontramos que gran parte del efecto de ingreso y de la variable de marginación (índice de marginación del INEGI) son capturados por la variable de densidad de lista nominail.
+
+
+
+Esta variable es la que mejor efecta estos efectos dada la información disponible. Idealmente deseariamos tener una medida clara de ingreso
+
+El Estado de México presenta una alta concentración de Lista Nominal, y población, en municipios conurbados pertenecientes a la ciudad de México
+
+```{r Tabla Densidad de Lista Nominal, results='asis'}
+#cambio reciente, ordenar por densidad de lista nominal, criterio de densidad
+TablaLN <- arrange(EMENSAYO, desc(Densidad_de_Lista_Nominal)) %>%  
+  select(NOM_MUN, EM_17_LISTA_NOMINAL, Densidad_de_Lista_Nominal, EM_17_POR_PART) %>%
+  mutate( Porcentaje_Lista_Nominal = (EM_17_LISTA_NOMINAL/sum(EMENSAYO$EM_17_LISTA_NOMINAL)*100)) %>% 
+  mutate(Suma_Acumulada_PLN = cumsum(Porcentaje_Lista_Nominal))
+
+TablaLN <- TablaLN %>% 
+  select(NOM_MUN, EM_17_LISTA_NOMINAL, Densidad_de_Lista_Nominal, Porcentaje_Lista_Nominal, Suma_Acumulada_PLN) 
+
+colnames(TablaLN) <-  c("Municipio", "Lista N_2017", "Densidad LN", "Porcentaje_LN", "Acum_LN")
+kable(TablaLN[1:10,], format.args =list(big.mark = ",", digits = 3), caption = "Densidad de Lista Nominal, 10 principales Municipios, Estado de México")
+```
+El municipio de Ecatepec captura el 10.6% de la lista nominal. Los 33 municipios más poblados capturan el 80% de la lista nomial
+
+```{r Scatterplot de la densidad de Lista Nominal, results='asis'}
+
+#ggplot(TablaLN, aes(x = Densidad_de_Lista_Nominal, y = EM_17_LISTA_NOMINAL)) + 
+#  geom_point(aes(size= TablaLN$Porcentaje_Lista_Nominal)) + 
+#       labs(subtitle="Area Vs Población", 
+#       y="Población", 
+#       x="Area", 
+#       title="Densidad de la lista nominal, Edomex 2017", 
+#       caption = "Source: midwest")
+
+```
+
+
+##Partido que gobierna el municipio
+Se codifican los partidos ganadores de los municipios en las elecciones 2015, lo que determina el partido gobernante a nivel municipal. Se recodifican los ganadores para concentrar el número de categorías, de los 125 municipios (ahora alcaldias) 84 de ellos generaron una mayoría por el PRI (26), o por el PRI en alianza (58 alianza PRI-PVEM-NA), 18 por el PAN (con y sin alianzas), 16 PRD y 7 por otros partidos. Cabe resaltar que sólo un municipio obtiene mayoría por MORENA, enfatizando que este partido es fuertemente disruptivo lo que en parte nos permite mantener la afirmación teórica de que no tiene una estructura que le permita ser identificado como proveedor de favores o de recursos de programas (salvo en un municipio). Tanto el ejecutivo Federal como el ejecutivo estatal son del PRI.
+
+Para el modelo de regresión se utiliza como categoría base aquellos municipios (84) en los cuales gobierna el PRI o se obtuvo una mayoría a favor de este partido en alianza con otro. Es decir que el peso del efecto es el de un gobierno distinto del PRI, se decidió utilizar una variable binaria que determina si gobierna o no el PRI, o un partido que haya obtenido el gobierno en alianza con el PRI en el 2015.
+
+
+```{r "Tabla con los cuatro tipos de municipio" , results='asis', message = FALSE, fig.cap="Estadística descriptiva de las variables del Estudio",  out.extra=''}
+
+#1. Población rural y municipio del PRI o alianzas
+EMENSAYO %>% filter(Partido_Gobernante_2015 == "PRI o PRI Alianza")
+
+#2. Población rural y municipio no del PRI
+
+#3. Población urbana y municipio del PRI o alianzas
+
+#4. Población urbana y municipio no del PRI 
 ```
 
 
@@ -400,40 +456,7 @@ Plot_Map2
 ```
 
 
-##Partido que gobierna el municipio
-Se codifican los partidos ganadores de los municipios en las elecciones 2015, lo que determina el partido gobernante a nivel municipal. Se recodifican los ganadores para concentrar el número de categorías, de los 125 municipios (ahora alcaldias) 84 de ellos generaron una mayoría por el PRI (26), o por el PRI en alianza (58 alianza PRI-PVEM-NA), 18 por el PAN (con y sin alianzas), 16 PRD y 7 por otros partidos. Cabe resaltar que sólo un municipio obtiene mayoría por MORENA, enfatizando que este partido es fuertemente disruptivo lo que en parte nos permite mantener la afirmación teórica de que no tiene una estructura que le permita ser identificado como proveedor de favores o de recursos de programas (salvo en un municipio). Tanto el ejecutivo Federal como el ejecutivo estatal son del PRI.
 
-Para el modelo de regresión se utiliza como categoría base aquellos municipios (84) en los cuales gobierna el PRI o se obtuvo una mayoría a favor de este partido en alianza con otro. Es decir que el peso del efecto es el de un gobierno distinto del PRI, se decidió utilizar una variable binaria que determina si gobierna o no el PRI, o un partido que haya obtenido el gbierno en alianza con el PRI en el 2015.
-
-##Densidad de lista nominal 
-
-Se generó una variable dividiendo la lista nominal entre el área, en kilómetros cuadrados, de los municipios y calculando su logaritmo natural. Esta variable cumple varios papeles.
-1. Genera una alternativa continua a la distinción urbano-rural. 
-2. Captura ingreso y marginación al generar una distinción entre municipios urbanos y rurales. 
-
-El segundo efecto, ingreso, es deseado como una de las principales explicaciones detrás de la teoría de compra del voto. En un entorno donde se busca optimizar un presupuesto y todos los votos tienen el mismo valor, dado que es una elección solamente para gobernador, se compran los votos más baratos, que tienden a ser de las personas que asignan mayor valor marginal al dinero, o beneficios en especie, es decir aquellos más pobres.
-
-Esta variable es la que mejor efecta estos efectos dada la información disponible. Idealmente deseariamos tener una medida clara de ingreso
-
-El Estado de México presenta una alta concentración de Lista Nominal, y población, en municipios conurbados pertenecientes a la ciudad de México
-
-```{r Tabla Densidad de Lista Nominal, results='asis'}
-
-TablaLN <- arrange(EMENSAYO, desc(EM_17_LISTA_NOMINAL)) %>%  
-  select(NOM_MUN, EM_17_LISTA_NOMINAL, Densidad_de_Lista_Nominal, EM_17_POR_PART) %>%
-  mutate( Porcentaje_Lista_Nominal = (EM_17_LISTA_NOMINAL/sum(EMENSAYO$EM_17_LISTA_NOMINAL)*100)) %>% 
-  mutate(Suma_Acumulada_PLN = cumsum(Porcentaje_Lista_Nominal))
-
-TablaLN <- TablaLN %>% 
-  select(NOM_MUN, EM_17_LISTA_NOMINAL, Densidad_de_Lista_Nominal, Porcentaje_Lista_Nominal, Suma_Acumulada_PLN) 
-
-colnames(TablaLN) <-  c("Municipio", "Lista N_2017", "Densidad LN", "Porcentaje_LN", "Acum_LN")
-kable(TablaLN[1:10,], format.args =list(big.mark = ",", digits = 3), caption = "Densidad de Lista Nominal, 10 principales Municipios, Estado de México")
-
-
-
-
-```
 
 ## Índice de Marginación
 
@@ -486,6 +509,10 @@ Asumimos que existe un problema de identificación de aquellos votantes que son 
 
 
 Particiáción en municipios donde en la elección 2011 el PRI obtiene mayor ventaja
+
+## Población con ingreso menor a dos salarios mínimos 
+
+El segundo efecto, ingreso, es deseado como una de las principales explicaciones detrás de la teoría de compra del voto. En un entorno donde se busca optimizar un presupuesto y todos los votos tienen el mismo valor, dado que es una elección solamente para gobernador, se compran los votos más baratos, que tienden a ser de las personas que asignan mayor valor marginal al dinero, o beneficios en especie, es decir aquellos más pobres.
 
 
 
