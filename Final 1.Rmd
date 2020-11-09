@@ -59,7 +59,11 @@ EMENSAYO<-read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv")
 
 # Introducción
 
-En este trabajo definimos el concepto de promoción sesgada del voto y establecemos un método para medir este efecto. Entendemos promoción sesgada del voto como la estratégia de optimización electoral que promueve la participación electoral en regiones o grupos electorales de acuerdo a una expectativa de comportamiento de estos. La promoción de la participación de forma amplia, como es analizada en este trabajo, contrasta con estratégias donde también se promueve la participación a nivel individual, como el acarreo y la compra de votos. Esta diferencia obra en el sentido de que no se actua bajo la premisa de que se conoce el sentido del voto individual sino que se promueve la participación de grupos que se sabe que en promedio actuaran de forma favorable al propósito electoral del partido o grupo promovente.
+En este trabajo definimos el concepto de promoción sesgada del voto y establecemos un método para medir este efecto. Entendemos promoción sesgada del voto como la estratégia de optimización que promueve la participación electoral en regiones o grupos electorales maximizando el diferencial de votos entre el candidato de un partido y el de un segundo lugar de acuerdo a una expectativa de comportamiento de estas regiones y grupos. 
+
+La promoción de la participación a nivel municipio, como es analizada en este trabajo, contrasta con estratégias donde también se promueve la participación a nivel individual, como el acarreo, compra de votos, beneficio dirigidos individualmente, etc. 
+
+Esta diferencia obra en el sentido de que no se actua bajo la premisa de que se conoce el sentido del voto individual sino que se promueve la participación de grupos que se sabe que en promedio actuarán de forma favorable al propósito electoral del partido o grupo promovente.
 
 Utilizamos información electoral de, principalmente, dos elecciones donde el único cargo en juego es la gobernatura; elección a gobernador del Estado de México de 2011 y 2017. Esto nos permite establecer un modelo en donde no existen potenciales conflictos entre estratégias en diversos niveles electorales. Las dos elecciones con las que trabajamos son similares en incentivos con una importante diferencia en cuanto a competitividad. La elección 2011 es poco competitiva y la de 2017 es  altamente competitiva, lo que ofrece un contraste en incentivos y estrategias. 
 
@@ -87,7 +91,7 @@ El caso que nos ocupa es, principalmente, relativo a un corte entre población r
 
 Es una elección con un amplío esfuerzo para ampliar la participación electoral en dichas comunidades rurales respecto a la elección anterior comparable, comparando 2011 con 2017. Este esfuerzo de movilización es posible, presumiblemente, gracias a la presencia local del partido incumbente. Es decir que la estrategía del incumbente y la competencia está en su mayor parte determinada por su presencia, gasto público, redes de operadores, presupuesto y las preferencias "base" de la población. Este resultado, en resumen, predice estratégias distintas y mide el tamaño de estos efectos generando un posible proxy para la influencia legal e ilegal del partido incumbente en determinada elección. 
 
-## Revisión de literatura. Planteamientos dicotómicos; tipos de votantes, gasto, principales y agentes, mobilización y persuación. 
+# Revisión de literatura. Planteamientos dicotómicos; tipos de votantes, gasto, principales y agentes, mobilización y persuación. 
 
 La participación electoral puede entenderse como un fenómeno amplio.El análisis comparativo de la participación electoral puede realizarse en distintas dimensiones, comparaciones entre grupos sociales, unidades subnacionales, distintos periodos de tiempo, caracterísiticas personales, características propias de una elección, etc. No existe una forma predefinida de plantear un análisis comparativo de la participación electoral desde la perspectiva de la participación racional. El planteamiento puede realizarse sobre diversas dimensiones, algunas sobre las que se encuentran más estudiadas en la literatura son;  
 
@@ -99,9 +103,6 @@ Un ejemplo de como está discusión es relevante a nuestro planteamiento es la d
 
 Otro tipo de planteamiento, también relevante a esta investigación es sobre la naturaleza de la distribución de los bienes que provee el gobierno y los partidos. Bajo esta perspectiva se considera que los bienes programáticos suelen ser más difíciles de asociar a un partido. La discusión suele considerar que estos  son "de mayor calidad" en el sentido de que tienden a ser bienes públicos y menos enfocados en clientelismo o gasto. En cambio los bienes enfocados requieren la capacidad del partido, promotores electorales, gobierno, o alguna forma de la maquinaria electoral para identificar aquellos votantes que brindarán un voto a favor del partido sólo si reciben algo a cambio. 
 
-
-
-
 Una clasificación posible de los  mecanismos de manipulación electoral es de acuerdo al momento en el que ocurren: 
 
 *"(1). Beneficios que son entregados cuando se verifica el voto de un individuo. (2) Beneficios que son entregados a un votante antes de que él/ella vote. (3) Beneficios prometidos ante la victoria de el candidato o partido relevante."*[@cox_political_2009]
@@ -109,7 +110,7 @@ Una clasificación posible de los  mecanismos de manipulación electoral es de a
 Es en la primera de estás categorías donde ocurre la instancia que más comunmente se identifica como fraude electoral, la compra del voto. La segunda categoría puede ser violatoria de las reglas electorales y, para ser eficiente, requiere estar enfocada a un grupo que ya se sabe va a apoyar al partido o a uno que cambia su opinión por el beneficio entregado. La tercera categoría puede ser, o no legal, dependiendo  del mecanismo empleado, de la discriminación entre grupos y del tipo de bien entregado. Esta última es frecuentemente la más ambigua con ejemplos desde la "tarjeta rosa" ejemplo en donde se entregó una tarjeta de plástico bajo la promesa de que está se convertiria en una tarjeta de débito son saldo ante la victoria de un cierto candidato.
 
 
-##Información y planteamientos Micro y Macro
+#Información y planteamientos Micro y Macro
 
 Una dimensión adicional, relevante tanto en las conclusiones como en el tipo de información que requiere, es la distinción entre los estudios macro y los estudios micro. 
 
@@ -152,49 +153,43 @@ No obstante afirmamos que es posible distinguir elementos específicos de una el
 Algunos elementos que caracterizan la elección en el Estado de México 2017 son los siguientes;
 
 1. Es un un estado tradicionalmente gobernado por el partido incumbente, PRI. 
-2. Es la última elección ^[Con la excepción de un proceso para la elección de 3 ayuntamientos en Veracruz] antes del importante y concurrente período electoral federal 2018. Está se realiza en un momento de cambio electoral, las elecciones del año siguiente, 2018 se inclinaron sólidamente a favor de MORENA. Las características de esta elección la establecen como un símbolo de la resistencia del régimen incumbente (Federal y en la mayoría de los estados) Priista contra una futura elección contra un nuevo puntero, MORENA. 
-3.Es un estado donde el PRI suele obtener una amplia ventaja. En la elección anterior de gobernador de 2011  obtiene 61,97% del voto (en alianza PRI, PVEM, PANAL), en un lejano segundo lugar el PRD obtiene 20.96%. Caracterizamos esta primera elección como no competitiva. 
+2. Es la última elección ^[Con la excepción de un proceso para la elección de 3 ayuntamientos en Veracruz] antes del importante y concurrente período electoral federal 2018. Está se realiza en un momento de cambio electoral, las elecciones del año siguiente se inclinaron sólidamente a favor de MORENA. Las características de esta elección la establecen como un símbolo de la resistencia del régimen incumbente (Federal y en la mayoría de los estados) Priista contra un nuevo puntero, MORENA. 
+3.Es un estado donde el PRI suele obtener una amplia ventaja. En la elección anterior de gobernador de 2011  obtiene 61,97% del voto (en alianza PRI, PVEM, PANAL), en un lejano segundo lugar el PRD obtiene 20.96%. 
 4. El presidente tiene una aprobación históricamente baja, que toca fondo con un 12%  en Enero de 2017 [@nacion_321_encuesta_nodate], la elección del Estado de México fue en el 4 de Junio de ese año cuando contaba con una aprobación de alrededor del 26% [@molina_sexenio_nodate]. Durante esta epoca el PRI sufre una debacle en su imagen que se encuentra altamente ligada a la del presidente, el cual también es una figura importante en el Estado de México, de donde es originario y en donde tuvo el cargo de gobernador. 
 
 Esto sentará la base para el fuerte contraste entre el 2011 y 2017, dos elecciones similares en términos de lo que está en juego e incentivos institucionales. El proceso electoral 2017 la elección se mostró mucho más cerrada  que en la de 2011. El proceso 2017 puede caracterizarse como altamente competitivo, mientras que el proceso de 2011 no fue competitivo.
 
-El proceso electoral 2017 se da dentro de un contexto de realinación, o desalineación partidista intenso. Probablemente el trabajo que mejor describe dicho proceso sea "El cambio Electoral" del encuestador y académico Alejandro Moreno en donde se describe lo que puede resumirse en tres procesos:
+El proceso electoral 2017 se da dentro de un contexto de realineación, o desalineación, partidista intenso. Probablemente el trabajo que mejor describe dicho proceso sea "El cambio Electoral" del encuestador y académico Alejandro Moreno en donde se describe lo que puede resumirse en tres procesos[@moreno]:
 
+#Fuentes de información de los partidos políticos
 
+En el modelo que presentamos la información cumple un papel fundamental en el actuar de los partidos políticos. Afirmamos que una parte importante de la movilización realizada por los partidos, particularmente por parte del incumbente es facilitada por estructuras a las que se tiene acceso o su acceso es facilitado por el control del gobierno municipal. 
 
+Los partidos pueden informarse de caracteristicas de participación y de preferencia electoral por medio de encuestas, es frecuente que los partidos paguen por ellas y que dispongan datos sobre preferencias electorales. Podemos hablar de 3 usos que suelen tener las encuestas en épocas electorales, una que caracterizamos como "de consumo interno" que funciona como fuente de información para los partidos sobre las características de participación y preferencia electoral. El segundo tipo de encuesta tiene el propósito de al hacerse públicas influir en la elecciones al modificar los pagos esperados de los votantes, por ejemplo al mostrar contiendas cerradas o al mostrar amplias ventajas. 
 
-#Fuentes de información
+Previo a la jornada electoral del 4 de Junio de 2017 ninguna encuesta privilegiaba a MORENA sobre el PRI. Sin embargo el resultado final estaría a tres puntos de distancia entre los punteros PRI (33.56%) y MORENA (30.78%.).
 
-En el modelo que presentamos la información cumple un papel fundamental en el actuar de los partidos políticos. Afirmamos que una parte importante de la movilización realizada por los partidos, particularmente por parte del incumbente 
-
-
-Los partidos pueden informarse de caracteristicas de participación y de preferencia electoral por medio de encuestas, es frecuente que los partidos paguen por ellas y que dispongan datos sobre preferencias electorales. 
-
-Podemos hablar de 3 usos que suelen tener las encuestas en épocas electorales, una que caracterizamos como "de consumo interno" que funciona como fuente de información para los partidos sobre las características de participación y preferencia electoral. El segundo tipo de encuesta tiene el propósito de al hacerse públicas influir en la elecc
-
-
-aunque previo a la jornada electoral del 4 de Junio de 2017 ninguna encuesta privilegiaba a MORENA sobre el PRI. Sin embargo el resultado final estaría a tres puntos de distancia entre los punteros PRI (33.56%) y MORENA (30.78%.).
-
-##Incentivos a la participación electoral en el Estado de México 2011, 2012 y 2017
+#Incentivos de la participación electoral en el Estado de México 2011, 2012 y 2017
 
 Estudiamos una elección no concurrente de gobernador, es decir que se espera que los incentivos se encuentren alineados a procurar una mayoría simple en el estado. Esto en contraste con múltiples elecciones concurrentes donde podría la cercanía entre punteros generar incentivos diferenciados entre los que buscan la victoria del partido en el municipio contra los que esperan obtener la gobernatura. 
+
 En una elección donde se determine en el mismo proceso la gobernatura y alcaldías podríamos encontrar conflictos dentro de las estructuras partidistas por el control de recursos limitados. Presumiblemente aquellos que buscan la gobernatura buscan optimizar la cantidad de votos que se pueden obtener dado un presupuesto, minimizando así el costo por voto individual. Mientras que los que buscan ganar una alcaldía tienen que realizar cálculos adicionales, en una competencia con muy poca distancia entre punteros pueden estar dispuestos a obtener votos a un costo mayor al que está a dispuesto a pagar la estructura estatal. 
 
-En la tabla siguiente se muestran los resultados y descriptivos básicos de la participación electoral 2011, 2017 y 2012. En las elecciones a 2011 y 2017, ambas sólo para gobernador, se observan porcentajes de participación promedio de 53.38% (2011), 60.38% (2017), 71.33%(2012). Estos niveles de participación se encuentran alineados con nuestras expectativas.
-
-La elección 2011 es una elección poco competitiva, se espera, y obtiene, una amplia mayoría para el PRI, al igual que la elección 2017 el único cargo electo es el de gobernador estatal. La elección 2012 es similar a 2011 la diferencia más importante es que es una elección competitiva por lo que esperamos que distintas fuerzas políticas inviertan más recursos en promover el voto mediante diversas estratégias lo que se ve reflejado en una participación electoral 7% mayor. La elección 2012 en varios ordenes de gobierno, es una elección extremadamente competitiva a nivel ejecutivo federal, se elige al congreso y es competitiva en diversos municipios, dada la naturaleza concuerrente de la elección de estos cargos esperamos ver efectos de importancia y competencia en estas elecciones por lo que la relativamente alta participación electoral es esperada.
 
 ```{r "Participación electoral en tres elecciones EDOMEX"}
+T1 <- EMENSAYO %>% select(EM11_Por_Part,EM_17_POR_PART,EM_12_Por_Part) 
+colnames(T1) <- c("2011", "2017", "2012")
 
-T1 <- EMENSAYO %>% select(EM11_Por_Part,EM_17_POR_PART,EM_12_Por_Part) %>% summary() 
-colnames(T1) <- c("Participación_2011", "Participación_2017", "Participación_2012")
-#kable(T1), caption = "Participación electoral (%) en tres elecciones EDOMEX")
-knitr::kable((T1), caption = "Participación electoral (porcentaje) en tres elecciones EDOMEX")
+ggplot(gather(T1), aes(x = as.factor(key), y  =value)) + 
+  geom_boxplot(fill = "#69b3a2") +
+  geom_jitter(alpha = .3, width = .1) + 
+  xlab("Año") + ylab("% de participación") +
+  ggtitle("Participación electoral en tres elecciones Estado de México")
+
 ```
+En la tabla anterior se muestran los resultados y descriptivos básicos de la participación electoral 2011, 2017 y 2012. En las elecciones a 2011 y 2017, ambas sólo para gobernador, se observan porcentajes de participación promedio de 53.38% (2011), 60.38% (2017), 71.33%(2012). Estos niveles de participación se encuentran alineados con nuestras expectativas. La elección 2011 es poco competitiva en la cual el PRI obtiene una amplia mayoria. Al igual que la elección 2017 el único cargo electo es el de gobernador estatal. La elección 2017 es similar a 2011 la diferencia más importante es que es una elección competitiva por lo que esperamos que distintas fuerzas políticas inviertan más recursos en promover el voto mediante diversas estratégias lo que se ve reflejado en una participación electoral 7% mayor. La elección 2012  es en varios ordenes de gobierno, es una elección extremadamente competitiva a nivel ejecutivo federal, se elige al congreso y es competitiva en diversos municipios, dada la naturaleza concuerrente de la elección de estos cargos esperamos ver efectos de importancia y competencia en estas elecciones por lo que la relativamente alta participación electoral es esperada.
 
-Un primer elemento  a observar en la participación electoral entre estos periodos es el importante cambio en la participación electoral entre dos elecciones similares; 2011, 2017. En la siguiente tabla se muestra la correlación entre la participación electoral para estos tres periodos en los 125 municipios del Estado de México.
-
-Se muestra la correlación(Pearson) entre las tres elecciones, como es esperado la mayor correlación  es entre las dos elecciones más similares, ambas elecciones simples de gobernador,elección 2011 y 2017 (0.89).  
+En la siguiente tabla se muestra la correlación (Pearson) a nivel muncipal entre las tres elecciones, se utiliza el porcentaje de participación electoral en los tres periodos para cada municipio. Como es esperado la mayor correlación  es entre las dos elecciones más similares, ambas elecciones simples de gobernador,elección 2011 y 2017 (0.89).  
 
 ```{r Gráficas de correlación participación en tres elecciones EDOMEX, fig.cap="Gráficas de correlación participación a nivel municipal en tres elecciones EDOMEX",  out.extra='', fig.width=5 , fig.height=3.5}
 
@@ -202,7 +197,6 @@ EMENSAYO %>% select(EM11_Por_Part, EM_12_Por_Part, EM_17_POR_PART) %>%
   chart.Correlation(histogram = TRUE, title="Correlación Participación Electoral 2011, 2012, 2017")
 
 ```
-
 ##Incentivos para la participación
 
 Estudiamos la elección como un problema de optimización al que se enfrentan los partidos. Estos buscan maximizar el número de votos de acuerdo a una cantidad de recursos fija. Estos recursos no son sencillamente monetarios, la presencia partidista, por el control del gobierno en el estado y en el municipio, presumiblemente disminuye el presupuesto discrecional de obtención de los votos. Podemos hablar de un segundo presupuesto municipal o, con resultados idénticos, de una disminución de los costos para obtener los votos en municipios donde exista una presencia del partido. Es notable que no todos los partidos se enfrentan a la elección con el mismo presupuesto ni con los mismos recursos a nivel municipal. Por ello es útil hacer la distinción entre el incumbente, que en este caso tiene el control del estado y de la mayoría de los municipios, contra el principal competidor. 
@@ -215,12 +209,11 @@ Sin embargo vemos una importante diferenciación en la votación, probablemente 
 
 En la elección 2017 el Ejecutivo Federal, el gobierno del estado y el control de 84 de 125 de las alcaldias (67% de los municipios y 69% del padron electoral del 2017) , está bajo el control del PRI. Esto le permite disponer de una mayor cantidad de herramientas de promoción del voto. 
 
-##Mecanismos de influencia
+#Mecanismos de influencia
 
 Utilizamos información agregada a nivel municipal, esto implica una caracterización de los municipios como si estos fueran individuos. Los resultados de nuestros modelos de regresión pueden ser intrepretados como si un municipio más pobre o más rico, más o menos denso,gobernado por tal o cual partido puede tener distintas propensidades para una mayor o menor participación electoral de acuerdo a estas características. Este es un tratamiento inusual donde la caracterízación puede ser interpretada como si los municipios fueran individuos con ciertas características y los pesos de las variables en el modelo el cambio atribuido a sus intenciones de voto.
 
 Sin embargo esta metodología no permite observar el mecanismo por el cual los partidos optimizan sus recursos para maximizar el voto lo que impide entender la eficacia, logística, y funcionamiento de la estructura intermedia. Es, por ejemplo, relevante si la estructura que opera durante los periodos electorales es parte permanente del partido, si es una estructura temporal del partido que es activada durante el periodo electoral, si utiliza una estructura que cumple una función de facilitadora de programas gubernamentales, si estos programas son federales o estatales y que cumple una función de motivación o acarreo o incluso de sabotaje durante la jornada electoral. 
-
 
 Existe una literatura creciente sobre los mecanismos mediante los cuales un partido puede influir en un resultado electoral. Las teorías detrás de los mecanismos de operación tienen distintos grados de complejidad, desde lo relativamente lineal, basadas en una sóla dimensión que establece a los votantes de acuerdo a su grado de lealtad, votantes leales a votantes "oscilantes".
 
@@ -238,9 +231,17 @@ Existen diversas teorías que aportan al fenómeno observado, la promoción de l
 4. Donde se reciban mayores participaciones del gobierno. 
 5. Donde exista una mayor diferencia entre el voto del PRI y del segundo principal contendiente. 
 
-La primera es la más frecuente explicación en la literatura revisada, lo que proponemos como mecanismo causal es una política no programática que logra identificar a sus recipientes a través de una maquinaria. La explicación es, esencialmente, que la compra, o promoción, de los votos se da en donde hay mayor pobreza. El mecanismo explicativo es la optimización de un presupuesto electoral maximizando el número de votos obtenidos. En el Estado de México logramos ver variación al respecto. Se utiliza la variable xxx, y xxx, como proxys de pobreza obtenidos en la encuesta Intercensal 2015.    (Stokes, Dunning, Nazareno)
+Donde el costo del voto sea menor; La primera es la más frecuente explicación en la literatura revisada, lo que proponemos como mecanismo causal es una política no programática que logra identificar a sus recipientes a través de una maquinaria. La explicación es, esencialmente, que la compra, o promoción, de los votos se da en donde hay mayor pobreza dado que el costo de oportunidad de los votantes del voto es menor, reciben menos a cambio y la utilidad marginal de un ingreso adicional es mayor que en municipios donde el ingreo sea alto. Para el estudio de esta variable utilizamos la variable de porcentaje de población en el municipio que recibe menos de dos salarios mínimos. 
 
-#Hipótesis y variables
+Donde se disponga de una maquinaria partidista que opere a favor del partido; la presencia de un partido en el gobierno le da capacidad, principalmente a través del ejercicio del gasto público, de influir en la movilización o a través de un discurso asociado a los programas sociales. También la implementación de programas de gasto social a nivel municipal genera, o requiere, de la existencia de redes de facilitadores. Estos facilitadores funcionan como una red informal con actividades y relaciones cercanas al gobierno municipal y pueden ser utilizados para movilizar a sus redes durante epoca electoral para promover el voto del grupo con el que se alineen, generalmente el mismo grupo que tiene el control del gobierno municipal. Para identificar un efecto de este tipo utilizamos la variable de partido que gobierna el municipio. 
+
+Donde exista menos supervisión del cumplimiento de la ley electoral.
+Donde se reciban mayores participaciones del gobierno.
+Donde exista una mayor diferencia entre el voto del PRI y del segundo principal contendiente. 
+
+El mecanismo explicativo es la optimización de un presupuesto electoral maximizando el número de votos obtenidos. En el Estado de México logramos ver variación al respecto. Se utiliza la variable xxx, y xxx, como proxys de pobreza obtenidos en la encuesta Intercensal 2015.    (Stokes, Dunning, Nazareno)
+
+# Variables
 
 Exponemos el origen de la información utilizada en esta investigación junto con la relación esperada que se tiene con la participación electoral como variable dependiente.  
 Se utilizaron xx variables asociadas a las hipótesis planteadas y una variable adicional, tamaño de la lista nominal, como peso para el modelo de regresión. Se probó, y descartó, el uso del índice de marginación por su alta correlación con el la variable de porcentaje de población que obtiene menos de dos salários mínimos en el municipio.
@@ -249,70 +250,68 @@ Hacemos una distinción principal, en cuanto a características sociodemográfic
 
 Es decir que buscariamos, en esta primera clasificación, cuatro tipos de comportamiento.
 
-1. Población rural y municipio del PRI o alianzas
-2. Población rural y municipio no del PRI
-3. Población urbana y municipio del PRI o alianzas
-4. Población urbana y municipio no del PRI 
+1. Baja densidad de población y municipio del PRI o alianzas
+2. Baja densidad de población y municipio no del PRI
+3. Alta densidad de población y municipio del PRI o alianzas
+4. Alta densidad de población y municipio no del PRI 
 
 Para ello necesitamos analizar el comportamiento de dos variables; densidad de población, que utilizamos como proxy continuo para la dimensión rural - urbana y el partido que gobierna el municipio. 
 
 ##Densidad de lista nominal, consideraciones sobre la dimensión rural-urbana. 
 
-La distinción rural-urbano es una atribución que se hace a nivel de localidad, el punto de corte se hace en los 2,500 habitantes, en el orden municipal se suele hablar de municipios predominantemente rurales o predominantemente urbanos. Encontramos que para este estudio no es práctico hablar de una distinción tajante entre lo urbano y lo rural, porqué la distinción no se hace a nivel municipio y porqué buscamos un tratamiento que brinde las ventajas de una categoria continua. La principal desventaja, que además afecta al resto de las variables, es que al ser el tratamiento a nivel municipal no consideramos la posibilidad, ni la proporción, en la que comparte población rural y urbana un mismo municipio. 
-
-Por ello se generó una variable de densidad de los potenciales votantes dividiendo la lista nominal entre el área, en kilómetros cuadrados, de los municipios y calculando su logaritmo natural. Esta variable cumple varios papeles.
-
-1. Genera una alternativa continua a la distinción urbano-rural. 
-2. Captura ingreso y marginación al generar una distinción entre municipios urbanos y rurales. 
-
-El segundo papel es en gran parte un efecto no deseado que analizaremos en los modelos de regresión, utilizamos una variable distinta para el ingreso (porcentaje de población con menos de dos salarios mínimos) pero encontramos que gran parte del efecto de ingreso y de la variable de marginación (índice de marginación del INEGI) son capturados por la variable de densidad de lista nominail.
-
-
-
-Esta variable es la que mejor efecta estos efectos dada la información disponible. Idealmente deseariamos tener una medida clara de ingreso
-
-El Estado de México presenta una alta concentración de Lista Nominal, y población, en municipios conurbados pertenecientes a la ciudad de México
+La distinción rural-urbano es una que se hace a nivel de localidad, si está contiene más 2,500 habitantes es considerada urbana, con menos habitantes es rural. A diferencia de las localidades, en el orden municipal se suele hablar de municipios predominantemente rurales o predominantemente urbanos. Encontramos que para este estudio no es práctico hablar de una distinción tajante entre lo urbano y lo rural, porqué la distinción urbano-rural no se hace a nivel municipio y porqué buscamos un tratamiento que brinde las ventajas de una categoría continua. 
+La distinción urbano rural no es una categoría bien definida en la literatura ni es homogenea en su definición entre paises con puntos distintos de corte y frecuentemente usando criterios adicionales a los de densidad de población. 
+Generamos una variable de densidad de los potenciales votantes dividiendo la lista nominal entre el área, en kilómetros cuadrados, de los municipios y calculando su logaritmo natural. Esta variable genera una alternativa continua a la distinción urbano rural al mismo tiempo que captura el mismo fenómeno de densidad de población, entendiendo en este caso como población el tamaño de la lista nominal de cada municipio. . 
 
 ```{r Tabla Densidad de Lista Nominal, results='asis'}
 #cambio reciente, ordenar por densidad de lista nominal, criterio de densidad
 TablaLN <- arrange(EMENSAYO, desc(Densidad_de_Lista_Nominal)) %>%  
-  select(NOM_MUN, EM_17_LISTA_NOMINAL, Densidad_de_Lista_Nominal, EM_17_POR_PART) %>%
+  select(NOM_MUN, EM_17_LISTA_NOMINAL, Densidad_de_Lista_Nominal, EM_17_POR_PART, AREAkm) %>%
   mutate( Porcentaje_Lista_Nominal = (EM_17_LISTA_NOMINAL/sum(EMENSAYO$EM_17_LISTA_NOMINAL)*100)) %>% 
   mutate(Suma_Acumulada_PLN = cumsum(Porcentaje_Lista_Nominal))
 
-TablaLN <- TablaLN %>% 
+TablaLNT <- TablaLN %>% 
   select(NOM_MUN, EM_17_LISTA_NOMINAL, Densidad_de_Lista_Nominal, Porcentaje_Lista_Nominal, Suma_Acumulada_PLN) 
 
-colnames(TablaLN) <-  c("Municipio", "Lista N_2017", "Densidad LN", "Porcentaje_LN", "Acum_LN")
-kable(TablaLN[1:10,], format.args =list(big.mark = ",", digits = 3), caption = "Densidad de Lista Nominal, 10 principales Municipios, Estado de México")
+colnames(TablaLNT) <-  c("Municipio", "Lista_Nominal_2017", "Densidad_LN", "Porcentaje_LN", "Acum_LN")
+kable(TablaLNT[1:20,], format.args =list(big.mark = ",", digits = 3), caption = "Densidad de Lista Nominal, 20 principales Municipios, Estado de México")
 ```
-El municipio de Ecatepec captura el 10.6% de la lista nominal. Los 33 municipios más poblados capturan el 80% de la lista nomial
+
+Los 33 municipios más poblados capturan el 80% de la lista nomial, el municipio más poblado,Ecatepec captura el 10.6% de la lista nominal. Los municipios que contienen grandes concentraciones de población son pequeños o medianos en extensión territorial como puede observarse en la gráfica. 
 
 ```{r Scatterplot de la densidad de Lista Nominal, results='asis'}
+ggplot(TablaLN, aes(x = log(AREAkm), y = log(EM_17_LISTA_NOMINAL))) + 
+  geom_point(aes(size= Densidad_de_Lista_Nominal)) + 
+       labs(subtitle="Area Vs  Log Población", 
+       y="Log Población", 
+       x="Log Área", 
+       title="Densidad de la lista nominal, Edomex 2017")
 
-#ggplot(TablaLN, aes(x = Densidad_de_Lista_Nominal, y = EM_17_LISTA_NOMINAL)) + 
-#  geom_point(aes(size= TablaLN$Porcentaje_Lista_Nominal)) + 
-#       labs(subtitle="Area Vs Población", 
-#       y="Población", 
-#       x="Area", 
-#       title="Densidad de la lista nominal, Edomex 2017", 
-#       caption = "Source: midwest")
+```
+
+##Partido que gobierna el municipio
+Se codifican los partidos ganadores de los municipios en las elecciones 2015, lo que determina el partido gobernante a nivel municipal. Se recodifican los ganadores para concentrar el número de categorías, de los 125 municipios (ahora alcaldias) 84 de ellos generaron una mayoría por el PRI (26 0 31%), o por el PRI en alianza (58 alianza PRI-PVEM-NA o 69% de los municipios PRiistas), 18 por el PAN (con y sin alianzas), 16 PRD y 7 por otros partidos. Cabe resaltar que sólo un municipio obtiene mayoría por MORENA, enfatizando que este partido es fuertemente disruptivo en la elección. Esto abona a nuestra hipótesis de que no tiene una estructura que le permita ser identificado como proveedor de favores o de recursos de programas (salvo en un municipio). Tanto el ejecutivo Federal como el ejecutivo estatal son del PRI.
+
+```{r "Mapa Municipios y partido que los gobierna" , results='asis', message = FALSE, fig.cap="Estadística descriptiva de las variables del Estudio",  out.extra=''}
+
+
+
 
 ```
 
 
-##Partido que gobierna el municipio
-Se codifican los partidos ganadores de los municipios en las elecciones 2015, lo que determina el partido gobernante a nivel municipal. Se recodifican los ganadores para concentrar el número de categorías, de los 125 municipios (ahora alcaldias) 84 de ellos generaron una mayoría por el PRI (26), o por el PRI en alianza (58 alianza PRI-PVEM-NA), 18 por el PAN (con y sin alianzas), 16 PRD y 7 por otros partidos. Cabe resaltar que sólo un municipio obtiene mayoría por MORENA, enfatizando que este partido es fuertemente disruptivo lo que en parte nos permite mantener la afirmación teórica de que no tiene una estructura que le permita ser identificado como proveedor de favores o de recursos de programas (salvo en un municipio). Tanto el ejecutivo Federal como el ejecutivo estatal son del PRI.
 
-Para el modelo de regresión se utiliza como categoría base aquellos municipios (84) en los cuales gobierna el PRI o se obtuvo una mayoría a favor de este partido en alianza con otro. Es decir que el peso del efecto es el de un gobierno distinto del PRI, se decidió utilizar una variable binaria que determina si gobierna o no el PRI, o un partido que haya obtenido el gobierno en alianza con el PRI en el 2015.
 
 
 ```{r "Tabla con los cuatro tipos de municipio" , results='asis', message = FALSE, fig.cap="Estadística descriptiva de las variables del Estudio",  out.extra=''}
 
 #1. Población rural y municipio del PRI o alianzas
-EMENSAYO %>% filter(Partido_Gobernante_2015 == "PRI o PRI Alianza")
+EMENSAYO %>% filter(Partido_Gobernante_2015 == "PRI o PRI Alianza") %>% nrow()
 
 #2. Población rural y municipio no del PRI
+
+EMENSAYO %>% filter(Partido_Gobernante_2015 != "PRI o PRI Alianza") %>% nrow()
+
 
 #3. Población urbana y municipio del PRI o alianzas
 
@@ -330,24 +329,6 @@ EMENSAYO %>% filter(Partido_Gobernante_2015 == "PRI o PRI Alianza")
 #kable(temp, caption = "Estadística descriptiva de las variables")
 #sum(EMENSAYO[EMENSAYO$PRI_o_Otro_2015 == "PRI o PRI Alianza",]$EM_17_LISTA_NOMINAL)/sum(EMENSAYO$EM_17_LISTA_NOMINAL) 
 ```
-
-Información municipal. Nos parece importante abordar la unidad de observación y sus consecuencias. 
-
-
-##H1. Promoción del voto en municipios Pobres. 
-
-```{r "Porcentaje de viviendas en el municipio que recibe menos de dos salarios mínimos" , results='asis', message = FALSE, fig.cap="Estadística descriptiva de las variables del Estudio",  out.extra=''}
-temp <- EMENSAYO %>% 
-  select(PO2SM) %>% 
-  summary()
-colnames(temp) <- c("Porcentaje con menos de dos Salarios  Mínimos")
-kable(temp, caption = "Porcentaje de viviendas en el municipio que recibe menos de dos salarios mínimos")
-```
-En la literatura suele reconocerse dos tipos de efectos relacionados con el ingreso y la participación electoral. El ingreso puede estar asociado a mayor calidad de vida, conexión con las instituciones sociales y una mayor percepción de importancia de los procesos electorales. En este sentido esperariamos un incremento en la propensión a la participación electoral a mayor ingreso. Sin embargo es más frecuente encontrar que se asocie a una mayor pobreza con la capacidad de adquirir, o promover, votos a menor costo. 
-
-El mecanismo es que aquellos votantes más pobres, con mayor utilidad marginal hacia el ingreso, puedan ser más fácilmente manipulados para participar, para votar por algún resultado en particular, o ser movilizados en apoyo de un partido del que perciban obtienen algún apoyo directo. El efecto puede entenderse como que a menor ingreso los potenciales votantes se encuentran "más dispuestos a comprometer sus preferencias políticas a cambio de consumo privado adicional".
-
-
 
 
 
@@ -410,10 +391,44 @@ Plot_Map <- ggplot() +
 
 Plot_Map
 
+
+
+```
+```{r, "Mapa de diferencia a favor del PRI", fig.cap="Mapa de Participación Electoral Municipal EDOMEX 2017",  out.extra='', out.width= "130%"}
+library(hexbin)
+Plot_Map_Ventaja_PRI <- ggplot() +
+  geom_polygon(data = mapa.df, aes(fill = DIF_VPRI_2011, 
+                                          x = long,
+                                          y = lat, 
+                                          group = group)) +
+  geom_path(data = mapa.df, aes( x = long, 
+                                        y = lat, 
+                                       group = group),
+            color = "white", size = 0.2) +
+  coord_equal() +
+  theme_map() +
+  labs( x = NULL, 
+        y = NULL, NULL,
+        title = "Ventaja del PRI sobre runner up") +
+  theme(legend.position = "bottom") +
+  scale_fill_viridis(
+    option = "viridis",
+    name = "% de diferencia",
+    #discrete = T,
+    direction = -1,
+    guide = guide_legend(
+      keyheight = unit(5, units = "mm"),
+      title.position = 'top',
+      reverse = T
+    ))
+
+Plot_Map_Ventaja_PRI
+
 ```
 
 
-##Hogares que reciben dinero del gobierno a través de programas gubernamentales
+
+##Hogares que reciben dinero de programas gubernamentales
 
 Se tomó el número de viviendas (ponderadas por el factor de expansión) que respondieron afirmativamente la pregunta: *"¿Alguna persona que vive en esta vivienda recibe dinero: de programas de gobierno? (Prospera, Oportunidades, Adultos mayores, PROCAMPO, etcétera)."*  Está variable está expresada como el porcentaje de viviendas dentro del municipio que afirmaron recibir dinero de programas de gobierno respecto al total de viviendas dentro del municipio. Se generó con información de la Encuesta Iintercensal 2015 del INEGI, la cual es significativa a nivel municipal. 
 La pregunta no distingue entre programas gubernamentales estatales, federales o municipales. Los principales programas y que pueden tener  un efecto de "priming" al ser mencionados en las preguntas, son programas federales condicionados. Estos programas están blindados de diversas formas, su padrón no puede aumentar xx meses antes de las elecciones, los materiales y pruebas que se realizan deben de estar desprovistos de una identificación con un partido o gobierno específico. Los mecanismos de cumplimiento deben de ser transparentes. Sin embargo existe la posibilidad de que en algún momento del otorgamiento del apoyo este se busque identificar con algún grupo político, que su entrega sea condicionada al cumplimiento de ciertas metas electorales al menos discursivamente. 
@@ -456,8 +471,6 @@ Plot_Map2
 ```
 
 
-
-
 ## Índice de Marginación
 
 Es elaborado, por la Comisión Nacional de Población (CONAPO)  a partir de la información de la encuesta intercensal 2015 por lo que es representativo a nivel municipal (Datos Abiertos del Índice de Marginación). 
@@ -481,44 +494,51 @@ Está elaborada a partir de las siguientes variables:
 A pesar de que esperamos que el efecto sea positivo existen varias razones por las cuales podría no serlo: 
 1. La marginación se encuentra relacionada con la baja densidad El costo de la mobilización 
 
+
+
+
+
+
 ## Municipio que favorece al PRI
-Planteamos que los partidos buscan promover el voto en aquellos municipios donde tienen la expectativa de que este municipio aporte más al desenlace electoral. Los partidos no pueden distinguir al momento de promover el voto si aquellas personas que votan lo hacen a favor de su partido, es decir que estamos, al menos por ahora, asumiendo que no existe la compra de votos. En lugar de la estratégia directa de compra de votos realizan una estratégia indirecta en donde buscan aumentar la participación electoral en aquellos municipios que saben o sospechan que les serán más propicios electoralmente. Un ejemplo de este planteamiento es que en un municipio donde se sepa, o sospeche, que la diferencia de la intención de voto entre  PRI y MORENA sea nula ninguno de los dos partidos tendrá incentivos a una promoción no selectiva del voto en ese municipio. 
+Planteamos que los partidos buscan promover el voto en aquellos municipios donde tienen la expectativa de que este voto aporte más, en promedio, a su ventaja en el desenlace electoral. Bajo esta premisa los partidos buscaran promover la participación electoral en aquellos lugares donde se identifique que la intención neta del voto les favorece. Calculamos la intención neta como la diferencia en la intención de voto entre el que obtiene el partido y el que obtiene el principal competidor, esta diferencia se calcula a nivel municipal. Esta es la intención de los partidos sin embargo se enfrentan a información imperfecta que puede ser resuelta por medio de encuestas actuales, encuestas anteriores, resultados electorales anteriores o conocimiento político local derivado de programas sociales existentes o de facilitadores de programas. Una variable que 
+
+
+
+
+
+En lugar de la estratégia directa de compra de votos realizan una estratégia indirecta en donde buscan aumentar la participación electoral en aquellos municipios que saben o sospechan que les serán más propicios electoralmente. Un ejemplo de este planteamiento es que en un municipio donde se sepa, o sospeche, que la diferencia de la intención de voto entre  PRI y MORENA sea nula ninguno de los dos partidos tendrá incentivos a una promoción no selectiva del voto en ese municipio. 
   
   
   
   El planteamiento teórico es que el PRI utilice su estructura para promover el voto en aquellos municipios donde sabe que existe una mayor proporción de votos a favor de ellos, es decir que el diferencial de votos entre el PRI y el segundo lugar es mayor. Utilizamos la elección a gobernador 2011, y construimos la variable como una resta entre el voto a favor del PRI y del PAN ^[Utilizando sus respectivas alianzas].
 
 
-
-
-
-
-
-
-
-Índice de Marginación
-Logaritmo de densidad de Lista Nominal
-
-
-
-
-## H3. Promoción del voto en municipios donde el PRI tiene mayor voto 
-Asumimos que existe un problema de identificación de aquellos votantes que son más propensos a votar por el PRI. Este es un problema típico, si se van a distribuir recursos durante la campaña estos se optimizarian, en la incapacidad de tener certidumbre de quienes van a presentarse a votar
-
-
-
-
-Particiáción en municipios donde en la elección 2011 el PRI obtiene mayor ventaja
-
 ## Población con ingreso menor a dos salarios mínimos 
 
 El segundo efecto, ingreso, es deseado como una de las principales explicaciones detrás de la teoría de compra del voto. En un entorno donde se busca optimizar un presupuesto y todos los votos tienen el mismo valor, dado que es una elección solamente para gobernador, se compran los votos más baratos, que tienden a ser de las personas que asignan mayor valor marginal al dinero, o beneficios en especie, es decir aquellos más pobres.
 
+#Hipótesis
+## H1. Promoción del voto en municipios Pobres. 
+
+```{r "Porcentaje de viviendas en el municipio que recibe menos de dos salarios mínimos" , results='asis', message = FALSE, fig.cap="Estadística descriptiva de las variables del Estudio",  out.extra=''}
+temp <- EMENSAYO %>% 
+  select(PO2SM) %>% 
+  summary()
+colnames(temp) <- c("Porcentaje con menos de dos Salarios  Mínimos")
+kable(temp, caption = "Porcentaje de viviendas en el municipio que recibe menos de dos salarios mínimos")
+```
+En la literatura suele reconocerse dos tipos de efectos relacionados con el ingreso y la participación electoral. El ingreso puede estar asociado a mayor calidad de vida, conexión con las instituciones sociales y una mayor percepción de importancia de los procesos electorales. En este sentido esperariamos un incremento en la propensión a la participación electoral a mayor ingreso. Sin embargo es más frecuente encontrar que se asocie a una mayor pobreza con la capacidad de adquirir, o promover, votos a menor costo. 
+
+El mecanismo es que aquellos votantes más pobres, con mayor utilidad marginal hacia el ingreso, puedan ser más fácilmente manipulados para participar, para votar por algún resultado en particular, o ser movilizados en apoyo de un partido del que perciban obtienen algún apoyo directo. El efecto puede entenderse como que a menor ingreso los potenciales votantes se encuentran "más dispuestos a comprometer sus preferencias políticas a cambio de consumo privado adicional".
+
+## H2. Promoción del voto en municipios donde el PRI tiene mayor diferencial de voto 
+Asumimos que existe un problema de identificación de aquellos votantes que son más propensos a votar por el PRI. Este es un problema típico, si se van a distribuir recursos durante la campaña estos se optimizarian, en la incapacidad de tener certidumbre de quienes van a presentarse a votar
+
+Particiáción en municipios donde en la elección 2011 el PRI obtiene mayor ventaja
 
 
-
-##Modelo de regresión
-Aplicamos una regresión de Weighted Least Squares utilizando como peso el tamaño de la lista nominal de cada municipio. Este modelo arroja los resultados en el sentido que esperamos y nos brinda una buena idea del tamaño de los efectos sin embargo los coeficientes, a diferencia de un modelo de mínimos cuadrados ordinario, no son interpretables linealmente. 
+#Modelo de regresión
+Aplicamos una regresión de Weighted Least Squares(WLS) utilizando como peso el tamaño de la lista nominal de cada municipio. Este modelo arroja los resultados en el sentido que esperamos y nos brinda una buena idea del tamaño de los efectos sin embargo los coeficientes, a diferencia de un modelo de mínimos cuadrados ordinario, no son interpretables linealmente. 
 
 
 ```{r "Tabla de Correlaciones entre las variables del Estudio" , fig.cap="Correlaciones entre variables Independientes",  out.extra=''}
@@ -538,6 +558,7 @@ OLS con tamaño del padrón electoral como peso.
 
 El sentido de las variables y su importancia es la correcta el tamaño del efecto posiblemente no es el correcto.
 
+Para el modelo de regresión se utiliza como categoría base aquellos municipios (84) en los cuales gobierna el PRI o se obtuvo una mayoría a favor de este partido en alianza con otro. Es decir que el peso del efecto es el de un gobierno distinto del PRI, se decidió utilizar una variable binaria que determina si gobierna o no el PRI, o un partido que haya obtenido el gobierno en alianza con el PRI en el 2015.
 
 
 ```{r Tabla de Modelo de Regresión 2017, results='asis', message = FALSE }
@@ -566,6 +587,24 @@ stargazer(Mod1, Mod2, Mod3, title = "Modelo para participación electoral 2017",
 
 #Diagnóstico de la regresión 
 
+#Regresión de cuantiles
+```{r Regresión de cuantiles, results='asis', message = FALSE }
+
+library(quantreg)
+Mod3_rq <- rq(EM_17_POR_PART ~ Por_Ingreso_Gobierno + PRI_o_Otro_2015 + Log_DLN + PO2SM + DIF_VPRI_2011, data = EMENSAYO, tau = seq(0.2, 0.8, by = 0.15), weights = EM_17_LISTA_NOMINAL)
+plot(summary(Mod3_rq))
+```
+
+
+Relaciones entre las variables, bivariate kernel density, densidad bivariada de kernels.
+
+
+```{r Densidad bivariada de kernels, results='asis', message = FALSE }
+
+
+
+
+```
 
 
 
