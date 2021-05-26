@@ -33,7 +33,6 @@ library(viridis)
 library(kableExtra)
 library(knitr)
 
-
  fn = local({
    i = 0
    function(x) {
@@ -55,9 +54,10 @@ library(knitr)
             ref[[refName]]
         })
 })
-MEXMAPf<-read.csv(file = "Datos/Mapaedomexmun.csv") #cargar data geográfica del edomex
 
+MEXMAPf<-read.csv(file = "Datos/Mapaedomexmun.csv") #cargar data geográfica del edomex
 EMENSAYO<-read.csv(file = "Datos/2018/ENSAYO/EMENSAYO20190403.csv") 
+MEXSECC17 <- read.csv(file= "Datos/2018/ENSAYO/EDOMEXSECC2017.csv")
 
 ##########   Data frame para mapas, se pueden añadir variables aquí    #########
 Mapa <- left_join(MEXMAPf, EMENSAYO %>% 
@@ -327,19 +327,21 @@ Entre otras son notables la correlación negativa entre viviendas que reciben in
 
 ## Participación electoral
 
-Es nuestra variable dependiente, se construye utilizando la votación efectiva obtenida a través de las bases oficiales del INE a nivel sección electoral y agregandola a nivel municipio, después dividimos esto entre el tamaño de la lista nominal en el municipio para 2017. 
-En el estudio utilizamos la participación 2017 pero mostramos como resultado adicional el comportamiento del modelo para el 2011. 
-En la siguiente tabla de correlaciones mostramos el comportamiento de los municipios para estos tres periodos. 
+Es nuestra variable dependiente, se construye utilizando la votación efectiva obtenida a través de las bases oficiales del INE a nivel sección electoral y agregandola a nivel municipio, después dividimos esto entre el tamaño de la lista nominal en el municipio para 2017, repetimos el ejercicio para varias elecciones, incluyendo 2011 y 2012, en el estudio utilizamos la participación 2017 pero mostramos como resultado adicional el comportamiento del modelo para el 2011. En la siguiente tabla de correlaciones mostramos el comportamiento de los municipios para estos tres periodos. 
 
 ```{r "Tabla de Correlaciones Participación electoral" , fig.cap="Correlaciones entre variables Independientes",  out.extra=''}
 EMENSAYO %>% 
   select(EM11_Por_Part, EM_12_Por_Part, EM_17_POR_PART) %>%
   chart.Correlation(histogram = TRUE, 
                     title="Correlación Participación Electoral 2011, 2012, 2017")
-
 ```
 
+También el porcentaje de participación total[^3] es más similar entre 2011 y 2017.
 
+
+
+
+[^3]: obtenida como un promedio simple en los municipios de la proporción de votos totales entre lista nominal en las secciones electorales.
 
 
 
@@ -356,23 +358,46 @@ ggplot(gather(T1), aes(x = as.factor(key), y  =value)) +
 EMENSAYO %>% select(EM11_Por_Part, EM_12_Por_Part, EM_17_POR_PART) %>% summary() %>% kable()
 
 ```
+En este trabajo utilizamos elementos de la elección 2011 por considerarla más parecida, como hemos expuesto antes, a la elección del 2017. Evidencia parcial a favor de esto es la mayor correlación entre las elecciones 2017 y 2012 que con las demás combinaciones, incluyendo la más próxima en el tiempo 2012 y 2011, aunque las tres correlaciones mostradas entre pares de elecciones son similarmente altas.
+
+Una variable importante, en la literatura revisada y en el modelo planteado, es la relación entre la densidad de la lista nominal y la participación electoral.En ambos casos, y como mejor exponemos en la sección relativa a la densidad de la lista nominal se optó por una variable continua que se forma a partir de la suma de la lista nominal y de la participación electoral a nivel casilla y agregada a municipios. Sin embargo una preocupación de dicho procedimiento es la heterogeneidad de los municipios, particularmente de aquellos que tienen tanto casillas en zonas muy densas y otras en zonas muy poco densas. En dichos municipios al tratar las secciones de forma agregada encontrariamos una confusión entre los efectos que atribuimos a la densidad electoral. 
+
+```{r "Distribución de la participación en secciones electorales por municipio" , fig.cap="Distribución de la densidad en la participación electoral a nivel municipal",  out.extra=''}
 
 
-En este trabajo utilizamos elementos de la elección 2011 por considerarla más parecida, como hemos expuesto antes, a la elección del 2017. Evidencia parcial a favor de esto es la mayor correlación entre las elecciones 2017 y 2012 que con las demás combinaciones, incluyendo la más próxima en el tiempo 2012 y 2011, aunque las tres correlaciones mostradas entre pares de elecciones son similarmente altas. 
+MEXSECC17 %>% 
+  group_by(MUNICIPIO) %>% 
+  summarise(Densidad_Promedio = mean(POR_PART),
+            Varianza_participacion = var(POR_PART),
+            Total_Lista_Nominal= sum(LISTA_NOMINAL) ) %>%
+  arrange(-Varianza_participacion)
 
-Una variable importante, en la literatura revisada y en el modelo planteado, es la relación entre la densidad de la población (en este caso de la lista nominal) con 
+MEXSECC17 %>% 
+  group_by(MUNICIPIO) %>% 
+  summarise(Densidad_Promedio = mean(POR_PART),
+            Varianza_participacion = var(POR_PART)) %>% 
+  select(Densidad_Promedio, Varianza_participacion) %>% 
+  chart.Correlation()
 
-```{r "Diagramas de densidad para participación electoral a nivel municipal" , fig.cap="Diagramas de densidad para participación electoral a nivel municipal",  out.extra=''}
 
 
+EMENSAYO %>% 
+  select(EM11_Por_Part, EM_12_Por_Part, EM_17_POR_PART) %>%
+  chart.Correlation(histogram = TRUE, 
+                    title="Correlación Participación Electoral 2011, 2012, 2017")
+
+
+class(MEXSECC17$POR_PART)
+
+ggplot(MEXSECC17) + aes(POR_PART, MUNICIPIO) + geom_boxplot()
 
 ```
 
 ## Logaritmo de densidad de lista nominal.
 
-En la estadística geográfica nacional la distinción rural-urbano es una que se hace a nivel de localidad, si está contiene más 2,500 habitantes es considerada urbana, con menos habitantes es rural. Esta es una distinción práctica para la estadística nacional, sin embargo la distinción urbano rural no es una categoría bien definida en la literatura. Es heterogénea en su definición en otros paises con puntos distintos de corte y frecuentemente usando criterios adicionales a los de densidad de población. Encontramos que para este estudio no es práctico hablar de una distinción tajante entre lo urbano y lo rural, porqué la distinción urbano-rural no se hace a nivel municipio y porqué buscamos un tratamiento que brinde las ventajas de una categoría continua. 
+En la estadística geográfica nacional la distinción rural-urbano es una que se hace a nivel de localidad, si está contiene más 2,500 habitantes es considerada urbana, con menos habitantes es rural. Esta es una distinción práctica para la estadística nacional, sin embargo la distinción urbano rural no es una categoría bien definida entre los paises ni en la literatura. Es heterogénea en su definición en otros paises con puntos distintos de corte y frecuentemente usando criterios adicionales a los de densidad de población. Encontramos que para este estudio no es práctico hablar de una distinción tajante entre lo urbano y lo rural, porqué la distinción urbano-rural no se hace a nivel municipio y porqué buscamos un tratamiento que brinde las ventajas de poder distinguir distintas gradaciones de la variable por lo que elegimos una variable una categoría continua. 
 
-Generamos una variable de densidad de los potenciales votantes dividiendo la lista nominal entre el área, en kilómetros cuadrados, de los municipios y calculando su logaritmo natural. Esta variable genera una alternativa continua a la distinción urbano rural al mismo tiempo que captura el mismo fenómeno de densidad de población, entendiendo en este caso como población el tamaño de la lista nominal de cada municipio. . 
+Generamos una variable de densidad de los potenciales votantes dividiendo la lista nominal entre el área, en kilómetros cuadrados, de los municipios y calculando su logaritmo natural. Esta variable proporciona una alternativa continua a la distinción urbano rural al mismo tiempo que captura el mismo fenómeno de densidad de población, entendiendo en este caso como población el tamaño de la lista nominal de cada municipio. . 
 
 ```{r Tabla Densidad de Lista Nominal, results='asis'}
 #cambio reciente, ordenar por densidad de lista nominal, criterio de densidad
