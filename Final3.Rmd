@@ -245,7 +245,7 @@ En esta sección mostramos estadística descriptiva básica de las variables uti
 
 ```{r "Tabla de Correlaciones entre las variables del Estudio" , fig.cap="Correlaciones entre variables Independientes",  out.extra=''}
 EMENSAYO %>% 
-  select(EM11_Por_Part, EM_17_POR_PART, Por_Ingreso_Gobierno, Log_DLN, PO2SM, DIF_VPRI_2011) %>%
+  select(EM11_Por_Part, EM_17_POR_PART, Por_Ingreso_Gobierno, IM, Log_DLN, PO2SM, DIF_VPRI_2011) %>%
   chart.Correlation(histogram = TRUE, 
                     title="Correlación Participación Electoral 2011, 2012, 2017")
 ```
@@ -613,55 +613,103 @@ Mod3 <- lm(EM_17_POR_PART ~  Log_DLN + DIF_VPRI_2011 + Por_Ingreso_Gobierno  + I
 
 stargazer(Mod1, Mod2, Mod3,
           title = "Modelo  Participación Electoral 2017", 
-          header = FALSE)
+          header = FALSE, 
+          no.space = TRUE, 
+          column.sep.width = "3pt", 
+          font.size = "small")
 #          float.env = "sidewaystable")
 
 
 
-#stargazer(Mod1, Mod3, title = "Modelos de Regresión Lineal", table.placement = "H") #para forzar el float
+#stargazer(Mod1
 ```
-Encontramos que el logaritmo de la densidad de lista nominal, la ventaja neta en la contienda anterior a favor del PRI y el recibir ingresos del gobierno son variables altamente predictivas. 
-
-El modelo utiliza como unidades de observación características agregas a nivel municipal
-
-Encontramos, en la tercera especificación significativas las siguientes variables.
-
-1. Logaritmo de densidad de lista nominal (Log_DLN). 
-2. Índice de marginación (IM) .
-3. Diferencia a favor del PRI (DIF_VPRI_2011). 
-4. Viviendas que reciben transferencias gubernamentales (Por_Ingreso_Gobierno)
-
-
-
-
 
 
 ## Especificación final e interpretación
 
-Este modelo sobre participación estudia la relación entre la participación, como variable dependiente a nivel municipal, y las variables propuestas y descritas. 
+Este modelo sobre participación estudia la relación entre la participación, como variable dependiente a nivel municipal, y las variables propuestas y descritas. Encontramos, en la tercera especificación, significativas las siguientes variables;
 
-Dentro de las variables que encontramos significativas: 
-
-Encontramos que la variable de logaritmo de densidad de lista nominal tiene u
-
+1. Logaritmo de densidad de lista nominal (Log_DLN). 
+Tiene el sentido negativo esperado, la participación se muestra significativamente inversa a la densidad de lista nominal medida por su logaritmo. Dado que es una variable logarítmica no es sencilla la interpretación del tamaño del coeficiente. 
 
 
-Argumentamos que el PRI es el principal partido movilizador por su control sobre los principales mecanismos de promoción del voto como lo es el uso de maquinarias asociadas a la promoción de programas municipales y estatales. En esta elección el PRI tiene el control de dos o tres de los órdenes de gobierno, dependiendo del partido que gobierna el municipio, por lo que puede hacer un uso de los mecanísmos descritos para la movilización del voto. 
+2. Índice de marginación (IM) .
+Encontramos que es la variable que mejor refleja pobreza, el sentido es negativo como es esperado dado que el índice 
 
-Definimos hipótesis relacionadas con mecanismos por medio de los cuales podría ocurrir una promoción sesgada del voto a favor del PRI como partido movilizador.
+3. Diferencia a favor del PRI (DIF_VPRI_2011). 
 
-Como esperamos, encontramos que el modelo es altamente predictivo para el PRI y en menor medida para MORENA, interpretamos la varianza explicada para cada partido por estos modelos como una señal de la alineación de este partido con la estrategia planteada de movilización electoral. Es decir que las variables que consideramos relevantes para el modelo tienen un alto peso cuando se alinean con la estrategía de promoción sesgada del voto, o un fenómeno similar, y un bajo peso cuando no. 
 
-Por ello esperamos ver el incremento en la participación electoral operando frecuentemente a favor del incumbente o de aquel partido que tenga el control del municipio. Encontramos, como es de suponerse y es frecuente encontrar en la literatura, que la población más movilizada suele ser la población en zonas poco densas en población y con bajos ingresos, aunque en este caso también puede ser producto de una alineación ideológica entre entre esta población y el PRI. 
 
-Encontramos evidencia que apunta a que durante la elección 2017 el PRI ejerció una estrategia de promoción electoral en los municipios rurales en el Estado de México, este efecto es menor en la elección del 2011 lo que se alinea con los resultados que esperamos al comparar una elección competitiva (2017) con una elección no competitiva (2011).
+4. Viviendas que reciben transferencias gubernamentales (Por_Ingreso_Gobierno)
+
+
+```{r Tabla resumen de variables del modelo, results='asis', message = FALSE }
+
+Tabla_M1 <- EMENSAYO %>% select(Log_DLN, DIF_VPRI_2011, Por_Ingreso_Gobierno, IM) %>% summary() %>% kable()
+
+Tabla_M1
+
+```
+
+Esta especificaci'ón no carece de problemas. Algunos de los principales son:
+
+1. La variable dependiente de diferencia de voto a favor del PRI en el municipio no afecta, de acuerdo a nuestro planteamiento teórico, uniformemente la participación. Esperaríamos que sólo aumente la participación en los municipios en los que exista esta diferencia cuando el partido que controla los municipios sea el PRI, o el partido que tiene las condiciones materiales en la contienda para prover la participación.
+
+2. 
 
 
 # Modelos de participación por partido
 
-Este trabajo se ha centrado en el papel de diversas variables en la determinación de la participación electoral a nivel municipal en la elección del Estado de México en el 2017. Hemos planteado una explicación consistente con los datos que se basa en la promoción sesgada del voto en aquellos municipios que son más proclives a votar por el PRI. Asumimos que el PRI al controlar la gobernatura del Estado, el Ejecutivo Federal y la mayor parte de los municipios tiene ventajas únicas de incumbente que le permiten apropiarse de la atribución percibida de programas públicos y/o de maquinaria que le permite la movilización de aquellos grupos que se percibe que tienen mayor proclividad electoral por el este partido.
+Proponemos un nuevo tipo de modelos en donde la variable dependiente es el porcentaje del voto obtenido por cada partido en el municipio. La lógica detrás de estos modelos es el que si tenemos variables asociadas a la promoción sesgada de la participación encontrariamos una mayor proporción de la varianza "explicada" poe estas variables. 
 
-Correlaciones entre partidos, cuales partidos son sustitutos
+```{r Regresión Comparativa entre Partidos, results='asis', message = FALSE }
+
+Mod5 <- lm(EM_17_POR_PRI ~ Log_DLN + DIF_VPRI_2011 + Por_Ingreso_Gobierno  + IM,
+                  data = EMENSAYO, 
+           #weights = EM_17_LISTA_NOMINAL
+           )
+
+Mod6 <- lm(EM_17_POR_MORENA ~ Log_DLN + DIF_VPRI_2011 + Por_Ingreso_Gobierno  + IM, 
+                  data = EMENSAYO, 
+           #weights = EM_17_LISTA_NOMINAL
+           )
+
+Mod7 <- lm(EM_17_POR_PAN ~ Log_DLN + DIF_VPRI_2011 + Por_Ingreso_Gobierno  + IM,
+            data = EMENSAYO, 
+            #weights = EM_17_LISTA_NOMINAL
+           )
+       
+Mod8 <- lm(EM_17_POR_PRD ~ Log_DLN + DIF_VPRI_2011 + Por_Ingreso_Gobierno  + IM,
+            data = EMENSAYO, 
+            #weights = EM_17_LISTA_NOMINAL
+           )
+
+stargazer( Mod5, Mod6, Mod7, title = "Modelos de Regresión Lineal Partidos ", table.placement = "H", header = FALSE, single.row = TRUE, no.space = TRUE, column.sep.width = "3pt", font.size = "small") #para forzar el float
+```
+
+Como esperamos, encontramos que el modelo es altamente predictivo para el PRI, en menor medida para Morena y poco predictivo para los demás partidos. De forma interesante el modelo es predictivo por distintas razones. 
+
+La participación por el PRI se da en municipios donde haya mostrado mayor ventaja en contiendas anteriores, que reciben participaciones del gobierno y con alto índice de marginación. Lo opuesto es cierto para el voto de Morena aunque ninguna de estas variables cumple con mostrar significancia estadística.
+
+
+
+
+para el PRI y en menor medida para MORENA. Proponemos que las variables que consideramos relevantes para el modelo tienen un alto peso cuando se alinean con la estrategía de promoción sesgada del voto, o un fenómeno similar, y un bajo peso cuando no. 
+
+Planteamos que las estrategias d elos partidos son diferentes, esencialmente porqué parten de condiciones iniciales distintas. Esta diferencia parece 
+
+
+```{r Correlación entre participación y voto por partido, results='asis', message = FALSE }
+
+EMENSAYO %>% 
+  select(EM_17_POR_PART, EM_17_POR_PRI, EM_17_POR_MORENA, EM_17_POR_PAN, EM_17_POR_PRD) %>%
+  chart.Correlation(histogram = TRUE, 
+                    title="Correlaciones entre participación y voto por partido. EDOMEX 2017")
+
+```
+
+Es releva
+
 
 
 Bajo esta perspectiva esperamos que las variables que hemos encontrado explican parte de las diferencias en la participación electoral en los municipios del Estado de México en 2017 sean significativas para la predicción del voto por el PRI y que no sean relevantes, o tengan el sentido contrario, para la votación por sus oponentes, particularmente MORENA. 
@@ -669,21 +717,9 @@ Bajo esta perspectiva esperamos que las variables que hemos encontrado explican 
 Para ello utilizamos algunas de las variables expuestas y cambiamos la variable dependiente al voto, a nivel municipal, obtenido como porcentaje del total de votos efectivos por PRI y por MORENA y comparamos el efecto de las variables en estos dos modelos. 
 
 
-```{r Regresión Comparativa entre Partidos, results='asis', message = FALSE }
-
-Mod5 <- lm(EM_17_POR_PRI ~ Por_Ingreso_Gobierno + PRI_o_Otro_2015 + PO2SM + DIF_VPRI_2011, 
-           data = EMENSAYO, 
-           weights = EM_17_LISTA_NOMINAL)
-Mod6 <- lm(EM_17_POR_MORENA ~ Por_Ingreso_Gobierno + PRI_o_Otro_2015 + PO2SM + DIF_VPRI_2011, 
-           data = EMENSAYO, 
-           weights = EM_17_LISTA_NOMINAL)
-Mod7 <- lm(EM_17_POR_PAN ~ Por_Ingreso_Gobierno + PRI_o_Otro_2015 + PO2SM + DIF_VPRI_2011, 
-           data = EMENSAYO, 
-           weights = EM_17_LISTA_NOMINAL)
 
 
-stargazer( Mod5, Mod6, Mod7, title = "Modelos de Regresión Lineal Partidos ", table.placement = "H", header = FALSE) #para forzar el float
-```
+
 
 Encontramos que el modelo es altamente predictivo en el caso del voto por el PRI
 
