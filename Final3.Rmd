@@ -532,7 +532,7 @@ Esta variable ofrece información imperfecta, una de las principales razones es 
 
 En un entorno donde se busca optimizar un presupuesto y todos los votos tienen el mismo valor, dado que es una elección solamente para gobernador, se compran los votos más baratos, que tienden a ser de las personas que asignan mayor valor marginal al dinero, o beneficios en especie, es decir aquellos más pobres. En este sentido esta variable es similar a la del índice de marginación y, posiblemente, redundante. 
 
-# Modelo
+# Modelo de participación electoral 
 
 Utilizamos información agregada a nivel municipal, esto implica una caracterización de los municipios como si estos fueran individuos. Los resultados de nuestros modelos de regresión pueden ser intrepretados como si un municipio más pobre o más rico, más o menos denso, gobernado por tal o cual partido puede tener distintas propensidades para una mayor o menor participación electoral de acuerdo a estas características. 
 
@@ -609,8 +609,6 @@ Mod3 <- lm(EM_17_POR_PART ~  Log_DLN + DIF_VPRI_2011 + Por_Ingreso_Gobierno  + I
            data = EMENSAYO, 
            weights = EM_17_LISTA_NOMINAL) # .626 r2 ajustada, .542 sin pesos
 
-
-
 stargazer(Mod1, Mod2, Mod3,
           title = "Modelo  Participación Electoral 2017", 
           header = FALSE, 
@@ -618,49 +616,64 @@ stargazer(Mod1, Mod2, Mod3,
           column.sep.width = "3pt", 
           font.size = "small")
 #          float.env = "sidewaystable")
-
-
-
-#stargazer(Mod1
 ```
 
 
 ## Especificación final e interpretación
 
-Este modelo sobre participación estudia la relación entre la participación, como variable dependiente a nivel municipal, y las variables propuestas y descritas. Encontramos, en la tercera especificación, significativas las siguientes variables;
+En este modelo pretendemos asociar la participación electoral a variables proxy de movilización electoral. Consideramos que en la medida que el modelo sea predictivo esto puede ser una indicación de que la participación se encuentra en efecto motivada por los mecanismos causales descritos, estando estos mecanismos asociados a su vez al acarreo electoral. 
+
+
+Encontramos relevantes y significativas las siguientes variables;
 
 1. Logaritmo de densidad de lista nominal (Log_DLN). 
+
 Tiene el sentido negativo esperado, la participación se muestra significativamente inversa a la densidad de lista nominal medida por su logaritmo. Dado que es una variable logarítmica no es sencilla la interpretación del tamaño del coeficiente. 
 
 
 2. Índice de marginación (IM) .
-Encontramos que es la variable que mejor refleja pobreza, el sentido es negativo como es esperado dado que el índice 
 
-3. Diferencia a favor del PRI (DIF_VPRI_2011). 
+Encontramos que es la variable que mejor refleja pobreza en su sentido amplio. Un punto adicional en el índice de marginación disminuye en 11% la participación, dado que el índice es mayor a menor grado de marginación encontramos el efecto esperado. El índice toma valores de entre -2 a 0.78 con una mediana negativa de -0.759.
 
+3. Diferencia a favor del PRI (DIF_VPRI_2011).
+
+Asumimos que dado que existe un control del ejecutivo federal, estatal y de la mayoría de los municipios el que, de existir, la maquinaria y los promotores electorales operarian en donde exista un mayor diferencial a favor del partido incumbente, en este caso el PRI. La variable que mejor aproxima esto es la diferencia, a favor de este partido en la elección inmediata similar. El Sentido es el esperado, encontramos que un punto adicional de ventaja por el PRI esta asociado a un aumento de 0.248% en la participación. La mediana de ventaja a favor del PRI en el 2011 es de 26 puntos porcentuales, el promedio 30.4%.
 
 
 4. Viviendas que reciben transferencias gubernamentales (Por_Ingreso_Gobierno)
-
+Encontramos que un aumento en un punto porcentual de viviendas que afirman recibir apoyo de un apoyo gubernamental (de acuerdo a la encuesta intercensal 2015) aumenta en 0.454% la participación
 
 ```{r Tabla resumen de variables del modelo, results='asis', message = FALSE }
 
-Tabla_M1 <- EMENSAYO %>% select(Log_DLN, DIF_VPRI_2011, Por_Ingreso_Gobierno, IM) %>% summary() %>% kable()
+Tabla_M1 <- EMENSAYO %>% select(EM_17_POR_PART, Log_DLN, IM, DIF_VPRI_2011, Por_Ingreso_Gobierno) %>% summary() %>% kable()
 
 Tabla_M1
 
 ```
 
-Esta especificaci'ón no carece de problemas. Algunos de los principales son:
+# Deficiencias del modelo de participación electoral
 
-1. La variable dependiente de diferencia de voto a favor del PRI en el municipio no afecta, de acuerdo a nuestro planteamiento teórico, uniformemente la participación. Esperaríamos que sólo aumente la participación en los municipios en los que exista esta diferencia cuando el partido que controla los municipios sea el PRI, o el partido que tiene las condiciones materiales en la contienda para prover la participación.
+Esta especificación no carece de problemas. Algunos de los principales son:
 
-2. 
+1. La variable dependiente de diferencia de voto a favor del PRI en el municipio no afecta, de acuerdo a nuestro planteamiento teórico, uniformemente la participación. Esperaríamos que sólo aumente la participación en los municipios en los que exista esta diferencia cuando el partido que controla los municipios sea el PRI, o el partido que tiene las condiciones materiales en la contienda para prover la participación. En este caso es complicado hacer la diferencia ya que si bien hay municipios que no son gobernados por el PRI o el PRI en coalición todos los municipios comparten un ejecutivo federal y estatal en manos del PRI. 
 
+2. Se asume pero no se demuestra la existencia de un mecanismo causal intermedio entre variables como el Índice de Marginación o las viviendas que reciben alguna participación del gobierno. 
+
+La metodología empleada no permite observar el mecanismo por el cual los partidos optimizan sus recursos para maximizar el voto lo que impide entender la eficacia, logística, y funcionamiento de la estructura intermedia. 
+
+Es, por ejemplo, relevante si la estructura que opera durante los periodos electorales es parte permanente del partido, si es una estructura temporal del partido que es activada durante el periodo electoral, si utiliza una estructura que cumple una función de facilitadora de programas gubernamentales, si estos programas son federales o estatales y que cumple una función de motivación o acarreo o incluso de sabotaje durante la jornada electoral. 
+
+3. No tenemos certidumbre de que las variables que utilizamos para estimar acarreo no sean las mismas que caracterizan a los votantes del PRI. Es posible que en el momento de la elección estas variables esten asociadas a la base o al perfil electoral del PRI y que el incremento más que proporcional, en comparación con una elección no competida, de la votación en zonas que favorecen a este partido obedezca a preferencias ciudadanas, una mayor campaña u otras razones.
+
+4. La lista nominal de algunos municipios es tanto densa como no densa, no se realiza una separación de estas poblaciones para diferenciar efectos. Encontramos una diferencia fundamental entre los municipios urbanos y no urbanos, modelada a través de la variable de logarítmo de densidad de lista nominal. Pero existen múltiples municipios en los cuales es díficil separar este efecto ya que contienen en ellos tanto zonas densas como zonas no densas, el tratamiento agrupa todas la población dentro de un municipio y la trata como un sólo "individuo". 
+
+5. No estudiamos el efecto opuesto, la promoción de la abstención, el cual también podría realizarse con mecanismos logísticos similares. Del mecanismo propuesto se derivaria el creer que a mayor intensidad de las actividades relativas a esta forma de obtener votos tendríamos, lo demás constante, mayor participación electoral. Es decir que podríamos encontrar una relación en donde encontramos correlacionados la participación electoral y los esfuerzos de promoción ilicita del voto. Sin embargo puede existir el sentido inverso, donde se promueve ilicitamente la abstención, se puede promover que las personas se queden en su casa si se conoce el sentido de su voto o se estima que votaran más que proporcionalmente en algún sentido que no sea de conveniencia. [@cox_turnout_1981-1]
 
 # Modelos de participación por partido
 
-Proponemos un nuevo tipo de modelos en donde la variable dependiente es el porcentaje del voto obtenido por cada partido en el municipio. La lógica detrás de estos modelos es el que si tenemos variables asociadas a la promoción sesgada de la participación encontrariamos una mayor proporción de la varianza "explicada" poe estas variables. 
+Proponemos un nuevo tipo de modelos en donde la variable dependiente es el porcentaje del voto obtenido por cada partido en el municipio. La lógica detrás de estos modelos es el que si tenemos variables asociadas a la promoción sesgada de la participación encontraremos una mayor proporción de la varianza "explicada" por estas variables. Es decir que el poder explicativo del modelo aumenta cuando la estratégia electoral se alinea con lo que hemos expuesto como promoción sesgada del voto.
+
+Para ello utilizamos algunas de las variables expuestas y cambiamos la variable dependiente al voto, a nivel municipal, obtenido como porcentaje del total de votos efectivos por PRI y por MORENA y comparamos el efecto de las variables en estos dos modelos. 
 
 ```{r Regresión Comparativa entre Partidos, results='asis', message = FALSE }
 
@@ -687,17 +700,11 @@ Mod8 <- lm(EM_17_POR_PRD ~ Log_DLN + DIF_VPRI_2011 + Por_Ingreso_Gobierno  + IM,
 stargazer( Mod5, Mod6, Mod7, title = "Modelos de Regresión Lineal Partidos ", table.placement = "H", header = FALSE, single.row = TRUE, no.space = TRUE, column.sep.width = "3pt", font.size = "small") #para forzar el float
 ```
 
-Como esperamos, encontramos que el modelo es altamente predictivo para el PRI, en menor medida para Morena y poco predictivo para los demás partidos. De forma interesante el modelo es predictivo por distintas razones. 
+De acuerdo al sentido de los coeficientes de las variables independientes, la participación por el PRI se da en municipios donde este partido ha mostrado mayor ventaja en contiendas anteriores, que reciben participaciones del gobierno y con alto índice de marginación. El modelos logra asociar una gran parte de la varianza a estas variables (R cuadrada ajustada de .750). Lo opuesto es cierto para el voto de Morena aunque ninguna de estas variables cumple con mostrar significancia estadística y el modelo muestra un poder predictivo menor (R cuadrada  ajustada de 0.436).
 
-La participación por el PRI se da en municipios donde haya mostrado mayor ventaja en contiendas anteriores, que reciben participaciones del gobierno y con alto índice de marginación. Lo opuesto es cierto para el voto de Morena aunque ninguna de estas variables cumple con mostrar significancia estadística.
+Proponemos que las variables que consideramos relevantes para el modelo tienen un alto peso cuando se alinean con la estrategía de promoción sesgada del voto, o un fenómeno similar, y un bajo peso cuando no. 
 
-
-
-
-para el PRI y en menor medida para MORENA. Proponemos que las variables que consideramos relevantes para el modelo tienen un alto peso cuando se alinean con la estrategía de promoción sesgada del voto, o un fenómeno similar, y un bajo peso cuando no. 
-
-Planteamos que las estrategias d elos partidos son diferentes, esencialmente porqué parten de condiciones iniciales distintas. Esta diferencia parece 
-
+Consideramos que este modelo abona a mostrar estrategias diferencias de acuerdo a cada partido. También es útil en el análisis de que partidos compiten, o son sustitutos entre ellos.
 
 ```{r Correlación entre participación y voto por partido, results='asis', message = FALSE }
 
@@ -708,99 +715,33 @@ EMENSAYO %>%
 
 ```
 
-Es releva
+De forma interesante y complementaria encontramos que el voto por el PRI y Morena son fuertes sustitutos (correlación de  -0.58). Esto tiene particular sentido ante estratégias y electorados claramente diferenciados, mientras que el PAN muestra un comportamento independiente. 
 
+# Dos, potenciales, aportaciones. 
 
+Al desarrollar este modelo consideramos que existen dos potenciales, aunque no desarrolladas, aportaciones al análisis de la participación electoral. 
 
-Bajo esta perspectiva esperamos que las variables que hemos encontrado explican parte de las diferencias en la participación electoral en los municipios del Estado de México en 2017 sean significativas para la predicción del voto por el PRI y que no sean relevantes, o tengan el sentido contrario, para la votación por sus oponentes, particularmente MORENA. 
+## Tipología electoral.
 
-Para ello utilizamos algunas de las variables expuestas y cambiamos la variable dependiente al voto, a nivel municipal, obtenido como porcentaje del total de votos efectivos por PRI y por MORENA y comparamos el efecto de las variables en estos dos modelos. 
+La literatura electoral revisada no presenta aún una tipología sistemática, que separe las elecciones de acuerdo a los incentivos que ellas presentan. Encontramos en este estudio que ciertas características de la contienda son determinantes para el comportamiento tanto del electorado como de los partidos y que es conveniente introducir dichos elementos para el adecuado matiz del análisis de la participación. 
 
+En el presente ejemplo encontramos en el proceso electoral tres características tipológicas determinantes; es una elección donde hay un claro incumbente, es una elección competitiva y hay un sólo cargo en juego. Consideramos que tanto el análisis de participación como de predicción del voto por partido se beneficiaria de aplicar esta metodología a elecciones similares. Podemos hacer una primera separación donde se determine categoricámente si;
 
+1. Una elección es competida o no.
+2. De acuerdo a los cargos competidos y considerando los distintos incentivos que estos introducen al comportamiento de los actores. Es decir introducir concurrencia con elecciones federales, estatales, municipales.
+3. Determinar incumbencia y su efecto a nivel federal, estatal y municipal.
 
+## Repetibilidad y comparabilidad. 
 
+Tal vez la mayor ventaja, comparado con otros análisis de participación electoral, es que todos los datos utilizados son públicos y disponibles para un amplio intervalo de tiempo. Es decir que podemos repetir el análisis a través del tiempo o comparando resultados a nivel estatal a través de distintos periodos electorales manteniendo principios metodológicos. 
 
-
-Encontramos que el modelo es altamente predictivo en el caso del voto por el PRI
-
-# Hacia una tipología electoral
-
-El presente análisis utiliza información que se encuentra disponible nacionalmente para unidades tan pequeñas como casillas para la información electoral y municipios para los datos sociodemográficos, esto permite replicar el análisis en un gran número de elecciones en todos los estados. Aquí estudiamos una elección particularmente sencilla en sus incentivos y en su interpretación, encontrando evidencia que apunta hacia efectos de promoción sesgada del voto, o movilización electoral, dependiente de variables que entran dentro de un marco teoríco de incentivos de partidos.
-
-Es decir que la participación electoral puede 
-
-Existe una amplia literatura que estudia los incentivos de la participación electoral utilizando variables institucionales o características personales de los votantes, aquí proponemos una tercera dimensión, que frecuentemente se sobrelapa pero que puede ser igual de determinante especialmente cuando comparamos elecciones dentro de un mismo marco institucional, generalmente dentro de un mismo país. Esta tercera dimensión se refiere a los incentivos de los partidos y permite caracterizar las elecciones de acuerdo a los incentivos a los que estos se enfrentan y a partir de variables existentes e información pública pretende inferir el grado de manipulación electoral y el origen de esta en cada elección. Esto permite una clasificación electoral de acuerdo a las características de la contienda en donde podemos generar hipótesis de acuerdo a los incentivos que la caracterizen. Dicha clasificación incluiria, pero no estaría limitada, a las siguientes categorias.
-
-1. Elecc
-
-
-Algunas tipologías electorales se encontraran poco provistas de eventos actuales 
-
-Intuitivamente esperariamos encontrar resultados similares a los aquí presentados en algunas, pero comparativamente pocas elecciones, los resultados encontrados se dan en un contexto de competencia estatal por un sólo puesto, con control de programas gubernamentales y presumiblemente de la estructura asociada de parte de un incumbente. 
-No todas las elecciones son así pero si existe un espectro de movilidad electoral a través de facilitadores, coyotes, jefes de manzana o intermediarios que esperamos que de comportarse de acuerdo a como esperamos podamos medir un mayor efecto en las variables que presentamos y que asociamos a este tipo de movilización. 
-
-
-
-
-Encontramos efectos significativos que apuntan a la promoción del voto en municipios donde hay mayor proporción de gasto en programas gubernamentales. En este estudio no es posible determinar si existe una mayor proporción de gasto en Estados competidos por parte de programas Federales, para lo que podría existir información si se incorporará información de otros estados y otras elecciones para hacer comparativos. 
-
-Otra veta de investigación es determinar el tamaño de diversos efectos institucionales en la participación, a decir la concurrencia electoral, la competencia, o no, en un municipio. También de interés es determinar 
-
-Nuevo contexto electoral y viejas prácticas, menos controles programáticos. Mayor concentración, nuevas formas de gastar y distribuir programas sociales impactos que van a tener en la distribución de recursos, ahora que es menos programático es más importante. 
-
-De forma menos directa pero temáticamente directamente relacionada se puede plantear el análisis de programas, privados o públicos y su efecto en la promoción del voto. Ejemplificando podemos pensar en la amplia campaña hecha desde la sociedad civil "Si no votas callate" si se encontrara que esa campaña influye en algún segmento homogéneo de la población, digamos población de entre 25 y 35 años que no es políticamente activa, y encontraramos que este mismo segmento se decanta particularmente por alguna fuerza política encontraríamos que esta campaña a favor del voto no es neutral. Es decir que tanto la promoción electoral desde la sociedad civil como desde el estado puede, en la medida cuyos efectos afecten a una población homogénea, tener un efecto predecible y específico en los resultados electorales. Hasta donde el autor conoce no existe aún un estudio de este tipo que sea público.
-
-No se plantea un estudio de la elección en Puebla, que arroja una participación mucho menor, pero si encontramos características de la elección en el Estado de México que apuntan a una estratégia electoral, por parte de los partidos, diferente. En este trabajo señalamos elementos que apuntan a la excepcionalidad de la elección del Estado de México y que apuntan a una potencialmente rica agenda de investigación en materia del estudio de la heteregoneidad de los incentivos electorales en México.
-
-La elección 2017 en el Estado de México objeto de este estudio tuvo una participación del `r round((sum(EMENSAYO$EM_17_TOTAL_VOTOS)/sum(EMENSAYO$EM_17_LISTA_NOMINAL))*100, digits = 1)`%^[Porcentaje estatal de votos totales respecto a lista nominal.], en contraste, dos años después, una elección, también estatal, en Puebla 33.4%. Ambas elecciones fueron procesos no concurrentes ^[ Con la excepción de 5 municipios en Puebla donde se repitió el proceso por anulación.], se eligió un gobernador y ocurrieron a menos de dos años una de otra. A pesar de ser ambas elecciones para gobernador estos dos procesos arrojaron una participación con una fuerte diferencia. 
-
-
-
--¿existencia de variables de capacidad de monitoreo?
-  
-La tipología depende de dos variables, categóricas que dan lugar a permutaciones con incentivos y por ello comportamientos característicos. Primero depende del partido, principalmente en la relación que tiene el partido con la maquinaria de mobilización electoral en donde se lleva cabo la elección. Segundo depende de los puestos por los que se compite en dicha elección, de acuerdo al valor de estos se determina la estratégia del partido, principalmente a través de los montos que se asignan a cada competencia.
-La literatura electoral no presenta aún una tipología sistemática, que separe las elecciones de acuerdo a los incentivos que ellas presentan. 
-
-Densidad o distancia a las casillas. Aquí proponemos una distancia asociada a la densidad de la población votante, pero existen explicaciones alternativas con variables altamente correlacionadas LARREGUy et al. proponen que hay una distancia óptima para el PRI en donde 1.5 kms de distancia en el traslado necesario para llegar a la casilla 
-Diferencia entre comprar voto o participaci[on]
-
-## Nota sobre el modelo
-
-Sin embargo esta metodología no permite observar el mecanismo por el cual los partidos optimizan sus recursos para maximizar el voto lo que impide entender la eficacia, logística, y funcionamiento de la estructura intermedia. Es, por ejemplo, relevante si la estructura que opera durante los periodos electorales es parte permanente del partido, si es una estructura temporal del partido que es activada durante el periodo electoral, si utiliza una estructura que cumple una función de facilitadora de programas gubernamentales, si estos programas son federales o estatales y que cumple una función de motivación o acarreo o incluso de sabotaje durante la jornada electoral. 
-
-De este mecanismo se derivaria el creer que a mayor intensidad de las actividades relativas a esta forma de obtener votos tendríamos, lo demás constante, mayor participación electoral. Es decir que podríamos encontrar una relación en donde encontramos correlacionados la participación electoral y los esfuerzos de promoción ilicita del voto. Sin embargo puede existir el sentido inverso, donde se promueve ilicitamente la abstención, se puede promover que las personas se queden en su casa si se conoce el sentido de su voto o se estima que votaran más que proporcionalmente en algún sentido que no sea de conveniencia. [@cox_turnout_1981-1]
-
-Esto es indicativo de un fenómeno más general, la estrategia particular de un partido depende de las preferencias del electorado, la región donde trabajo, la estructura de mobilización y presupuesto del que dispone, la vigilancia ejercida, el nivel de competencia. Es decir que es un fenómeno complejo para el que es necesario realizar una caracterización de la contienda para entender el sentido de sus variables. 
-
-## Dos aportaciones.
-
-Es una propuesta metodológica que no utiliza datos personales los cuales son costosos y reducen la magnitud del análisis a contiendas pequeñas o muestras pequeñas de contiendas grandes. 
-Propone un mapa de investigación sobre comportamiento electoral del cual resuelve los casos más sencillos pero que permite, a través de las r´s ajustadas el hacer comparable contiendas y da una interpretación a la magnitud de la participación explicada por las variables utilizadas. 
-
-Permite actualizar datos y progresar en el tiempo manteniendo principios metodológicos. 
-
-El concepto más similar en la literatura es la "compra de participación" generalmente descrita como un incremento en la participación a través de un intermediario o broker que resuelve un problema de información para un partido al acarrear votantes. Este tipo de literatura generalmente 
-Distancia
-
-¿Son generalizables nuestras conclusiones?
-
-Entre la elección 2011, 2012 y 2017 esperamos que la que más se ajuste a nuestro modelo es la elección de 2017, por ser competitiva y de incentivos sencillos, se analiza en la siguiente sección. 
-
-ds
-
-
+Consideramos que ambos ejercicios presentan una interesante oportunidad de investigación que sin embargo queda más alla de la ambición del presente trabajo. 
 
 # Nota 
 
 Este documento se elaboró en R y el editor de textos en Latex knitr. Para manejar la bibliografía se utilizó Zotero y Bibtex. 
 
-Una versión del documento se encuentra en la página del autor en github. Junto los archivos de código de preparación de datos realizados por mí.
-
-
-Bla por bla en el bla del bla  [@nichter_vote_2008]
-
-
-
+Una versión del documento se encuentra en la página del autor en github bajo el nombre de Roderfish. 
 
 \begin{appendix}
   \listoffigures
