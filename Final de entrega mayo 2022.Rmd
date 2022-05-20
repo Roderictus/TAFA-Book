@@ -6,12 +6,27 @@ date: "Mayo, 2022"
 
 header-includes:
     - \usepackage{setspace}\onehalfspacing
-    - \renewcommand*\contentsname{Contenido:}
     - \usepackage{placeins} 
-    
+    - \renewcommand{\topfraction}{.85}
+    - \renewcommand{\bottomfraction}{.7}
+    - \renewcommand{\textfraction}{.15}
+    - \renewcommand{\floatpagefraction}{.66}
+    - \setcounter{topnumber}{3}
+    - \setcounter{bottomnumber}{3}
+    - \setcounter{totalnumber}{4}
+    - \renewcommand{\figurename}{Figura.}
+    - \renewcommand{\contentsname}{Tabla de Contenido}
+    - \renewcommand{\tablename}{Tabla.}
+    - \renewcommand{\listfigurename}{Listado de figuras.}
+    - \renewcommand{\listtablename}{Listado de Tablas.}  
+
 geometry: "left=3cm,right=3cm,top=2.5cm,bottom=2.5cm"
 bibliography: ["My_Library.bib"]
 mainfont: Times New Roman
+
+
+thanks: "El presente trabajo, incluyendo la preparación de bases de datos, se encuentra en un repositorio público (https://github.com/Roderictus/TAFA-Book). **Versión actual**: `r format(Sys.time(), '%B %d, %Y')`; **Rodrigo Franco**: rodrigofrancofuentes@gmail.com."
+
 
 output: 
   pdf_document:
@@ -20,6 +35,8 @@ output:
     number_sections: yes
     toc:             yes
 ---
+
+
 
 ```{r setup , include=FALSE}
 #knitr::opts_chunk$set(echo = FALSE, cache = TRUE, message = FALSE, fig.path = "Figuras/", warning = 
@@ -97,9 +114,9 @@ theme_map <- function(...) {
 
 Este trabajo nace de un deseo de cuantificar el acarreo electoral en México. Dicho proceso guarda poco o nulo rastro y es difícilmente medible, abarca un grupo amplio de comportamientos, por lo que generalmente se encuentra fuera del ámbito del análisis estadístico y dentro de la crónica electoral. Reconociendo estas dificultades abordamos un fenómeno más general, la promoción sesgada del voto, y proponemos una técnica de análisis estadístico para estimar su existencia y efecto. 
 
-Partimos de considerar que la promoción electoral sesgada es una estrategia empleada asimétricamente por los partidos políticos.  Estos presentan comportamientos que pueden ser modelados de acuerdo a un sistema de incentivos diferenciado por condiciones de competencia tanto de la contienda como de cada partido. Estas condiciones pueden catalogarse como tipologías electorales, propósito para el cual se presenta una propuesta en las conclusiones. 
+Partimos de considerar que la promoción electoral sesgada es una estrategia empleada asimétricamente por los partidos políticos.  Estos presentan comportamientos que pueden ser modelados de acuerdo a un sistema de incentivos diferenciado por condiciones de competencia tanto de la contienda como de las capacidades de cada partido de influir en ella. Estas condiciones pueden catalogarse como tipologías electorales, propósito para el cual se presenta una propuesta en las conclusiones. 
 
-En el trabajo se aborda un caso específico que es relevante históricamente pero que se ha elegido porqué representa un caso en donde los incentivos son especialmente sencillos de exponer y analizar. Se utilizan datos públicamente disponibles, por lo que una de las principales ventajas del método propuesto es su potencial replicabilidad. 
+En el trabajo se aborda un caso específico que es relevante históricamente pero que se ha elegido porqué en él los incentivos son especialmente sencillos de exponer y analizar. Se utilizan datos públicamente disponibles, por lo que una de las principales ventajas del método propuesto es su potencial replicabilidad. 
 
 En la revisión de literatura encontramos que el concepto más cercano a la promoción sesgada del voto es el análisis de la "promoción de la participación". Nuestra propuesta parte de enmarcar esta promoción de la participación en el contexto electoral donde ocurre. Exponemos los incentivos a los que se enfrentan los actores en eventos electorales específicos, identificamos los agentes y mecanismos mediante los cuales ocurre la promoción del voto. 
 
@@ -107,7 +124,7 @@ Proponemos, en línea con buena parte de la literatura existente revisada, que l
 
 ## Datos
 
-Utilizamos datos de dos elecciones similares, 2011 y 2017. Estas dos elecciones son similares en incentivos pero con una importante diferencia en cuanto a competitividad. La elección 2011 es poco competitiva y la de 2017 es  altamente competitiva. 
+Utilizamos datos de dos elecciones similares, 2011 y 2017. Estas dos elecciones son similares en incentivos pero con una importante diferencia en cuanto a competitividad. La elección 2011 es poco competitiva y la de 2017 es  altamente competitiva. Adicionalmente se utilizan datos complementarios de la elección de 2012 y  de la encuesta intercensal 2015.
 
 Obtenemos la información para este trabajo de fuentes públicas; Instituto Federal Electoral (IFE), Instituto Nacional Electoral (INE) e Instituto Nacional de Estadística y Geografía (INEGI). Los datos originalmente son a nivel de sección electoral y los agregamos a nivel municipal para datos electorales y para la encuesta intercensal 2015 utilizamos datos  agregados también a nivel municipal. 
 
@@ -338,7 +355,7 @@ kbl(TablaLNT[1:20,], format.args =list(big.mark = ",", digits = 3), caption = "D
 
 Los 33 municipios más poblados (26.4%), capturan 80% de la lista nominal. Los municipios que contienen grandes concentraciones de población son pequeños o medianos en extensión territorial como puede observarse en la gráfica. 
 
-```{r Scatterplot de la densidad de Lista Nominal, results='asis'}
+```{r Scatterplot de la densidad de Lista Nominal, results='asis', fig.cap= "Densidad de lista nominal"}
 
 ggplot(TablaLN, aes(x = log(AREAkm), y = log(EM_17_LISTA_NOMINAL))) + 
   geom_text(label = TablaLN$NOM_MUN,
@@ -356,7 +373,7 @@ ggplot(TablaLN, aes(x = log(AREAkm), y = log(EM_17_LISTA_NOMINAL))) +
 
 Para la obtención de la variable de partido que gobierna el municipio se codifican los partidos ganadores de los municipios en las elecciones 2015, lo que determina el partido gobernante a nivel municipal. Después se recodifican los ganadores para concentrar el número de categorías y reflejar las coaliciones que establecieron gobierno, de los 125 municipios (ahora alcaldias) 84 de ellos generaron una mayoría por el PRI (26 municipios o 31%), o por el PRI en alianza (58 en alianza PRI-PVEM-NA o 69% de los municipios del PRI), 18 por el PAN (con y sin alianzas), 16 PRD y 7 por otros partidos. Cabe resaltar que sólo un municipio obtiene mayoría por MORENA (Texcoco), lo que enfatiza que este partido es fuertemente disruptivo en la elección 2017 y que presenta condiciones iniciales para la contienda significativamente diferentes a las del PRI. Tanto el ejecutivo Federal como el ejecutivo estatal son del PRI.
 
-```{r "Mapa Municipios y partido que los gobierna" , results='asis', message = FALSE, fig.cap="Estadística descriptiva de las variables del Estudio",  out.extra=''}
+```{r "Mapa Municipios y partido que los gobierna" , results='asis', message = FALSE, fig.cap="Partido que gobierna el municipio",  out.extra=''}
 
 Mapa_Gobierno <- ggplot() +
   geom_polygon(data = mapa.df, aes(fill = Partido_Gobernante_2015, 
@@ -371,9 +388,9 @@ Mapa_Gobierno <- ggplot() +
   theme_map() +
   labs( x = NULL, 
         y = NULL, NULL,
-        title = "Partido Gobernante 2017\n Estado de México") +
+        title = "Partido Gobernante\n Estado de México") +
   theme(legend.position = "bottom") +
-    scale_fill_manual(values = c("darkseagreen4", "blue2", "yellow3", "brown1"))
+    scale_fill_manual(values = c("darkseagreen4", "blue2", "yellow1", "red3"))
 
 
 
@@ -405,7 +422,7 @@ Los programas federales a los que puede estar sujeta la población son programá
 Esto se puede dar por facilitadores federales, estatales o municipales. En el caso de los promotores federales se espera que estos sean los que menos influyen en la promoción electoral dado que es donde existen mayores controles, sin embargo esta es una variable que no es observable dado que no existe variación, todos los municipios observados se encuentran gobernados por el mismo gobierno federal. En el caso de la promoción municipal, que asumimos puede influir en los programas federales, el municipio suele tener un presupuesto de programas y de gasto discrecional con fines sociales en los DIFs (Centros de Desarrollo Integral de la Familia).
 
 
-```{r Mapa de Ingresos por Programas Gubernamentales, Encuesta Intercensal 2015, fig.cap="Mapa de Ingresos por Programas Gubernamentales EDOMEX 2015",  out.extra=''}
+```{r Mapa de Ingresos por Programas Gubernamentales, Encuesta Intercensal 2015, fig.cap="Mapa de Hogares que reciben ingresos por Programas Gubernamentales EDOMEX 2015",  out.extra=''}
 
 Plot_Map2 <- ggplot() +
   geom_polygon(data = mapa.df, aes(fill = Por_Ingreso_Gobierno, 
@@ -491,7 +508,7 @@ Plot_Map2
 
 Planteamos que los partidos buscan promover la participación en aquellos municipios donde tienen la expectativa de que esta aporte una diferencia neta a su favor. Calculamos la intención neta como la diferencia en la intención de voto entre el que obtiene el partido y el que obtiene el principal competidor, la diferencia se calcula a nivel municipal. 
 
-```{r, "Mapa de diferencia a favor del PRI", fig.cap="Mapa de Participación Electoral Municipal EDOMEX 2017",  out.extra='', out.width= "130%"}
+```{r, "Mapa de diferencia a favor del PRI", fig.cap="Mapa de Diferencial de voto a favor del PRI, EDOMEX 2017",  out.extra=''}
 
 Plot_Map_Ventaja_PRI <- ggplot() +
   geom_polygon(data = mapa.df, aes(fill = DIF_VPRI_2011, 
@@ -645,14 +662,6 @@ Asumimos que dado que existe un control del ejecutivo federal, estatal y de la m
 4. Viviendas que reciben transferencias gubernamentales (Por_Ingreso_Gobierno)
 Encontramos que un aumento en un punto porcentual de viviendas que afirman recibir apoyo de un apoyo gubernamental (de acuerdo a la encuesta intercensal 2015) aumenta en 0.454% la participación
 
-```{r Tabla resumen de variables del modelo, results='asis', message = FALSE }
-
-Tabla_M1 <- EMENSAYO %>% select(EM_17_POR_PART, Log_DLN, IM, DIF_VPRI_2011, Por_Ingreso_Gobierno) %>% summary() %>% kable()
-
-Tabla_M1
-
-```
-
 # Deficiencias del modelo de participación electoral
 
 Esta especificación no carece de problemas. Algunos de los principales son:
@@ -669,7 +678,7 @@ Es, por ejemplo, relevante si la estructura que opera durante los periodos elect
 
 4. La lista nominal de algunos municipios es tanto densa como no densa, no se realiza una separación de estas poblaciones para diferenciar efectos. Encontramos una diferencia fundamental entre los municipios urbanos y no urbanos, modelada a través de la variable de logaritmo de densidad de lista nominal. Pero existen múltiples municipios en los cuales es difícil separar este efecto ya que contienen en ellos tanto zonas densas como zonas no densas, el tratamiento agrupa todas la población dentro de un municipio y la trata como un sólo "individuo". 
 
-5. No estudiamos el efecto opuesto, la promoción de la abstención, el cual también podría realizarse con mecanismos logísticos similares. Del mecanismo propuesto se derivaría el creer que a mayor intensidad de las actividades relativas a esta forma de obtener votos tendríamos, lo demás constante, mayor participación electoral. Es decir que podríamos encontrar una relación en donde encontramos correlacionados la participación electoral y los esfuerzos de promoción ilícita del voto. Sin embargo puede existir el sentido inverso, donde se promueve ilícitamente la abstención, se puede promover que las personas se queden en su casa si se conoce el sentido de su voto o se estima que votaran más que proporcionalmente en algún sentido que no sea de conveniencia. [@cox_turnout_1981-1]
+5. No estudiamos el efecto opuesto, la promoción de la abstención, el cual también podría realizarse con mecanismos logísticos similares. Del mecanismo propuesto se derivaría el creer que a mayor intensidad de las actividades relativas a esta forma de obtener votos tendríamos, lo demás constante, mayor participación electoral. Es decir que podríamos encontrar una relación en donde encontramos correlacionados la participación electoral y los esfuerzos de promoción ilícita del voto. Sin embargo puede existir el sentido inverso, donde se promueve ilícitamente la abstención, se puede promover que las personas se queden en su casa si se conoce el sentido de su voto o se estima que votaran más que proporcionalmente en algún sentido que no sea de conveniencia. [[@cox_turnout_1981]]
 
 # Modelos de participación por partido
 
@@ -708,7 +717,7 @@ Proponemos que las variables que consideramos relevantes para el modelo tienen u
 
 Consideramos que este modelo abona a mostrar estrategias diferencias de acuerdo a cada partido. También es útil en el análisis de que partidos compiten, o son sustitutos entre ellos.
 
-```{r Correlación entre participación y voto por partido, results='asis', message = FALSE }
+```{r Correlación entre participación y voto por partido, results='asis', message = FALSE,  fig.cap= "Correlación entre participación y voto por partido"}
 
 EMENSAYO %>% 
   select(EM_17_POR_PART, EM_17_POR_PRI, EM_17_POR_MORENA, EM_17_POR_PAN, EM_17_POR_PRD) %>%
@@ -739,11 +748,6 @@ Tal vez la mayor ventaja, comparado con otros análisis de participación electo
 
 Consideramos que ambos ejercicios presentan una interesante oportunidad de investigación que sin embargo queda más alla de la ambición del presente trabajo. 
 
-# Nota 
-
-Este documento se elaboró en R y el editor de textos en Latex knitr. Para manejar la bibliografía se utilizó Zotero y Bibtex. 
-
-Una versión del documento se encuentra en la página del autor en github bajo el nombre de Roderfish. 
 
 \begin{appendix}
   \listoffigures
